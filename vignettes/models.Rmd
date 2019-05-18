@@ -1,0 +1,257 @@
+---
+title: "Using the models defined in the Rsero package"
+author: "Nathanael Hoze"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+  toc: true
+toc_depth: 2
+vignette: >
+  %\VignetteIndexEntry{Models used in the Rsero package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+  
+This vignette presents the different models used in the *Rsero* package, their implementation, and the different uses of these models to fit the data. Models of the force of infection are used to explain the change of the profile of seropositivity with age, using as the main model assumption that an increase in seroprevalence is the result of the cumulated exposure to a pathogen during a lifetime. 
+We included in this package various models of the force of infection, but also other factors affecting the serology such as cross-reactivity, travelling, waning-immunity (seroreversion) and differential risks of exposure.
+
+## The data
+
+We first load the package 
+```{r data1, echo=TRUE, warning=FALSE}
+library(Rsero)
+```
+The data must be in the following format 
+```{r data2, echo=TRUE, warning=FALSE}
+data <- simulate_SeroData(number_samples = 5)
+print(data)
+```
+
+
+## Models of the force of infection
+
+### The basic models
+We considered five models that define the force of infection at a given year:  
+  
+* Annual hazard of infection. This model corresponds to independent, yearly values of the force of infection. 
+* Outbreak model. The force of infection is defined as a sum of gaussians.
+* Intervention model. 
+* Constant force of infection. 
+* Combination of constant and outbreak
+
+
+
+In the constant model a single parameter of the force of infection is evaluated. 
+
+The intervention models consider successive constant phases. They take as an input the number of different constant phase $K$, where $K \geq 1$. The value $K=1$ corresponds to the constant model. 
+
+
+In the case of the outbreak model, the force of infection at year $i$ is given as a sum of $K$ gaussians: 
+  $$\lambda_i  = \sum_{j=1}^K\alpha_{j} e^{-\frac{(i-T_j)^2}{\beta_j^2}}.$$
+  The $T_j$ are the time points where the force of infection is maximal and is equal to $\alpha_j$. The width of the gaussians is quantified with the parameters $\beta_j$. The width of the gaussian is actually a parameter that can quantify two things: the duration of the epidemics, or the uncertainty for the location of the peak of the epidemics. 
+In the case where the $T_j$ are far apart, the gaussians are well separated and around $T_j$ the force of infection is given by a single gaussian. 
+
+
+
+
+### Using the models
+
+```{r modelUse, echo=TRUE}
+model <- FOImodel(type = "constant")
+model <- FOImodel(type = "intervention", K = 2)
+model <- FOImodel(type = "outbreak", K = 1)
+model <- FOImodel(type = "constantoutbreak", K = 2)
+model <- FOImodel(type = "independent")
+print(model)
+```
+
+## Secondary parameters affecting the seroprevalence
+
+### Seroreversion
+
+In a first extension, we consider the possibility of seroreversion. An individual that was once infected is classified as seronegative at the time of survey. The method estimates a rate of seroreversion which can be seen as the inverse of the time of decline of seropositivity.
+We write such models as `seroreversion = 1`. By default `seroreversion = 0`.
+
+
+### Background infection
+  
+In a second extension, we consider the possibility that individuals are found seropositive although the pathogen did not circulate. This can happen when a circulating pathogen shows antigenic similarities with the pathogen of interest, and triggers a similar antibody response. Other possibilities are: non perfect specificity of the assay, travelling to regions of circulation... 
+To call such background infection the line `background=1` must be added to the model definition. By default `background = 0`.
+
+## Likelihood from the annual force of infection
+
+The probability that an individual of age $a_j$ is infected depends on the history of the force of infection during his/her lifetime. It is therefore a function of the cumulative force of infection $\lambda_S + \lambda_{S-1}+\dots+ \lambda_{S-a_j}$, where $S$ is the sampling year. More specifically, the contribution to the likelihood of a seropositive individual is
+$$P_j = 1 - \exp\bigg(-\sum_{i = 0}^{a_j} \lambda_{S-i}\bigg).$$
+  
+  The contribution to the likelihood of a seronegative individual is
+$$P_j =  \exp\bigg(-\sum_{i = 0}^{a_j} \lambda_{S-i} \bigg).$$
+  
+###  Background infection
+  
+  Cross-reactivity does not modify the formulas for the force of infection, but it changes the likelihood. With $p_B$ the probability that an individual is cross-reactive, the contribution to the likelihood of a seropositive individual is
+$$P_j = 1 - (1-p_B)\exp\bigg(-\sum_{i = 0}^{a_j} \lambda_{S-i}\bigg).$$
+  
+  The contribution to the likelihood of a seronegative individual is
+$$P_j =  (1-p_B)\exp\bigg(-\sum_{i = 0}^{a_j}\lambda_{S-i} \bigg).$$
+  
+  
+### Seroreversion
+  
+  We consider a generalization of the previous models. The probability for a 1 year old individual to be seronegative depends on the force of infection at the first year $\lambda_1$ and the rate of seroreversion $\rho$
+$$  X_{1} = e^{-(\lambda_1+\rho)} +  \frac{\rho}{\lambda_1+\rho}\bigg(1-e^{-(\lambda_1+\rho)} \bigg).
+$$
+  This probability comprises the possibility that this individual did not get infected, or got infected and seroreverted, and is thus classified as seronegative. By recursion, we obtain the probability that an individual of age $i+1$ is seronegative
+$$
+  X_{i+1} =X_i e^{-(\lambda_i+\rho)} +  \frac{\rho}{\lambda_i+\rho}\bigg(1-e^{-(\lambda_i+\rho)} \bigg).
+$$
+  In the full model with seroreversion and cross-reactivity, the contribution to the likelihood of a seropositive individual of age $a_j$ is
+$$P_j = 1 - (1-p_B)X_{a_j}.$$
+  The contribution to the likelihood of a seronegative individual is
+$$P_j =  (1-p_B)X_{a_j}.$$
+   
+
+## Defining a model with the package *Rsero*
+
+In this section, we describe the definition of models and give examples. 
+The package *Rsero* allows defining a variety of predefined models. To create a model, it is required to call the constructor `FOImodel`, and to give as inputs the type of model, and if needed, additional parameters and parameters of the prior distributions. 
+ 
+As an example, let's define a model with a peak force of infection and seroreversion:
+
+```{r modelRectangle, echo=TRUE, warning=FALSE}
+library(Rsero)
+model <- FOImodel(type = "outbreak", K=1, seroreversion = 1)
+print(model)
+```
+
+ 
+
+
+
+## Defining categories in the model 
+
+Models can be defined to include different risks of infection by category. Categories are defined in the data.
+Let's look at an example dataset provided with the package of a serological survey of CHIKV in Vietnam. This survey was described in Quan et al., 2018 (link) and includes 546 individuals sampled in 4 different areas of the country.  
+First, we load the dataset: 
+```{r vietnam1, echo=TRUE, warning=FALSE,eval=FALSE}
+sero.dta =  read.csv('../data-raw/CHIKVVietnam.csv', header = TRUE, sep=';')
+
+chikv_vietnam = Rsero::SeroData(age_at_sampling = round(as.numeric(sero.dta$age)), 
+               Y = as.numeric(sero.dta$Y)>9,
+               sampling_year = as.numeric(sero.dta$sampling_year), 
+               category = sero.dta$Loc,
+               location = sero.dta$Loc)
+
+```
+We could have written data(chikv_vietnam) too
+```{r vietnam2, echo=TRUE, warning=FALSE}
+ data("chikv_vietnam")
+```
+We defined categories corresponding to the different regions. This can be seen in the column *category* of the dataset *chikv_vietnam* that associate to each individual one  of the four region: 
+```{r vietnam3, echo=TRUE, warning=FALSE}
+print(levels(chikv_vietnam$category))
+
+```
+We define a model of the annual force of infection that accounts for different risks of infection in each region.
+-FOImodel
+```{r vietnam4, echo=TRUE, warning=FALSE}
+modelI2Full  =FOImodel(type='intervention',
+                       K=2,
+                       background = 1,
+                       cat_bg = TRUE,
+                       cat_lambda = TRUE)
+```
+
+We defined an *intervention* model, to describe that we expect a drop of the force of infection at a certain point in time. The parameter *cat_lamba = TRUE* is used to set different relative values of the force of infection while keeping equal the timing of the drop in infection probability. Therefore, the fit is done simultaneously on the four regions. 
+-code fit
+
+```{r vietnam5, echo=TRUE, warning=FALSE, eval=FALSE}
+FOIfit.vietnam = fit(model = modelI2full, data=chikv_vietnam)
+```
+
+## Model comparison
+ 
+We implemented three different measures of model adequacy: The deviance information criterion (DIC), the Aikaike information criterion (AIC), the widely-applicable information criterion (WAIC). See Gelman Ref for a detailed explanation of all three measures.
+```{r DIC1, echo=TRUE, warning=FALSE, eval=FALSE}
+compute_information_criteria(FOIfit.vietnam)
+```
+
+```{r DIC2, echo=TRUE, warning=FALSE, eval=FALSE}
+modelOutbreakBg =FOImodel(type='outbreak',
+                       K=1,
+                       background = 1)
+FOIfit.vietnam2 = fit(model = modelOutbreakBg, data=chikv_vietnam)
+compute_information_criteria(FOIfit.vietnam2)
+```
+The DIC of the intervention model is lower than the DIC of the outbreak model. This indicates that the former is a more adequate description of the data. In general, DIC differences of more than 5 points with the lowest DIC indicate weak support for a model.
+
+
+
+
+## Priors
+
+Flat priors were chosen for all parameters except the force of infection in the *independent* model. 
+
+### Default values of the hyperparameters
+
+The default values of the hyperparameters are given for uniform distributions. The first and second parameters are respectively the lower and upper boundary of the distributions.  
+#### For the constant model
+```{r prior1, echo=TRUE, warning=FALSE, eval=FALSE}
+priorC1 = 0
+priorC2 = 10
+```
+#### For the intervention model
+```{r prior2, echo=TRUE, warning=FALSE, eval=FALSE}
+priorC1 = 0
+priorC2 = 10
+priorT1 = 0
+priorT2 = 70
+```
+#### For the outbreak model
+```{r prioroutbreak, echo=TRUE, warning=FALSE, eval=FALSE}
+prioralpha1 = 0
+prioralpha2 = 5
+priorbeta1 = 0
+priorbeta2 = 5
+priorT1 = 0
+priorT2 = 70
+```
+#### For the constant+outbreak model
+```{r priorconstantoutbreak, echo=TRUE, warning=FALSE, eval=FALSE}
+prioralpha1 = 0
+prioralpha2 = 5
+priorbeta1 = 0
+priorbeta2 = 5
+priorT1 = 0
+priorT2 = 70
+priorC1 = 0
+priorC2 = 10
+```
+#### For the independent model
+```{r independent}
+priorY1 = 0
+priorY2 = 100
+```
+
+#### In the case of seroreversion
+```{r priorsrho}
+priorRho1 = 0
+priorRho2 = 10
+```
+
+####  In the case of background infection
+```{r priorsbg}
+priorbg1 = 0
+priorbg2 = 1
+```
+ 
+### Setting the prior hyperparameters: examples
+
+By defining specific prior distributions it is possible to set predefined parameters for the models.
+
+For instance, if we want the background probability of infection to be close to be a known value $p_B=0.2$, we can define $priorbg1 =  0.19$, $priorbg2 =  0.21$. 
+
+We define here a model of outbreak model with a rate of seroreversion  $\rho = 0.01$:
+```{r modelGCpc, echo=TRUE}
+model <- FOImodel(type = "outbreak", K = 2, priorRho1 = 0.009, priorRho2 = 0.011)
+print(model)
+```
