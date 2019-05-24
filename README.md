@@ -5,8 +5,8 @@ Rsero: Estimate the annual force of infection using serological data
 Rsero is R package dedicated to the implementation of serocatalytic models that are used to estimate the force of infection from age-stratified serological surveys.
 
 Estimations requires:
-*The age of each individual *Their seropositivity status
-*The year of sampling *A model of pathogen circulation
+\* The age of each individual \* Their seropositivity status
+\* The year of sampling \* A model of pathogen circulation
 
 The package provides a standardized framework to store serological data, analyze serological surveys, use a variety of serocatalytic models, run MCMC algorithm to estimate the parameters of the force of infection, and analyse the results.
 
@@ -21,7 +21,7 @@ devtools::install_github("nathoze/Rsero")
 
 (This step requires that the package *devtools* is installed). Installation may take a few minutes due to the compilation of the stan files that encode the serocatalytic models.
 
-MCMC simulations are done using the package rstan, that requires Rtools on Windows computers. Rtools can be found here <https://cran.r-project.org/bin/windows/Rtools/>
+MCMC simulations are done using the package rstan, that requires Rtools 3.3 on Windows computers. Rtools 3.3 can be found here <https://cran.r-project.org/bin/windows/Rtools/>
 
 More details
 ------------
@@ -64,11 +64,23 @@ ConstantModel = FOImodel(type = 'constant')
 
 We can now fit the defined model to the data:
 
-`r  FOIfit.constant = fit( data = one_peak_simulation,  model = Constantmodel, chains=1)` (we simulate only one MCMC chain here). We now visualize the result of the fit
+``` r
+FOIfit.constant = fit( data = one_peak_simulation,  model = ConstantModel, chains=1)
+```
 
-`r  seroprevalence.fit(FOIfit.constant, YLIM=0.5)` Here the solid line is the mean annual FOI obtained from the MCMC simulations and the envelope is the 95% credible interval. This seems not a very good fit. Indeed younger individuals are all seronegative, which suggests that the pathogen did not circulate in the recent years. Several other models could explain the data. For instance we define a model of one outbreak.
+(we simulate only one MCMC chain here). We now visualize the result of the fit
 
-`r  OutbreakModel = FOImodel( type='outbreak', K=1)` We can now fit the defined model to the data:
+``` r
+seroprevalence.fit(FOIfit.constant, YLIM=0.5)
+```
+
+Here the solid line is the mean annual FOI obtained from the MCMC simulations and the envelope is the 95% credible interval. This seems not a very good fit. Indeed younger individuals are all seronegative, which suggests that the pathogen did not circulate in the recent years. Several other models could explain the data. For instance we define a model of one outbreak.
+
+``` r
+OutbreakModel = FOImodel( type='outbreak', K=1)
+```
+
+We can now fit the defined model to the data:
 
 ``` r
 FOIfit.outbreak = fit( data = one_peak_simulation,  model = OutbreakModel, chains=1)
@@ -76,7 +88,11 @@ FOIfit.outbreak = fit( data = one_peak_simulation,  model = OutbreakModel, chain
 
 and we plot the result
 
-`r  seroprevalence.fit(FOIfit.outbreak)` Visually, this a better fit (and it is not surprising given the way the data was generated). We can compare the results of the fit using the deviance information criterion (DIC).
+``` r
+seroprevalence.fit(FOIfit.outbreak)
+```
+
+Visually, this a better fit (and it is not surprising given the way the data was generated). We can compare the results of the fit using the deviance information criterion (DIC).
 
 ``` r
 DIC.constant = compute_information_criteria(FOIfit.constant)
