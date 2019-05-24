@@ -5,8 +5,8 @@ Rsero: Estimate the annual force of infection using serological data
 Rsero is R package dedicated to the implementation of serocatalytic models that are used to estimate the force of infection from age-stratified serological surveys.
 
 Estimations requires:
-\* The age of each individual \* Their seropositivity status
-\* The year of sampling \* A model of pathogen circulation
+- The age of each individual - Their seropositivity status
+- The year of sampling - A model of pathogen circulation
 
 The package provides a standardized framework to store serological data, analyze serological surveys, use a variety of serocatalytic models, run MCMC algorithm to estimate the parameters of the force of infection, and analyse the results.
 

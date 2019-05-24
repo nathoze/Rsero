@@ -14,8 +14,8 @@ Depends:
 	binom, 
 	methods, 
 	bayesplot, 
-	rstan (>= 2.16.2), 
-	rstantools (>=1.3.0) 
+	rstan, 
+	rstantools 
 LinkingTo: 
 	StanHeaders (>= 2.16.0.1),
 	rstan (>= 2.16.2), 
