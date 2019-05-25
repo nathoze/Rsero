@@ -17,7 +17,8 @@ Depends:
 	rstan, 
 	rstantools,
 	shinystan,
-	shiny 
+	shiny,
+	httpuv 
 LinkingTo: 
 	StanHeaders (>= 2.16.0.1),
 	rstan (>= 2.16.2), 
