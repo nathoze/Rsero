@@ -16,7 +16,8 @@ Depends:
 	bayesplot, 
 	rstan, 
 	rstantools,
-	shinystan 
+	shinystan,
+	shiny 
 LinkingTo: 
 	StanHeaders (>= 2.16.0.1),
 	rstan (>= 2.16.2), 

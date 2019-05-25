@@ -5,8 +5,13 @@ Rsero: Estimate the annual force of infection using serological data
 Rsero is R package dedicated to the implementation of serocatalytic models that are used to estimate the force of infection from age-stratified serological surveys.
 
 Estimations requires:
-- The age of each individual - Their seropositivity status
-- The year of sampling - A model of pathogen circulation
+- The age of each individual
+
+-   Their seropositivity status
+
+-   The year of sampling
+
+-   A model of pathogen circulation
 
 The package provides a standardized framework to store serological data, analyze serological surveys, use a variety of serocatalytic models, run MCMC algorithm to estimate the parameters of the force of infection, and analyse the results.
 
@@ -35,6 +40,15 @@ In this example we show the basic steps to follow to get a complete analysis of 
 
 ``` r
 library(Rsero)
+#> Loading required package: Rcpp
+#> Warning: package 'Rcpp' was built under R version 3.3.3
+#> Loading required package: corrplot
+#> Warning: package 'corrplot' was built under R version 3.3.3
+#> corrplot 0.84 loaded
+#> Loading required package: ggplot2
+#> Warning: package 'ggplot2' was built under R version 3.3.3
+#> Loading required package: binom
+#> Warning: package 'binom' was built under R version 3.3.3
 data('one_peak_simulation')
 ```
 
@@ -42,13 +56,18 @@ The data is saved under a custom format *SeroData*, that stores information abou
 
 ``` r
 seroprevalence(one_peak_simulation)
+#> [1] "Mean: 0.11    2.5%: 0.09    97.5%: 0.15"
+#> [1] "Mean: 0.11    2.5%: 0.09    97.5%: 0.15"
 ```
 
 and a graph of the age profile of seroprevalence is obtained using
 
 ``` r
 seroprevalence.plot(one_peak_simulation)
+#> [[1]]
 ```
+
+![](README-seroprevalenceplot-1.png)
 
 Age-stratified serological surveys assess immunological markers of past infections and can be used to reconstruct the historical patterns of the circulation of an infectious disease and the force of infection (the per capita rate at which susceptible individuals will be infected a given year). Such inference is performed using serocatalytic models. The Rsero package proposes several models that can be fitted to the data using the command
 
@@ -66,13 +85,46 @@ We can now fit the defined model to the data:
 
 ``` r
 FOIfit.constant = fit( data = one_peak_simulation,  model = ConstantModel, chains=1)
+#> 
+#> SAMPLING FOR MODEL 'intervention' NOW (CHAIN 1).
+#> Rejecting initial value:
+#>   Log probability evaluates to log(0), i.e. negative infinity.
+#>   Stan can't start sampling from this initial value.
+#> 
+#> Gradient evaluation took 0.001 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 10 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 5000 [  0%]  (Warmup)
+#> Iteration:  500 / 5000 [ 10%]  (Warmup)
+#> Iteration: 1000 / 5000 [ 20%]  (Warmup)
+#> Iteration: 1500 / 5000 [ 30%]  (Warmup)
+#> Iteration: 2000 / 5000 [ 40%]  (Warmup)
+#> Iteration: 2500 / 5000 [ 50%]  (Warmup)
+#> Iteration: 2501 / 5000 [ 50%]  (Sampling)
+#> Iteration: 3000 / 5000 [ 60%]  (Sampling)
+#> Iteration: 3500 / 5000 [ 70%]  (Sampling)
+#> Iteration: 4000 / 5000 [ 80%]  (Sampling)
+#> Iteration: 4500 / 5000 [ 90%]  (Sampling)
+#> Iteration: 5000 / 5000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 3.722 seconds (Warm-up)
+#>                4.835 seconds (Sampling)
+#>                8.557 seconds (Total)
+#> Warning: There were 1568 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
+#> http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+#> Warning: Examine the pairs() plot to diagnose sampling problems
 ```
 
 (we simulate only one MCMC chain here). We now visualize the result of the fit
 
 ``` r
 seroprevalence.fit(FOIfit.constant, YLIM=0.5)
+#> [[1]]
 ```
+
+![](README-fitplot1-1.png)
 
 Here the solid line is the mean annual FOI obtained from the MCMC simulations and the envelope is the 95% credible interval. This seems not a very good fit. Indeed younger individuals are all seronegative, which suggests that the pathogen did not circulate in the recent years. Several other models could explain the data. For instance we define a model of one outbreak.
 
@@ -84,15 +136,46 @@ We can now fit the defined model to the data:
 
 ``` r
 FOIfit.outbreak = fit( data = one_peak_simulation,  model = OutbreakModel, chains=1)
+#> 
+#> SAMPLING FOR MODEL 'outbreak' NOW (CHAIN 1).
+#> Rejecting initial value:
+#>   Log probability evaluates to log(0), i.e. negative infinity.
+#>   Stan can't start sampling from this initial value.
+#> 
+#> Gradient evaluation took 0.001 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 10 seconds.
+#> Adjust your expectations accordingly!
+#> 
+#> 
+#> Iteration:    1 / 5000 [  0%]  (Warmup)
+#> Iteration:  500 / 5000 [ 10%]  (Warmup)
+#> Iteration: 1000 / 5000 [ 20%]  (Warmup)
+#> Iteration: 1500 / 5000 [ 30%]  (Warmup)
+#> Iteration: 2000 / 5000 [ 40%]  (Warmup)
+#> Iteration: 2500 / 5000 [ 50%]  (Warmup)
+#> Iteration: 2501 / 5000 [ 50%]  (Sampling)
+#> Iteration: 3000 / 5000 [ 60%]  (Sampling)
+#> Iteration: 3500 / 5000 [ 70%]  (Sampling)
+#> Iteration: 4000 / 5000 [ 80%]  (Sampling)
+#> Iteration: 4500 / 5000 [ 90%]  (Sampling)
+#> Iteration: 5000 / 5000 [100%]  (Sampling)
+#> 
+#>  Elapsed Time: 3.921 seconds (Warm-up)
+#>                2.519 seconds (Sampling)
+#>                6.44 seconds (Total)
+#> Warning: There were 729 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
+#> http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+#> Warning: Examine the pairs() plot to diagnose sampling problems
 ```
 
 and we plot the result
 
 ``` r
 seroprevalence.fit(FOIfit.outbreak)
+#> [[1]]
 ```
 
-Visually, this a better fit (and it is not surprising given the way the data was generated). We can compare the results of the fit using the deviance information criterion (DIC).
+![](README-fitplot2-1.png) Visually, this a better fit (and it is not surprising given the way the data was generated). We can compare the results of the fit using the deviance information criterion (DIC).
 
 ``` r
 DIC.constant = compute_information_criteria(FOIfit.constant)

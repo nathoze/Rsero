@@ -20,8 +20,11 @@ Rsero is R package dedicated to the implementation of serocatalytic models that 
 
 Estimations requires:   
 - The age of each individual 
+
 - Their seropositivity status  
+
 - The year of sampling
+
 - A model of pathogen circulation
 
  The package provides a standardized framework to store serological data, analyze serological surveys, use a variety of serocatalytic models, run MCMC algorithm to estimate the parameters of the force of infection, and analyse the results. 
@@ -48,17 +51,17 @@ More details on the available serocatalytic models can be found in the vignette 
 ## Worked example. 
 In this example we show the basic steps to follow to get a complete analysis of a serological survey. This analysis uses a simulated dataset containing samples of 500 individuals. 
 
-```{r load, eval=FALSE}
+```{r load, eval=TRUE}
 library(Rsero)
 data('one_peak_simulation')
 ```
 The data is saved under a custom format *SeroData*, that stores information about the serological surveys and details on the participants. Basic information such as the seroprevalence can be obtained simply by typing
 
-```{r seroprevalence, eval=FALSE}
+```{r seroprevalence, eval=TRUE}
 seroprevalence(one_peak_simulation)
 ```
 and a graph of the age profile of seroprevalence is obtained using
-```{r seroprevalenceplot, eval=FALSE}
+```{r seroprevalenceplot, eval=TRUE}
 seroprevalence.plot(one_peak_simulation)
 ```
 
@@ -68,31 +71,31 @@ Age-stratified serological surveys assess immunological markers of past infectio
 FOIfit = fit( data = one_peak_simulation,  model = seromodel)
 ```
 In its basic form a model is defined by specifying the mode of circulation of the pathogen. The simplest type of model assumes a constant force of infection. We define it with the command 
-```{r constantmodel, eval=FALSE}
+```{r constantmodel, eval=TRUE}
 ConstantModel = FOImodel(type = 'constant')
 ```
  We can now fit the defined model to the data: 
-```{r fit2, eval=FALSE}
+```{r fit2, eval=TRUE}
 FOIfit.constant = fit( data = one_peak_simulation,  model = ConstantModel, chains=1)
 ```
 (we simulate only one MCMC chain here). 
  We now visualize the result of the fit 
-```{r fitplot1, eval=FALSE}
+```{r fitplot1, eval=TRUE}
 seroprevalence.fit(FOIfit.constant, YLIM=0.5)
 ```
 
 Here the solid line is the mean annual FOI obtained from the MCMC simulations and the envelope is the 95% credible interval. 
 This seems not a very good fit. Indeed younger individuals are all seronegative, which suggests that the pathogen did not circulate in the recent years. Several other models could explain the data. For instance we define a model of one outbreak.
-```{r outbreakmodel, eval=FALSE}
+```{r outbreakmodel, eval=TRUE}
 OutbreakModel = FOImodel( type='outbreak', K=1)
 ```
 
  We can now fit the defined model to the data: 
-```{r fit3, eval=FALSE}
+```{r fit3, eval=TRUE}
 FOIfit.outbreak = fit( data = one_peak_simulation,  model = OutbreakModel, chains=1)
 ```
 and we plot the result 
-```{r fitplot2, eval=FALSE}
+```{r fitplot2, eval=TRUE}
 seroprevalence.fit(FOIfit.outbreak)
 ```
 Visually, this a better fit (and it is not surprising given the way the data was generated). 
