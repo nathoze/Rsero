@@ -18,7 +18,7 @@ We included in this package various models of the force of infection, but also o
 ## The data
 
 We first load the package 
-```{r data1, echo=TRUE, warning=FALSE}
+```{r data1, echo=FALSE, warning=FALSE}
 library(Rsero)
 ```
 The data must be in the following format 
@@ -59,9 +59,9 @@ In the case where the $T_j$ are far apart, the gaussians are well separated and 
 ```{r modelUse, echo=TRUE}
 model <- FOImodel(type = "constant")
 model <- FOImodel(type = "intervention", K = 2)
-model <- FOImodel(type = "outbreak", K = 1)
 model <- FOImodel(type = "constantoutbreak", K = 2)
 model <- FOImodel(type = "independent")
+model <- FOImodel(type = "outbreak", K = 1)
 print(model)
 ```
 
@@ -70,13 +70,13 @@ print(model)
 ### Seroreversion
 
 In a first extension, we consider the possibility of seroreversion. An individual that was once infected is classified as seronegative at the time of survey. The method estimates a rate of seroreversion which can be seen as the inverse of the time of decline of seropositivity.
-We write such models as `seroreversion = 1`. By default `seroreversion = 0`.
+We write such models by adding `seroreversion = 1` to the `FOIModel`definition. By default `seroreversion = 0`.
 
 
 ### Background infection
   
 In a second extension, we consider the possibility that individuals are found seropositive although the pathogen did not circulate. This can happen when a circulating pathogen shows antigenic similarities with the pathogen of interest, and triggers a similar antibody response. Other possibilities are: non perfect specificity of the assay, travelling to regions of circulation... 
-To call such background infection the line `background=1` must be added to the model definition. By default `background = 0`.
+To call such background infection the parameter `background=1` must be added to the model definition. By default `background = 0`.
 
 ## Likelihood from the annual force of infection
 
@@ -88,7 +88,7 @@ $$P_j =  \exp\bigg(-\sum_{i = 0}^{a_j} \lambda_{S-i} \bigg).$$
   
 ###  Background infection
   
-  Cross-reactivity does not modify the formulas for the force of infection, but it changes the likelihood. With $p_B$ the probability that an individual is cross-reactive, the contribution to the likelihood of a seropositive individual is
+Background infection does not modify the formulas for the force of infection, but it changes the likelihood. With $p_B$ the probability of background infection, the contribution to the likelihood of a seropositive individual is
 $$P_j = 1 - (1-p_B)\exp\bigg(-\sum_{i = 0}^{a_j} \lambda_{S-i}\bigg).$$
   
   The contribution to the likelihood of a seronegative individual is
@@ -130,7 +130,7 @@ print(model)
 ## Defining categories in the model 
 
 Models can be defined to include different risks of infection by category. Categories are defined in the data.
-Let's look at an example dataset provided with the package of a serological survey of CHIKV in Vietnam. This survey was described in Quan et al., 2018 (link) and includes 546 individuals sampled in 4 different areas of the country.  
+Let's look at an example dataset provided with the package of a serological survey of CHIKV in Vietnam. This survey was described in Quan et al., 2018 (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5823466/) and includes 546 individuals sampled in 4 different areas of the country.  
 First, we load the dataset: 
 ```{r vietnam1, echo=TRUE, warning=FALSE,eval=FALSE}
 sero.dta =  read.csv('../data-raw/CHIKVVietnam.csv', header = TRUE, sep=';')
@@ -142,7 +142,7 @@ chikv_vietnam = Rsero::SeroData(age_at_sampling = round(as.numeric(sero.dta$age)
                location = sero.dta$Loc)
 
 ```
-We could have written data(chikv_vietnam) too
+We could have loaded the dataset directly too
 ```{r vietnam2, echo=TRUE, warning=FALSE}
  data("chikv_vietnam")
 ```
@@ -152,7 +152,6 @@ print(levels(chikv_vietnam$category))
 
 ```
 We define a model of the annual force of infection that accounts for different risks of infection in each region.
--FOImodel
 ```{r vietnam4, echo=TRUE, warning=FALSE}
 modelI2Full  =FOImodel(type='intervention',
                        K=2,
@@ -161,8 +160,10 @@ modelI2Full  =FOImodel(type='intervention',
                        cat_lambda = TRUE)
 ```
 
-We defined an *intervention* model, to describe that we expect a drop of the force of infection at a certain point in time. The parameter *cat_lamba = TRUE* is used to set different relative values of the force of infection while keeping equal the timing of the drop in infection probability. Therefore, the fit is done simultaneously on the four regions. 
--code fit
+We defined an *intervention* model, to describe that we expect a drop of the force of infection at a certain point in time. The parameter *cat_lambda = TRUE* is used to set different relative values of the force of infection while keeping equal the timing of the drop in infection probability. 
+The parameter *cat_bg = TRUE* is similarly used to model specific probabilities of background infections in each location.
+Therefore, the fit is done simultaneously on the four regions. 
+
 
 ```{r vietnam5, echo=TRUE, warning=FALSE, eval=FALSE}
 FOIfit.vietnam = fit(model = modelI2full, data=chikv_vietnam)
@@ -170,7 +171,8 @@ FOIfit.vietnam = fit(model = modelI2full, data=chikv_vietnam)
 
 ## Model comparison
  
-We implemented three different measures of model adequacy: The deviance information criterion (DIC), the Aikaike information criterion (AIC), the widely-applicable information criterion (WAIC). See Gelman Ref for a detailed explanation of all three measures.
+We implemented three different measures of model adequacy: The deviance information criterion (DIC), the Akaike information criterion (AIC), the  Watanabe-Akaike information criterion (WAIC). 
+for a detailed explanation of all three measures, see Gelman A, Hwang J, Vehtari A. Understanding predictive information criteria for Bayesian models. Statistics and computing. 2014 Nov 1;24(6):997-1016.
 ```{r DIC1, echo=TRUE, warning=FALSE, eval=FALSE}
 compute_information_criteria(FOIfit.vietnam)
 ```
@@ -194,6 +196,7 @@ Flat priors were chosen for all parameters except the force of infection in the 
 ### Default values of the hyperparameters
 
 The default values of the hyperparameters are given for uniform distributions. The first and second parameters are respectively the lower and upper boundary of the distributions.  
+
 #### For the constant model
 ```{r prior1, echo=TRUE, warning=FALSE, eval=FALSE}
 priorC1 = 0
@@ -252,6 +255,6 @@ For instance, if we want the background probability of infection to be close to 
 
 We define here a model of outbreak model with a rate of seroreversion  $\rho = 0.01$:
 ```{r modelGCpc, echo=TRUE}
-model <- FOImodel(type = "outbreak", K = 2, priorRho1 = 0.009, priorRho2 = 0.011)
+model <- FOImodel(type = "outbreak", K = 2, seroreversion = 1, priorRho1 = 0.009, priorRho2 = 0.011)
 print(model)
 ```
