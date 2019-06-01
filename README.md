@@ -90,9 +90,36 @@ FOIfit.constant = fit( data = one_peak_simulation,  model = ConstantModel, chain
 #> Rejecting initial value:
 #>   Log probability evaluates to log(0), i.e. negative infinity.
 #>   Stan can't start sampling from this initial value.
+#> Rejecting initial value:
+#>   Log probability evaluates to log(0), i.e. negative infinity.
+#>   Stan can't start sampling from this initial value.
+#> Rejecting initial value:
+#>   Log probability evaluates to log(0), i.e. negative infinity.
+#>   Stan can't start sampling from this initial value.
+#> Rejecting initial value:
+#>   Log probability evaluates to log(0), i.e. negative infinity.
+#>   Stan can't start sampling from this initial value.
+#> Rejecting initial value:
+#>   Log probability evaluates to log(0), i.e. negative infinity.
+#>   Stan can't start sampling from this initial value.
+#> Rejecting initial value:
+#>   Log probability evaluates to log(0), i.e. negative infinity.
+#>   Stan can't start sampling from this initial value.
+#> Rejecting initial value:
+#>   Log probability evaluates to log(0), i.e. negative infinity.
+#>   Stan can't start sampling from this initial value.
+#> Rejecting initial value:
+#>   Log probability evaluates to log(0), i.e. negative infinity.
+#>   Stan can't start sampling from this initial value.
+#> Rejecting initial value:
+#>   Log probability evaluates to log(0), i.e. negative infinity.
+#>   Stan can't start sampling from this initial value.
+#> Rejecting initial value:
+#>   Log probability evaluates to log(0), i.e. negative infinity.
+#>   Stan can't start sampling from this initial value.
 #> 
-#> Gradient evaluation took 0.001 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 10 seconds.
+#> Gradient evaluation took 0 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -109,10 +136,10 @@ FOIfit.constant = fit( data = one_peak_simulation,  model = ConstantModel, chain
 #> Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Iteration: 5000 / 5000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 3.722 seconds (Warm-up)
-#>                4.835 seconds (Sampling)
-#>                8.557 seconds (Total)
-#> Warning: There were 1568 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
+#>  Elapsed Time: 4.244 seconds (Warm-up)
+#>                3.16 seconds (Sampling)
+#>                7.404 seconds (Total)
+#> Warning: There were 1709 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
 #> http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #> Warning: Examine the pairs() plot to diagnose sampling problems
 ```
@@ -142,8 +169,8 @@ FOIfit.outbreak = fit( data = one_peak_simulation,  model = OutbreakModel, chain
 #>   Log probability evaluates to log(0), i.e. negative infinity.
 #>   Stan can't start sampling from this initial value.
 #> 
-#> Gradient evaluation took 0.001 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 10 seconds.
+#> Gradient evaluation took 0 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -160,10 +187,10 @@ FOIfit.outbreak = fit( data = one_peak_simulation,  model = OutbreakModel, chain
 #> Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Iteration: 5000 / 5000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 3.921 seconds (Warm-up)
-#>                2.519 seconds (Sampling)
-#>                6.44 seconds (Total)
-#> Warning: There were 729 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
+#>  Elapsed Time: 3.396 seconds (Warm-up)
+#>                2.762 seconds (Sampling)
+#>                6.158 seconds (Total)
+#> Warning: There were 702 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
 #> http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #> Warning: Examine the pairs() plot to diagnose sampling problems
 ```
@@ -175,7 +202,9 @@ seroprevalence.fit(FOIfit.outbreak)
 #> [[1]]
 ```
 
-![](README-fitplot2-1.png) Visually, this a better fit (and it is not surprising given the way the data was generated). We can compare the results of the fit using the deviance information criterion (DIC).
+![](README-fitplot2-1.png)
+
+Visually, this a better fit (and it is not surprising given the way the data was generated). We can compare the results of the fit using the deviance information criterion (DIC).
 
 ``` r
 DIC.constant = compute_information_criteria(FOIfit.constant)
@@ -187,4 +216,6 @@ The DIC obtained for the outbreak model is lower than that for the constant mode
 More information
 ----------------
 
-For more details on the models, go to the vignette model.
+The following schematic summarizes the different functions available with the package ![](/schema.png)
+
+More details on the models can be found in the vignette model.

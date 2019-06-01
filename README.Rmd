@@ -98,6 +98,7 @@ and we plot the result
 ```{r fitplot2, eval=TRUE}
 seroprevalence.fit(FOIfit.outbreak)
 ```
+
 Visually, this a better fit (and it is not surprising given the way the data was generated). 
 We can compare the results of the fit using the deviance information criterion (DIC). 
 ```{r DIC, eval=FALSE}
@@ -108,6 +109,10 @@ The DIC obtained for the outbreak model is lower than that for the constant mode
 
 
 ## More information
-For more details on the models, go to the vignette model.
+
+The following schematic summarizes the different functions available with the package
+![ ](/schema.png)
+
+More details on the models can be found in the vignette model.
 
 
