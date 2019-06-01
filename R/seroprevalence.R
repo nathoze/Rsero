@@ -6,7 +6,7 @@
 #' 
 #' @param data An object of the class \code{SeroData}. 
 #' 
-#' @return The mean and 95 percent confidence interval of the seroprevalence
+#' @return The mean and 95  \%  confidence interval of the seroprevalence
 #'
 #' @export
 #' @examples
@@ -31,7 +31,7 @@ seroprevalence <- function(data){
   }
   B= binom.confint(x=length(which(data$Y==TRUE)),n = data$N,methods = "exact")
   A=paste0('Mean: ', round(B$mean,2), '    2.5%: ',round(B$lower,2), '    97.5%: ', round(B$upper,2))
-  print(A)
+ # print(A)
   
   return(A)
   

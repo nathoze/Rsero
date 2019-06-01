@@ -1,6 +1,6 @@
 #' @title Plot the seroprevalence by age 
 #'
-#' @description Plot the mean and 95 percent confidence interval of the seroprevalence by age-class. Accepts as an input a \code{SeroData} object. If multiple \code{category} are defined, it will also compute the seroprevalence for each category.  
+#' @description Plot the mean and 95  \%  confidence interval of the seroprevalence by age-class. Accepts as an input a \code{SeroData} object. If multiple \code{category} are defined, it will also compute the seroprevalence for each category.  
 #' 
 #' @author Nathanael Hoze \email{nathanael.hoze@gmail.com}
 #' 
@@ -31,9 +31,9 @@ seroprevalence.plot<- function(data, age_cats = 10, YLIM = 1, ...){
   for(i in seq(1,length(u))){
     s1[which(s==u[i])] = i
   }
-  u = sort(unique(data$sampling_year))
+  u2 = sort(unique(data$sampling_year))
   
-  for(sampling in u){
+  for(sampling in u2){
     for(k in seq(1,data$Ncategory)){
       
       index.plot = index.plot+1
@@ -51,7 +51,7 @@ seroprevalence.plot<- function(data, age_cats = 10, YLIM = 1, ...){
       
       
       plots[[index.plot]]= g
-      
+      print(paste0('Category: ',u[k]))
     }
     
   }
