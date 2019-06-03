@@ -18,7 +18,7 @@ We included in this package various models of the force of infection, but also o
 ## The data
 
 We first load the package 
-```{r data1, echo=FALSE, warning=FALSE}
+```{r data1, warning=FALSE}
 library(Rsero)
 ```
 The data must be in the following format 
