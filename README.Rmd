@@ -54,7 +54,7 @@ A serological survey contains primarily the age and seropositivity status of the
 
 Let's work on a toy example with simulated data: 500 individuals aged 1 to 70 yo, with a probability of infection of 0.2. 
 
-```{r dataexample1, eval=TRUE, echo=FALSE}
+```{r dataexample1, eval=TRUE, echo=FALSE, message = FALSE}
 library(Rsero)
 p.infection=0.2
 N.samples=500

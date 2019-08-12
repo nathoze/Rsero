@@ -40,39 +40,16 @@ One of the feature of *Rsero* is to store serological data in a standard format 
 
 Let's work on a toy example with simulated data: 500 individuals aged 1 to 70 yo, with a probability of infection of 0.2.
 
-    #> Loading required package: Rcpp
     #> Warning: package 'Rcpp' was built under R version 3.3.3
-    #> Loading required package: corrplot
     #> Warning: package 'corrplot' was built under R version 3.3.3
-    #> corrplot 0.84 loaded
-    #> Loading required package: ggplot2
     #> Warning: package 'ggplot2' was built under R version 3.3.3
-    #> Loading required package: binom
     #> Warning: package 'binom' was built under R version 3.3.3
-    #> Loading required package: bayesplot
     #> Warning: package 'bayesplot' was built under R version 3.3.3
-    #> This is bayesplot version 1.5.0
-    #> - Plotting theme set to bayesplot::theme_default()
-    #> - Online documentation at mc-stan.org/bayesplot
-    #> Loading required package: rstan
     #> Warning: package 'rstan' was built under R version 3.3.3
-    #> Loading required package: StanHeaders
     #> Warning: package 'StanHeaders' was built under R version 3.3.3
-    #> rstan (Version 2.17.3, GitRev: 2e1f913d3ca3)
-    #> For execution on a local, multicore CPU with excess RAM we recommend calling
-    #> options(mc.cores = parallel::detectCores()).
-    #> To avoid recompilation of unchanged Stan programs, we recommend calling
-    #> rstan_options(auto_write = TRUE)
-    #> Loading required package: rstantools
     #> Warning: package 'rstantools' was built under R version 3.3.3
-    #> This is rstantools version 1.5.0
-    #> Loading required package: shinystan
     #> Warning: package 'shinystan' was built under R version 3.3.3
-    #> Loading required package: shiny
     #> Warning: package 'shiny' was built under R version 3.3.3
-    #> 
-    #> This is shinystan version 2.4.0
-    #> Loading required package: httpuv
     #> Warning: package 'httpuv' was built under R version 3.3.3
 
 Now we write these data as a *SeroData*, the type of data used in the package
@@ -83,7 +60,7 @@ Some basic analysis can be done on this dataset. The seroprevalence is obtained 
 
 ``` r
 seroprevalence(simulated.survey)
-#> [1] "Mean: 0.2    2.5%: 0.17    97.5%: 0.24"
+#> [1] "Mean: 0.16    2.5%: 0.13    97.5%: 0.2"
 seroprevalence.plot(simulated.survey,YLIM=0.3)
 #> [1] "Category: 1"
 #> [[1]]
@@ -139,8 +116,8 @@ FOIfit.constant = fit( data = one_peak_simulation,  model = ConstantModel, chain
 #>   Log probability evaluates to log(0), i.e. negative infinity.
 #>   Stan can't start sampling from this initial value.
 #> 
-#> Gradient evaluation took 0 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
+#> Gradient evaluation took 0.008 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 80 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -157,10 +134,10 @@ FOIfit.constant = fit( data = one_peak_simulation,  model = ConstantModel, chain
 #> Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Iteration: 5000 / 5000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 3.213 seconds (Warm-up)
-#>                1.483 seconds (Sampling)
-#>                4.696 seconds (Total)
-#> Warning: There were 1597 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
+#>  Elapsed Time: 3.175 seconds (Warm-up)
+#>                2.344 seconds (Sampling)
+#>                5.519 seconds (Total)
+#> Warning: There were 1562 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
 #> http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #> Warning: Examine the pairs() plot to diagnose sampling problems
 ```
@@ -186,15 +163,9 @@ We can now fit the defined model to the data:
 FOIfit.outbreak = fit( data = one_peak_simulation,  model = OutbreakModel, chains=1)
 #> 
 #> SAMPLING FOR MODEL 'outbreak' NOW (CHAIN 1).
-#> Rejecting initial value:
-#>   Log probability evaluates to log(0), i.e. negative infinity.
-#>   Stan can't start sampling from this initial value.
-#> Rejecting initial value:
-#>   Log probability evaluates to log(0), i.e. negative infinity.
-#>   Stan can't start sampling from this initial value.
 #> 
-#> Gradient evaluation took 0 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
+#> Gradient evaluation took 0.032 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 320 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -211,10 +182,10 @@ FOIfit.outbreak = fit( data = one_peak_simulation,  model = OutbreakModel, chain
 #> Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Iteration: 5000 / 5000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 2.879 seconds (Warm-up)
-#>                1.761 seconds (Sampling)
-#>                4.64 seconds (Total)
-#> Warning: There were 699 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
+#>  Elapsed Time: 3.301 seconds (Warm-up)
+#>                2.55 seconds (Sampling)
+#>                5.851 seconds (Total)
+#> Warning: There were 749 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
 #> http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #> Warning: Examine the pairs() plot to diagnose sampling problems
 ```
