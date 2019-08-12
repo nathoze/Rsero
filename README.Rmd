@@ -79,7 +79,7 @@ seroprevalence.plot(simulated.survey,YLIM=0.3)
 ```
 
 If for instance we want to estimate different values of the force of infection for males and females, the variable *category* has to be defined: 
-```{r dataexample5, eval=TRUE, echo=FALSE}
+```{r dataexample5, eval=TRUE}
 sex= c(rep('males',250), rep('females', 250))
 simulated.survey  = SeroData(age_at_sampling =  age, Y = seropositive, sex = sex, location  = 'Paris', sampling = 2015, category = sex) 
 ```
@@ -88,16 +88,16 @@ simulated.survey  = SeroData(age_at_sampling =  age, Y = seropositive, sex = sex
 ## Example. 
 In this example we show the basic steps to follow to get a complete analysis of a serological survey. This analysis uses a simulated dataset containing samples of 500 individuals. 
 
-```{r load, eval=TRUE, echo=FALSE}
+```{r load, eval=TRUE}
 data('one_peak_simulation')
 ```
-The data is saved under a custom format *SeroData*, that stores information about the serological surveys and details on the participants. Basic information such as the seroprevalence can be obtained simply by typing
+The data is saved under a custom format *SeroData*, which stores information about the serological surveys and details on the participants. Basic information such as the seroprevalence can be obtained simply by typing
 
 ```{r seroprevalence, eval=TRUE}
 seroprevalence(one_peak_simulation)
 ```
 and a graph of the age profile of seroprevalence is obtained using
-```{r seroprevalenceplot, eval=TRUE}
+```{r seroprevalenceplot, eval=TRUE, message = FALSE}
 seroprevalence.plot(one_peak_simulation)
 ```
 
