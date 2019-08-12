@@ -50,13 +50,22 @@ seropositive = runif(n=N.samples)<p.infection
 
 Now we write these data as a *SeroData*, the type of data used in the package
 
-That's the minimum requirement for creating a *SeroData* and it can be already used for the model fit. However we can still enter more information about the survey. Suppose the first 250 are males, the last 250 are females, that they were all sampled in 2015 in Paris.
+``` r
+simulated.survey  = SeroData(age_at_sampling = age, Y = seropositive) 
+```
+
+This is the minimum requirement for creating a *SeroData* and it can be already used for the model fit. However we can still enter more information about the survey. Suppose the first 250 are males, the last 250 are females, that they were all sampled in 2015 in Paris.
+
+``` r
+sex= c(rep('males',250), rep('females', 250))
+simulated.survey  = SeroData(age_at_sampling =  age, Y = seropositive, sex = sex, location  = 'Paris', sampling = 2015) 
+```
 
 Some basic analysis can be done on this dataset. The seroprevalence is obtained by calling the function *seroprevalence* and the age-profile of seroprevalence by calling *seroprevalence.plot*
 
 ``` r
 seroprevalence(simulated.survey)
-#> [1] "Mean: 0.18    2.5%: 0.15    97.5%: 0.22"
+#> [1] "Mean: 0.2    2.5%: 0.17    97.5%: 0.24"
 seroprevalence.plot(simulated.survey,YLIM=0.3)
 #> [1] "Category: 1"
 #> [[1]]
@@ -115,9 +124,21 @@ FOIfit.constant = fit( data = one_peak_simulation,  model = ConstantModel, chain
 #> Rejecting initial value:
 #>   Log probability evaluates to log(0), i.e. negative infinity.
 #>   Stan can't start sampling from this initial value.
+#> Rejecting initial value:
+#>   Log probability evaluates to log(0), i.e. negative infinity.
+#>   Stan can't start sampling from this initial value.
+#> Rejecting initial value:
+#>   Log probability evaluates to log(0), i.e. negative infinity.
+#>   Stan can't start sampling from this initial value.
+#> Rejecting initial value:
+#>   Log probability evaluates to log(0), i.e. negative infinity.
+#>   Stan can't start sampling from this initial value.
+#> Rejecting initial value:
+#>   Log probability evaluates to log(0), i.e. negative infinity.
+#>   Stan can't start sampling from this initial value.
 #> 
-#> Gradient evaluation took 0.065 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 650 seconds.
+#> Gradient evaluation took 0 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -134,10 +155,10 @@ FOIfit.constant = fit( data = one_peak_simulation,  model = ConstantModel, chain
 #> Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Iteration: 5000 / 5000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 3.806 seconds (Warm-up)
-#>                2.232 seconds (Sampling)
-#>                6.038 seconds (Total)
-#> Warning: There were 1600 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
+#>  Elapsed Time: 3.545 seconds (Warm-up)
+#>                1.975 seconds (Sampling)
+#>                5.52 seconds (Total)
+#> Warning: There were 1745 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
 #> http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #> Warning: Examine the pairs() plot to diagnose sampling problems
 ```
@@ -163,12 +184,9 @@ We can now fit the defined model to the data:
 FOIfit.outbreak = fit( data = one_peak_simulation,  model = OutbreakModel, chains=1)
 #> 
 #> SAMPLING FOR MODEL 'outbreak' NOW (CHAIN 1).
-#> Rejecting initial value:
-#>   Log probability evaluates to log(0), i.e. negative infinity.
-#>   Stan can't start sampling from this initial value.
 #> 
-#> Gradient evaluation took 0.047 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 470 seconds.
+#> Gradient evaluation took 0.001 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 10 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -185,10 +203,10 @@ FOIfit.outbreak = fit( data = one_peak_simulation,  model = OutbreakModel, chain
 #> Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Iteration: 5000 / 5000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 2.711 seconds (Warm-up)
-#>                1.894 seconds (Sampling)
-#>                4.605 seconds (Total)
-#> Warning: There were 719 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
+#>  Elapsed Time: 3.143 seconds (Warm-up)
+#>                3.501 seconds (Sampling)
+#>                6.644 seconds (Total)
+#> Warning: There were 654 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
 #> http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #> Warning: Examine the pairs() plot to diagnose sampling problems
 ```

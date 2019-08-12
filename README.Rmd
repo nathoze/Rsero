@@ -63,12 +63,12 @@ seropositive = runif(n=N.samples)<p.infection
 ```
 Now we write these data as a *SeroData*, the type of data used in the package
 
-```{r dataexample2, eval=TRUE, echo=FALSE}
+```{r dataexample2, eval=TRUE}
 simulated.survey  = SeroData(age_at_sampling = age, Y = seropositive) 
 ```
-That's the minimum requirement for creating a *SeroData* and it can be already used for the model fit. 
+This is the minimum requirement for creating a *SeroData* and it can be already used for the model fit. 
 However we can still enter more information about the survey. Suppose the first 250 are males, the last 250 are females, that they were all sampled in 2015 in Paris. 
-```{r dataexample3, eval=TRUE, echo=FALSE}
+```{r dataexample3, eval=TRUE}
 sex= c(rep('males',250), rep('females', 250))
 simulated.survey  = SeroData(age_at_sampling =  age, Y = seropositive, sex = sex, location  = 'Paris', sampling = 2015) 
 ```
