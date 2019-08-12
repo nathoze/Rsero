@@ -12,7 +12,7 @@
 #' @examples
 #' 
 #' ## A very simple example of a serological survey with three individuals: 
-#' data = SeroData(age_at_sampling = c(10,32,24), Y=c(0,1,1), max_age = 50, age_cats = 1, sampling_year = 2017)
+#' data = SeroData(age_at_sampling = c(10,32,24), Y=c(0,1,1), max_age = 50, age_class = 1, sampling_year = 2017)
 #' seroprevalence(data = data)
 #' 
 #' 

@@ -6,7 +6,7 @@
 #' 
 #' @param data An object of the class \code{SeroData}.
 #' 
-#' @param age_cats Integer. The length in years of the age classes. Default = 10. 
+#' @param age_class Integer. The length in years of the age classes. Default = 10. 
 #' 
 #' @param YLIM Upper limit of the y-axis. Default = 1. The lower limit is set to 0. 
 #' 
@@ -20,7 +20,7 @@
 #' 
 #' 
 
-seroprevalence.plot<- function(data, age_cats = 10, YLIM = 1, ...){
+seroprevalence.plot<- function(data, age_class = 10, YLIM = 1, ...){
   
   plots  <- NULL
   index.plot=0
@@ -40,7 +40,7 @@ seroprevalence.plot<- function(data, age_cats = 10, YLIM = 1, ...){
       w = which(data$sampling_year ==  sampling & s1==k)
       subdata = subset(data,sub = w)
       
-      histdata <- sero.age.groups(dat = subdata,age_cats = age_cats,YLIM=YLIM)
+      histdata <- sero.age.groups(dat = subdata,age_class = age_class,YLIM=YLIM)
       
       g <- ggplot(histdata, aes(x=labels, y=mean)) + geom_point()+geom_segment(aes(x=labels,y=lower, xend= labels,yend=upper))
       g <- g + theme_classic()
@@ -60,9 +60,9 @@ seroprevalence.plot<- function(data, age_cats = 10, YLIM = 1, ...){
 }
 
 # get the seroprevalence (meanand 95%CI) for each age group
-sero.age.groups <- function(dat,age_cats,YLIM){
+sero.age.groups <- function(dat,age_class,YLIM){
   
-  age_categories <- seq(from = 0, to = dat$A, by = age_cats)
+  age_categories <- seq(from = 0, to = dat$A, by = age_class)
   age_bin <- sapply(dat$age, function(x) tail(which(x-age_categories >= 0), 1L)) # find the closest element
   S <- as.integer(as.logical(dat$Y)) 
   S1 <- sapply(1:length(age_categories), function(x) length(which(age_bin==x)) )

@@ -1,6 +1,6 @@
 #' @title Creates a subset of a serological survey 
 #'
-#' @description This function create a serological survey of the class \code{SeroData}.
+#' @description This function creates a serological survey of the class \code{SeroData}.
 #'
 #' @author Nathanael Hoze \email{nathanael.hoze@gmail.com}
 #' 

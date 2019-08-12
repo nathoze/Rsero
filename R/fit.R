@@ -83,7 +83,7 @@
 ##' @examples
 ##' 
 ##' data <- simulate_SeroData(number_samples = 1000,
-##'   age_cats = 1,
+##'   age_class = 1,
 ##'   epidemic_years = c(1976,1992),
 ##'   foi = c(0.2,0.3))
 ##' model <- FOImodel('outbreak', K = 2)

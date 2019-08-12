@@ -6,7 +6,7 @@
 ##' 
 ##' @param number_samples integer. The number of individuals in the simulated serological survey. Default = 500.
 ##' 
-##' @param age_cats integer. The length in years of the age classes.  Default = 1.  
+##' @param age_class integer. The length in years of the age classes.  Default = 1.  
 ##' 
 ##' @param equal_number boolean. If FALSE, draw random ages with a uniform distribution between 1 and \code{max_age}. if TRUE, generates a SeroData object with an equal distribution of the ages. Default = FALSE.
 ##' 
@@ -33,11 +33,11 @@
 ##' 
 ##' @examples 
 ##' 
-##' ## Simulates a serological survey taken in a population that experienced
-##' ## a series of three epidemics in 1972, 1988 and 1996. 
+##' ## Example 1: Simulates a serological survey taken in a population that experienced
+##' ## a series of three outbreaks in 1972, 1988 and 1996. 
 ##' 
 ##' data = simulate_SeroData(number_samples = 1000,
-##' age_cats = 1,
+##' age_class = 1,
 ##' sampling_year = 2015,
 ##' max_age = 50,
 ##' epidemic_years = c(1996,1988,1972),
@@ -47,7 +47,7 @@
 ##' seroprevalence(data)
 ##' 
 ##' 
-##' ## 500 individuals sampled in 2019, in a population that experienced two epidemics, in 1962
+##' ## Example 2: 500 individuals sampled in 2019, in a population that experienced two epidemics, in 1962
 ##' ## and 2012.
 ##' ## Sampled individuals have additionally a probability of being seropositive equal to pb = 0.1. 
 ##' years =  seq(1962,2012)
@@ -59,7 +59,7 @@
 ##' seroprevalence(data1)
 ##' 
 ##' ## Adding another survey, sampled in 2005, where ages are categorized in 5 year groups: 
-##' data2 <- simulate_SeroData(age_cats = 5,
+##' data2 <- simulate_SeroData(age_class = 5,
 ##'  epidemic_years = years,
 ##'  foi=FOI,
 ##'  pb=0.1,
@@ -72,7 +72,7 @@
 ##' @export 
 simulate_SeroData <- function(number_samples = 500,
                               equal_number = FALSE,
-                              age_cats = 1,
+                              age_class = 1,
                               max_age = 70,
                               sampling_year = 2019,
                               epidemic_years =c(2000,1987,1982),
@@ -127,13 +127,13 @@ simulate_SeroData <- function(number_samples = 500,
   
   sampling_year <- rep(sampling_year, 1, number_samples) 
   
-  age <-  ceiling(age_cats*floor((age-1)/age_cats)+age_cats/2)
+  age <-  ceiling(age_class*floor((age-1)/age_class)+age_class/2)
   
   dat <- SeroData(age_at_sampling =  age,
                   Y = as.logical(as.integer(Y)),
                   sampling_year = sampling_year,
                   max_age = max_age,
-                  age_cats = age_cats,
+                  age_class = age_class,
                   location = location,
                   sex = sex,
                   category =category)

@@ -37,7 +37,7 @@
 #' F1  = fit(model = model, data = data )
 #' compute_information_criteria(FOIfit  = F1)
 #' 
-#' @references See Gelman et al. Stat Comput (2014) 24:997-1016
+#' @references See Gelman et al., Understanding predictive information criteria for Bayesian models. Stat Comput (2014) 24:997-1016, 
 #' DOI 10.1007/s11222-013-9416-2
 #' @export
 compute_information_criteria <- function(FOIfit,...){

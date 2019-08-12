@@ -1,6 +1,6 @@
 ##' @title Model of the force of infection
 ##'
-##' @description This function creates an object of the class \code{FOImodel}. Inputs are the type of the model (required), additional parameters if required by the model, and parameters for the prior distributions. The models to be given as an input are predefined. 
+##' @description This function creates an object of the class \code{FOImodel}. Inputs are the type of the model (required), additional parameters if required by the model, and hyperparameters for the prior distributions (optional). The models to be given as an input are predefined. 
 ##'  More details are given in the vignette  \code{models}.
 ##'
 ##' @author Nathanael Hoze \email{nathanael.hoze@gmail.com}
@@ -14,7 +14,7 @@
 ##'   \item 'constantoutbreak': A combination of \code{K} outbreaks with a constant yearly force of infection
 ##' }
 ##' 
-##' @param K integer. An additional parameter used in the outbreak, constantoutbreak and intervention stan models. This parameter is the number of Gaussians used in the model.  Default = \code{NULL}.
+##' @param K integer. An additional parameter used in the outbreak, constantoutbreak and intervention stan models. This parameter is the number of Gaussians used in the model.  Default = 1.
 ##' 
 ##' @param background integer, equal to 0 or 1. If \code{background=1}  the model includes a background infection probability. See the vignette \code{models} for details.  Default = 0. 
 ##' 

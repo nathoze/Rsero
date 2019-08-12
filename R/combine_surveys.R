@@ -11,16 +11,16 @@
 #' @return A \code{SeroData} object.
 #'   
 #' @seealso \code{\link{SeroData}} Define the format of the serological data.
-#' @seealso \code{subset} Extract a smaller subset of a  \code{SeroData} object.
+#' @seealso \code{\link{subset}} Extract a smaller subset of a  \code{SeroData} object.
 #' 
 #'
 #' @examples 
-#'  # Combine two simulated surveys, one sampled in 2015, with one-year age categories, 
-#'  # and another one sampled in 1995 with 10-year age categories. 
+#'  # Combine two simulated surveys, one acquired in 2015, with one-year age categories, 
+#'  # and another one acquired in 1995 with 10-year age categories. 
 #'  Years <- c(1976,1992)
 #'  FOI <- c(0.2,0.3)
 #'  data1 <- simulate_SeroData(sampling_year = 2015, epidemic_years = Years, foi = FOI)
-#'  data2 <- simulate_SeroData(sampling_year = 1995,age_cats=10, epidemic_years = Years, foi = FOI)     
+#'  data2 <- simulate_SeroData(sampling_year = 1995,age_class=10, epidemic_years = Years, foi = FOI)     
 #'  data <- combine_surveys(data1,data2)             
 #' @export
 

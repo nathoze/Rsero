@@ -8,7 +8,7 @@
 #' 
 #' @param Y A vector containing the seropositivy status of the sampled individuals. It can be in a numeric form (1 or 0) or boolean (\code{TRUE} or \code{FALSE}). This vector must have the same size as \code{age}.
 #'  
-#' @param age_cats Integer. The length in years of the age classes. Default = 1.
+#' @param age_class Integer. The length in years of the age classes. Default = 1.
 #' 
 #' @param max_age Integer. The maximal age considered for the individuals in the sample. Individuals older than \code{max_age} are set equal to \code{max_age}. 
 #' 
@@ -52,17 +52,17 @@
 #' @examples
 #' 
 #' ## A very simple example of a serological survey with three individuals: 
-#' data = SeroData(age_at_sampling = c(10,32,24), Y=c(0,1,1), max_age = 50, age_cats = 1, sampling_year = 2017)
+#' data = SeroData(age_at_sampling = c(10,32,24), Y=c(0,1,1), max_age = 50, age_class = 1, sampling_year = 2017)
 #' 
 #' seroprevalence(data = data)
 #' data2 = subset(data,c(1,3))
-#' seroprevalence(data = data2, age_cats = 5) 
+#' seroprevalence(data = data2, age_class = 5) 
 
 
 SeroData <- function(age_at_sampling,
                      age=NULL,
                      Y,         
-                     age_cats = 1,
+                     age_class = 1,
                      max_age = NULL,
                      sampling_year = NULL,
                      location = NULL,
