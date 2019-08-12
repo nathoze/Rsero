@@ -36,21 +36,17 @@ More details on the functions can be found in the documentation. The serocatalyt
 Working with serological data
 -----------------------------
 
-One of the feature of *Rsero* is to store serological data in a standard format to permit some estimations and fit with serocatalytic models. A serological survey contains primarily the age and seropositivity status of the individuals, and can also contain information such as the sex, the location and the year of sampling, categories of individuals that ahave different risk of exposure ...
+One of the feature of *Rsero* is to store serological data in a standard format to permit some estimations and fit with serocatalytic models. A serological survey contains primarily the age and seropositivity status of the individuals, and can also contain information such as the sex, the location and the year of sampling, or categories of individuals that have a different risk of exposure.
 
 Let's work on a toy example with simulated data: 500 individuals aged 1 to 70 yo, with a probability of infection of 0.2.
 
-    #> Warning: package 'Rcpp' was built under R version 3.3.3
-    #> Warning: package 'corrplot' was built under R version 3.3.3
-    #> Warning: package 'ggplot2' was built under R version 3.3.3
-    #> Warning: package 'binom' was built under R version 3.3.3
-    #> Warning: package 'bayesplot' was built under R version 3.3.3
-    #> Warning: package 'rstan' was built under R version 3.3.3
-    #> Warning: package 'StanHeaders' was built under R version 3.3.3
-    #> Warning: package 'rstantools' was built under R version 3.3.3
-    #> Warning: package 'shinystan' was built under R version 3.3.3
-    #> Warning: package 'shiny' was built under R version 3.3.3
-    #> Warning: package 'httpuv' was built under R version 3.3.3
+``` r
+library(Rsero)
+p.infection=0.2
+N.samples=500
+age = round(runif(n=N.samples, min =1, max = 70))
+seropositive = runif(n=N.samples)<p.infection 
+```
 
 Now we write these data as a *SeroData*, the type of data used in the package
 
@@ -60,12 +56,10 @@ Some basic analysis can be done on this dataset. The seroprevalence is obtained 
 
 ``` r
 seroprevalence(simulated.survey)
-#> [1] "Mean: 0.16    2.5%: 0.13    97.5%: 0.2"
+#> [1] "Mean: 0.18    2.5%: 0.15    97.5%: 0.22"
 seroprevalence.plot(simulated.survey,YLIM=0.3)
 #> [1] "Category: 1"
 #> [[1]]
-#> Warning: Removed 1 rows containing missing values (geom_point).
-#> Warning: Removed 1 rows containing missing values (geom_segment).
 ```
 
 ![](README-dataexample4-1.png)
@@ -115,9 +109,15 @@ FOIfit.constant = fit( data = one_peak_simulation,  model = ConstantModel, chain
 #> Rejecting initial value:
 #>   Log probability evaluates to log(0), i.e. negative infinity.
 #>   Stan can't start sampling from this initial value.
+#> Rejecting initial value:
+#>   Log probability evaluates to log(0), i.e. negative infinity.
+#>   Stan can't start sampling from this initial value.
+#> Rejecting initial value:
+#>   Log probability evaluates to log(0), i.e. negative infinity.
+#>   Stan can't start sampling from this initial value.
 #> 
-#> Gradient evaluation took 0.008 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 80 seconds.
+#> Gradient evaluation took 0.065 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 650 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -134,10 +134,10 @@ FOIfit.constant = fit( data = one_peak_simulation,  model = ConstantModel, chain
 #> Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Iteration: 5000 / 5000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 3.175 seconds (Warm-up)
-#>                2.344 seconds (Sampling)
-#>                5.519 seconds (Total)
-#> Warning: There were 1562 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
+#>  Elapsed Time: 3.806 seconds (Warm-up)
+#>                2.232 seconds (Sampling)
+#>                6.038 seconds (Total)
+#> Warning: There were 1600 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
 #> http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #> Warning: Examine the pairs() plot to diagnose sampling problems
 ```
@@ -163,9 +163,12 @@ We can now fit the defined model to the data:
 FOIfit.outbreak = fit( data = one_peak_simulation,  model = OutbreakModel, chains=1)
 #> 
 #> SAMPLING FOR MODEL 'outbreak' NOW (CHAIN 1).
+#> Rejecting initial value:
+#>   Log probability evaluates to log(0), i.e. negative infinity.
+#>   Stan can't start sampling from this initial value.
 #> 
-#> Gradient evaluation took 0.032 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 320 seconds.
+#> Gradient evaluation took 0.047 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 470 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -182,10 +185,10 @@ FOIfit.outbreak = fit( data = one_peak_simulation,  model = OutbreakModel, chain
 #> Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Iteration: 5000 / 5000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 3.301 seconds (Warm-up)
-#>                2.55 seconds (Sampling)
-#>                5.851 seconds (Total)
-#> Warning: There were 749 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
+#>  Elapsed Time: 2.711 seconds (Warm-up)
+#>                1.894 seconds (Sampling)
+#>                4.605 seconds (Total)
+#> Warning: There were 719 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
 #> http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #> Warning: Examine the pairs() plot to diagnose sampling problems
 ```

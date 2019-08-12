@@ -50,11 +50,11 @@ More details on the functions can be found in the documentation. The serocatalyt
 ## Working with serological data 
 
 One of the feature of *Rsero* is to store serological data in a standard format to permit some estimations and fit with serocatalytic models. 
-A serological survey contains primarily the age and seropositivity status of the individuals, and can also contain information such as the sex, the location and the year of sampling, categories of individuals that ahave different risk of exposure ... 
+A serological survey contains primarily the age and seropositivity status of the individuals, and can also contain information such as the sex, the location and the year of sampling, or categories of individuals that have a different risk of exposure.  
 
 Let's work on a toy example with simulated data: 500 individuals aged 1 to 70 yo, with a probability of infection of 0.2. 
 
-```{r dataexample1, eval=TRUE, echo=FALSE, message = FALSE,warning = FALSE}
+```{r dataexample1, eval=TRUE, message = FALSE,warning = FALSE}
 library(Rsero)
 p.infection=0.2
 N.samples=500
