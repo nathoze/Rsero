@@ -54,7 +54,7 @@ A serological survey contains primarily the age and seropositivity status of the
 
 Let's work on a toy example with simulated data: 500 individuals aged 1 to 70 yo, with a probability of infection of 0.2. 
 
-```{r dataexample1, eval=TRUE, echo=FALSE, message = FALSE}
+```{r dataexample1, eval=TRUE, echo=FALSE, message = FALSE,warning = FALSE}
 library(Rsero)
 p.infection=0.2
 N.samples=500
@@ -73,7 +73,7 @@ sex= c(rep('males',250), rep('females', 250))
 simulated.survey  = SeroData(age_at_sampling =  age, Y = seropositive, sex = sex, location  = 'Paris', sampling = 2015) 
 ```
 Some basic analysis can be done on this dataset. The seroprevalence is obtained by calling the function *seroprevalence* and the age-profile of seroprevalence by calling *seroprevalence.plot*
-```{r dataexample4, eval=TRUE}
+```{r dataexample4, eval=TRUE, warning = FALSE}
 seroprevalence(simulated.survey)
 seroprevalence.plot(simulated.survey,YLIM=0.3)
 ```
@@ -127,7 +127,7 @@ OutbreakModel = FOImodel( type='outbreak', K=1)
 ```
 
  We can now fit the defined model to the data: 
-```{r fit3, eval=TRUE}
+```{r fit3, eval=TRUE, message  = FALSE}
 FOIfit.outbreak = fit( data = one_peak_simulation,  model = OutbreakModel, chains=1)
 ```
 and we plot the result 
