@@ -130,7 +130,7 @@ fit <- function(model,
     s1[which(s==u[i])] = i
   }
 
-  data$category = (s1)
+  #data$category = (s1)
   data$categoryindex=as.numeric(s1)
 
   data$Ncategory = length(unique(s1))
