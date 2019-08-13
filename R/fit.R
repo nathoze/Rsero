@@ -129,12 +129,9 @@ fit <- function(model,
   for(i in seq(1,length(u))){
     s1[which(s==u[i])] = i
   }
-  
+
   data$category = (s1)
-  
   data$categoryindex=as.numeric(s1)
-  
-  
 
   data$Ncategory = length(unique(s1))
   

@@ -4,7 +4,7 @@
 #'
 #' @author Nathanael Hoze \email{nathanael.hoze@gmail.com}
 #' 
-#' @param age_at_sampling A vector of integers containing the age of the sampled individuals at the time of sampling. 
+#' @param age_at_sampling A vector of integers containing the age of the sampled individuals at the time of sampling. Must be equal or greater than 1.  
 #' 
 #' @param Y A vector containing the seropositivy status of the sampled individuals. It can be in a numeric form (1 or 0) or boolean (\code{TRUE} or \code{FALSE}). This vector must have the same size as \code{age}.
 #'  
@@ -18,7 +18,7 @@
 #' 
 #' @param sex An optional character factor defining the sex of the individuals. It can be a single chain of characters or a vector of the same size as the number of sampled individuals. Default = \code{NULL}. 
 #'
-#' @param category An optional element defining the category of the individuals. This feature is used when fitting the models assuming  different risks of infection for the different categories. It can be a single element or a vector of the size of the number of individuals. Default = 1.
+#' @param category Character. An optional element containing the name of the categories and defining the category of the individuals. This feature is used when fitting the models assuming  different risks of infection for the different categories. It can be a single character element or a vector of characters of the size of the number of individuals. Default = "Category 1".
 #' 
 #' @param ... Additional arguments (not used).
 #'  
@@ -67,12 +67,25 @@ SeroData <- function(age_at_sampling,
                      sampling_year = NULL,
                      location = NULL,
                      sex = NULL,
-                     category = 1,
+                     category = "Category 1",
                      ...){
-  
+  # Error Messages
   #add  Check : Y and age_at_sampling must have the same length also when Y is multidimensional
   if(dim(as.matrix(Y))[1] != dim(as.matrix(age_at_sampling))[1] ){
-    print("Error : Y and age_at_sampling must have the same length") 
+    stop("Error : Y and age_at_sampling must have the same length") 
+  }
+  
+  if(!testInteger(age_at_sampling)){ 
+    stop("age_at_sampling must be given as integer")
+  }
+  
+  if(min(age_at_sampling)<=0){ 
+    stop("age_at_sampling must have only positive numbers (>=1)")
+  }
+  
+  
+  if(!typeof(category)=="character"){
+    stop("'category' must contain characters")
   }
   
   if (is.null(sampling_year)){
@@ -104,7 +117,7 @@ SeroData <- function(age_at_sampling,
   if (is.null(max_age)){
     max_age <- max(age)
   }  
-
+  
   age[which(age>max_age)] <- max_age
   
   age_at_sampling[which(age_at_sampling>max_age)] <- max_age 
@@ -170,10 +183,13 @@ print.SeroData <- function(data,...){
   
 }
 
- 
+
 find.category <- function(x, categories){
   return(tail(which(x-categories>0), 1L))
 }
 
-
- 
+testInteger <- function(x){
+  test <- all.equal(x, as.integer(x), check.attributes = FALSE)
+  if(test == TRUE){ return(TRUE) }
+  else { return(FALSE) }
+}

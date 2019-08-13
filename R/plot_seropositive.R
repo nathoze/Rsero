@@ -9,9 +9,9 @@
 ##'  
 ##' @param individual_samples  Integer. Number of individual samples to be plotted additionally to the mean and the credible interval of the force of infection. The \code{indivual_samples} samples are randomly chosen in the chains. Default = 0.
 ##' 
-##' @param show_data Boolean. If \code{TRUE}, shows the fraction of seropositive as well. By default, ages are associated in groups of \code{age_cats} years.  Default = \code{TRUE}. 
+##' @param show_data Boolean. If \code{TRUE}, shows the fraction of seropositive as well. By default, ages are associated in groups of \code{age_class} years.  Default = \code{TRUE}. 
 ##' 
-##' @param age_cats Integer. Length of the age groups (in years). Used if \code{show_data = TRUE}. Default = 10.
+##' @param age_class Integer. Length of the age groups (in years). Used if \code{show_data = TRUE}. Default = 10.
 ##' 
 ##' @param YLIM Upper limit of the y-axis. Default = 1. The lower limit is set to 0.
 ##' 
@@ -32,7 +32,7 @@
 
 seroprevalence.fit<- function(FOIfit,                   
                               individual_samples = 0,
-                              age_cats = 10,
+                              age_class = 10,
                               YLIM=1,
                               ...){
   
@@ -45,12 +45,12 @@ seroprevalence.fit<- function(FOIfit,
   latest_sampling_year <- max(FOIfit$data$sampling_year)
   years <- seq(1,A)
   
+  Ncat = FOIfit$data$Ncategory
   
-  if(FOIfit$model$cat_bg == 0 && FOIfit$model$cat_lambda==0){
-    Ncat = 1
-  }  else{
-    Ncat = FOIfit$data$Ncategory
-  }
+  # if(FOIfit$model$cat_bg == 0 && FOIfit$model$cat_lambda==0){
+  #   Ncat = 1
+  # }  else{
+  # }
   index.plot=0
   
   for(sampling_year in sort(unique(FOIfit$data$sampling_year)) ){
@@ -77,7 +77,7 @@ seroprevalence.fit<- function(FOIfit,
       DataEnvelope = data.frame(x = xpoly, y = ypoly)
       
       # data
-      histdata <- sero.age.groups(dat = subdat,age_cats = age_cats,YLIM=YLIM)
+      histdata <- sero.age.groups(dat = subdat,age_class = age_class,YLIM=YLIM)
       
       
       
@@ -89,9 +89,9 @@ seroprevalence.fit<- function(FOIfit,
       
       # plot individual runs of the chain
       if(individual_samples>0){
-        Index_samples <- sample(nrow(S), individual_samples)
+        Index_samples <- sample(nrow(Pinf), individual_samples)
         for (i in Index_samples){
-          ind_foi <-  data.frame(x = yrs,y = S[i, ])
+          ind_foi <-  data.frame(x = yrs,y = Pinf[i, ])
           p <- p + ggplot2::geom_line(data = ind_foi, ggplot2::aes(x = x, y = y), size = 0.8, colour = "#bbbbbb", alpha = 0.6)
         }
       }
