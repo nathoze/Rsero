@@ -112,7 +112,7 @@ fit <- function(model,
                   !identical(Sys.getenv("RSTUDIO"), "1"),
                 show_messages = TRUE,
                 ...){
-    
+  
   mdls <- model$stanname
   pars =  c(model$priors,
             K = model$K,
@@ -123,17 +123,64 @@ fit <- function(model,
   
   
   # modify the index of the categories in the data so it starts at 1 
-  s = data$category
-  s1 = s
-  u = unique(s) 
-  for(i in seq(1,length(u))){
-    s1[which(s==u[i])] = i
+  # s = data$category
+  # s1 = s
+  # u = unique(s) 
+  # for(i in seq(1,length(u))){
+  #   s1[which(s==u[i])] = i
+  # }
+  # 
+  # #data$category = (s1)
+  # data$categoryindex=as.numeric(s1)
+  # 
+  # data$Ncategory = length(unique(s1))
+  # 
+  
+  cat=data$category
+  
+  Ncategoryclass =  dim(cat)[2]
+  
+  
+  
+  A=apply(cat, 2, unique)
+  maxNcategory=0
+  for(I in 1:Ncategoryclass){
+    if(maxNcategory<length(A[[I]])){maxNcategory=length(A[[I]])}
   }
-
-  #data$category = (s1)
-  data$categoryindex=as.numeric(s1)
-
-  data$Ncategory = length(unique(s1))
+  
+  # list of all combinations
+  l=NULL
+  for(I in 1:Ncategoryclass){
+    
+    l[I]  = list(seq(1,length(unique(cat[,I]))))
+    
+  }
+  Exp = expand.grid(l)
+  
+  rowProd <-  function(X){
+    return(prod(X==a))
+    
+  }
+  
+  
+  categoryindex=c()
+  
+  for(i in 1:N){
+    a=V[2,]
+    apply(Exp,1, FUN = rowProd)
+    categoryindex[i]= which(apply(Exp,1, FUN = rowProd)==1)
+  }
+  
+  
+  MatrixCategory= Exp
+  Ncategory = dim(Exp)[1]
+  
+  
+  data$categoryindex=categoryindex
+  data$MatrixCategory = MatrixCategory
+  data$Ncategory = Ncategory
+  data$maxNcategory=maxNcategory
+  
   
   newdata = append(data,pars)
   if(model$type=='independent'){
@@ -147,29 +194,28 @@ fit <- function(model,
   if(model$cat_lambda){
     model$estimated_parameters <- model$estimated_parameters+data$Ncategory-1
   }
-
   F <- rstan::sampling(stanmodels[[mdls]],
-                     data= newdata,
-                     iter = iter,
-                     chains = chains,
-                     warmup = warmup, 
-                     thin = thin,
-                     seed = seed,
-                     init = init,
-                     check_data = check_data,
-                     sample_file = sample_file,
-                     diagnostic_file = diagnostic_file,
-                     verbose = verbose,
-                     algorithm = algorithm,
-                     control = control,
-                     include = include,
-                     cores = cores,
-                     open_progress = open_progress,
-                     show_messages = show_messages)
-
-
+                       data= newdata,
+                       iter = iter,
+                       chains = chains,
+                       warmup = warmup, 
+                       thin = thin,
+                       seed = seed,
+                       init = init,
+                       check_data = check_data,
+                       sample_file = sample_file,
+                       diagnostic_file = diagnostic_file,
+                       verbose = verbose,
+                       algorithm = algorithm,
+                       control = control,
+                       include = include,
+                       cores = cores,
+                       open_progress = open_progress,
+                       show_messages = show_messages)
+  
+  
   out <-list(fit = F, data = data, model = model)
-   
+  
   class(out) <- "FOIfit"
   
   return(out)
@@ -194,7 +240,7 @@ summary.FOIfit <- function(x,...){
   summary(x$data)
   summary(x$model)
 }
- 
+
 
 #' @export
 proba_from_foi <- function(lambda){
