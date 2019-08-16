@@ -180,7 +180,7 @@ fit <- function(model,
   data$MatrixCategory = MatrixCategory
   data$Ncategory = Ncategory
   data$maxNcategory=maxNcategory
-  
+  data$Ncategoryclass=Ncategoryclass
   
   newdata = append(data,pars)
   if(model$type=='independent'){
