@@ -155,7 +155,7 @@ transformed parameters {
 
     for(i in 1:Ncategory){
         c = 0;
-        for(I in 1:Ncategoryclass)
+        for(I in 1:Ncategoryclass){
             if(MatrixCategory[i,I]>1){ // if ==1, no change in the FOI
                 c = c+ Flambda2[MatrixCategory[i,I], I]; // NON c'est un entier
             }
@@ -163,7 +163,6 @@ transformed parameters {
         Flambda[i] =  exp(c);// exp(Flambda2[I,i]);
        // Flambda[1] = 1;
     }
-
 
     L=1;
     if(seroreversion==0){
