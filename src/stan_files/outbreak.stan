@@ -239,13 +239,11 @@ transformed parameters {
 
 
 */
+ 
    for(j in 1:N){
-        Like[j] =1-(1-bg[categoryindex[j]])*P[age[j],age_group[j],categoryindex[j], categoryindex[j]];///q[age_group[j],categoryindex[j]] ;
-    }
-/*   for(j in 1:N){
         Like[j] =1-(1-bg[categoryindex[j]])*P[age[j],age_group[j],categoryindex[j]];///q[age_group[j],categoryindex[j]] ;
     }
-*/
+
 
 }
 
