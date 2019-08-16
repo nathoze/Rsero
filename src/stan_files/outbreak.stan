@@ -22,6 +22,8 @@ data {
 
     int<lower=1> maxNcategory; // 14/08
 
+    int<lower=1> MatrixCategory[Ncategory,Ncategoryclass];
+
 //    int<lower=1> index1dimension[N] ; // 14/08
 
   //  int <lower=1, upper=NGroups> ind_by_age[A]; // 
