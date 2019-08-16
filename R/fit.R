@@ -140,13 +140,30 @@ fit <- function(model,
   
   Ncategoryclass =  dim(cat)[2]
   
-  
-  
   A=apply(cat, 2, unique)
   maxNcategory=0
+  V=c()
   for(I in 1:Ncategoryclass){
     if(maxNcategory<length(A[[I]])){maxNcategory=length(A[[I]])}
+    
+    
+    s =  cat[,I]
+    v1=rep(0,data$N)
+    
+    u = unique(s) 
+    for(i in seq(1,length(u))){
+      v1[which(s==u[i])] = i
+    }
+    V=cbind(V,v1)
   }
+  
+  
+  
+  
+  
+  
+  
+  
   
   # list of all combinations
   l=NULL
@@ -159,9 +176,7 @@ fit <- function(model,
   
   rowProd <-  function(X){
     return(prod(X==a))
-    
   }
-  
   
   categoryindex=c()
   
