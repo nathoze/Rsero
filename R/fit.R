@@ -157,12 +157,7 @@ fit <- function(model,
     V=cbind(V,v1)
   }
   
-  
-  
-  
-  
-  
-  
+   
   
   
   # list of all combinations
@@ -181,7 +176,7 @@ fit <- function(model,
   categoryindex=c()
   
   for(i in 1:N){
-    a=V[2,]
+    a=V[i,]
     apply(Exp,1, FUN = rowProd)
     categoryindex[i]= which(apply(Exp,1, FUN = rowProd)==1)
   }
