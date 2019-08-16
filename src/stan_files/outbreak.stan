@@ -13,9 +13,16 @@ data {
 
     int<lower = 0, upper=1> background; 
 
-    int <lower=1> categoryindex[N]; 
+    int <lower=1> categoryindex[N]; // 14/08
 
-    int <lower=1> Ncategory;  
+    int<lower= 1> Ncategoryclass; // 14/08
+
+ //   int <lower=1> Ncategory[Ncategoryclass];  // 14/08
+    int <lower=1> Ncategory;  // 14/08
+
+    int<lower=1> maxNcategory; // 14/08
+
+//    int<lower=1> index1dimension[N] ; // 14/08
 
   //  int <lower=1, upper=NGroups> ind_by_age[A]; // 
     
@@ -64,8 +71,7 @@ parameters {
     real<lower=0> beta[K];
     real<lower = 0, upper = 1> rho;    
     real<lower = 0, upper=1> bg2[Ncategory];
-    real  Flambda2[Ncategory];
- 
+    real  Flambda2[maxNcategory,Ncategoryclass]; //14 08
 }
 
 transformed parameters {
@@ -74,10 +80,11 @@ transformed parameters {
     real L;
     real lambda[A];
     real S[K]; // Normalization constant
-    real<lower =0, upper=1> P[A,NAgeGroups,Ncategory];
+    real<lower =0, upper=1> P[A,NAgeGroups,Ncategory]; //14 08 
     real<lower =0> bg[Ncategory];
-    real<lower =0> Flambda[Ncategory];
+    real<lower =0> Flambda[Ncategory]; //14 08
     real<lower = 0, upper=1> Like[N];  
+    real c; // 14/08
 
      
     if(!cat_bg){
@@ -110,7 +117,7 @@ transformed parameters {
             lambda[j]  =  lambda[j]  + alpha[i]/S[i]*exp(-((j-T[i])^2)/(beta[i])^2);
         }
     }
-
+/*
      if(!cat_lambda){
         for(i in 1:Ncategory){
             Flambda[i] = 1;
@@ -121,8 +128,80 @@ transformed parameters {
         }   
         Flambda[1] = 1;
     }
-  
+  */
+   
+
+
+// 14 08 
+/*
+    for(I in 1:Ncategoryclass){
+        for(i in 1:maxNcategory){
+            Flambda[I,i] =exp(Flambda2[I,i]);
+        }   
+        Flambda[I,1] = 1;
+    }
+     
+
+     // avec index1dimensionAll : exp(sum(Flambda2))
+    for(i in 1:Ncategory){
+            Flambda[i] =   exp(Flambda2[I,i]);
+        }   
+        Flambda[1] = 1;
+    }
+     */
+// 14 08 
+
+    for(i in 1:Ncategory){
+        c = 0;
+        for(I in 1:Ncategoryclass)
+            if(MatrixCategory[i,I]>1){ // if ==1, no change in the FOI
+                c = c+ Flambda2[MatrixCategory[i,I], I]; // NON c'est un entier
+            }
+        }   
+        Flambda[i] =  exp(c);// exp(Flambda2[I,i]);
+       // Flambda[1] = 1;
+    }
+
+
     L=1;
+    if(seroreversion==0){
+        for(J in 1:NAgeGroups){
+            for(i in 1:Ncategory){      // Ici Ncategory est un entier et pas un tableau
+                P[1,J,i ] = exp(-Flambda[i]*lambda[1]) ;
+                for(j in 1:A-1){
+                    x[j]=1;         
+                    if(j<age_at_init[J]){
+                        P[j+1,J,i] = exp(- Flambda[i]*lambda[j]) ;    
+                    }else{
+                        P[j+1,J,i] = P[j,J,i]*exp(- Flambda[i]*lambda[j+1]);                 
+                    } 
+                }
+                x[A]=1;
+            }
+        }
+    }
+
+    if(seroreversion==1){
+        for(J in 1:NAgeGroups){
+            for(i in 1:Ncategory){        
+                for(j in 1:A){
+                    x[j] = 1; 
+                    for(k in 2:j){
+                        L=Flambda[i]*lambda[j-k+2];
+                        x[j-k+2-1] = x[j-k+2]*exp(-(rho+L)) +rho/(L+rho)*(1- exp(-(rho+L)));
+                    }
+                    P[j,J,i]  = x[age_at_init[J]];
+                }
+            }
+        }
+    }
+
+
+
+
+
+
+/* 14 08 
 
 
     if(seroreversion==0){
@@ -157,9 +236,15 @@ transformed parameters {
         }
     }
 
+
+*/
    for(j in 1:N){
+        Like[j] =1-(1-bg[categoryindex[j]])*P[age[j],age_group[j],categoryindex[j], categoryindex[j]];///q[age_group[j],categoryindex[j]] ;
+    }
+/*   for(j in 1:N){
         Like[j] =1-(1-bg[categoryindex[j]])*P[age[j],age_group[j],categoryindex[j]];///q[age_group[j],categoryindex[j]] ;
     }
+*/
 
 }
 
@@ -178,8 +263,10 @@ model {
         bg2[i] ~ uniform(priorbg1, priorbg2);   // category background infection. Size = Ncategory 
     }
 
-    for(i in 1:Ncategory){
-        Flambda2[i] ~ normal(0,1.73) ;
+   for(I in 1:Ncategoryclass){
+        for(i in 1:maxNcategory){      
+            Flambda2[i,I] ~ normal(0,1.73) ;
+        }
     }
 
     for (j in 1:N) {  
