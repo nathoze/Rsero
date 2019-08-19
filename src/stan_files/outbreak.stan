@@ -119,50 +119,29 @@ transformed parameters {
             lambda[j]  =  lambda[j]  + alpha[i]/S[i]*exp(-((j-T[i])^2)/(beta[i])^2);
         }
     }
-/*
+
      if(!cat_lambda){
         for(i in 1:Ncategory){
             Flambda[i] = 1;
         }
-    }else{
+    } else{
+
         for(i in 1:Ncategory){
-            Flambda[i] =exp(Flambda2[i]);
-        }   
-        Flambda[1] = 1;
-    }
-  */
-   
-
-
-// 14 08 
-/*
-    for(I in 1:Ncategoryclass){
-        for(i in 1:maxNcategory){
-            Flambda[I,i] =exp(Flambda2[I,i]);
-        }   
-        Flambda[I,1] = 1;
-    }
-     
-
-     // avec index1dimensionAll : exp(sum(Flambda2))
-    for(i in 1:Ncategory){
-            Flambda[i] =   exp(Flambda2[I,i]);
-        }   
-        Flambda[1] = 1;
-    }
-     */
-// 14 08 
-
-    for(i in 1:Ncategory){
         c = 0;
         for(I in 1:Ncategoryclass){
             if(MatrixCategory[i,I]>1){ // if ==1, no change in the FOI
-                c = c+ Flambda2[MatrixCategory[i,I], I]; // NON c'est un entier
+                c = c+ Flambda2[MatrixCategory[i,I], I];  
             }
         }   
         Flambda[i] =  exp(c);// exp(Flambda2[I,i]);
-       // Flambda[1] = 1;
     }
+    }
+   
+
+ 
+// 14 08 
+
+    
 
     L=1;
     if(seroreversion==0){

@@ -15,7 +15,13 @@ data {
 
     int <lower=1> categoryindex[N];  
 
-    int <lower=1> Ncategory;  
+    int <lower=1> Ncategory;
+
+    int<lower= 1> Ncategoryclass; // 14/08
+
+    int<lower=1> maxNcategory; // 14/08
+
+    int<lower=1> MatrixCategory[Ncategory,Ncategoryclass];  
   
     int <lower=0> age_at_sampling[N];  
 
@@ -51,7 +57,7 @@ parameters {
     real logitlambda[NGroups]; 
     real<lower = 0, upper = 1> rho;    
     real<lower = 0, upper=1> bg2[Ncategory];
-    real Flambda2[Ncategory]; 
+    real  Flambda2[maxNcategory,Ncategoryclass]; //14 08
 }
 
 
@@ -59,10 +65,11 @@ transformed parameters {
     real x[A]; 
     real L;
     real lambda[A];
-    real<lower =0, upper=1> P[A,NAgeGroups,Ncategory];
+    real<lower =0, upper=1> P[A,NAgeGroups,Ncategory]; //14 08 
     real<lower =0> bg[Ncategory];
-    real<lower =0> Flambda[Ncategory];
-    real<lower = 0, upper=1> Like[N];   
+    real<lower =0> Flambda[Ncategory]; //14 08
+    real<lower = 0, upper=1> Like[N];  
+    real c; // 14/08
 
     for (j in 1:A) {
          lambda[j] = inv_logit(logitlambda[j]);
@@ -86,16 +93,23 @@ transformed parameters {
         }
     }
     
-    if(!cat_lambda){
+     if(!cat_lambda){
         for(i in 1:Ncategory){
             Flambda[i] = 1;
         }
-    }else{
+    } else{
+
         for(i in 1:Ncategory){
-            Flambda[i] =exp(Flambda2[i]);
+        c = 0;
+        for(I in 1:Ncategoryclass){
+            if(MatrixCategory[i,I]>1){ // if ==1, no change in the FOI
+                c = c+ Flambda2[MatrixCategory[i,I], I];  
+            }
         }   
-        Flambda[1] = 1;
+        Flambda[i] =  exp(c);// exp(Flambda2[I,i]);
     }
+    }
+   
     
    
     L=1;
@@ -153,8 +167,10 @@ model {
         bg2[i] ~uniform(priorbg1, priorbg2);   // category background infection. Size = Ncategory 
     }
 
-    for(i in 1:Ncategory){
-        Flambda2[i] ~ normal(0,1.73) ;
+    for(I in 1:Ncategoryclass){
+        for(i in 1:maxNcategory){      
+            Flambda2[i,I] ~ normal(0,1.73) ;
+        }
     }
     rho  ~ uniform(priorRho1, priorRho2);
 
