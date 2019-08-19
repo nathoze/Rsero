@@ -45,8 +45,12 @@ seroprevalence.fit<- function(FOIfit,
   latest_sampling_year <- max(FOIfit$data$sampling_year)
   years <- seq(1,A)
   
-  Ncat = FOIfit$data$Ncategory
   
+  # rajouter Ncategorysum dans fit 
+  
+#  Ncat = FOIfit$data$Ncategorysum
+  
+  Ncat=length(unique(as.vector(F1$data$category)))
   # if(FOIfit$model$cat_bg == 0 && FOIfit$model$cat_lambda==0){
   #   Ncat = 1
   # }  else{
@@ -76,7 +80,7 @@ seroprevalence.fit<- function(FOIfit,
       ypoly <-  c(par_out[3, ], rev(par_out[2, ]))
       DataEnvelope = data.frame(x = xpoly, y = ypoly)
       
-      # data
+      # histogram  of data
       histdata <- sero.age.groups(dat = subdat,age_class = age_class,YLIM=YLIM)
       
       

@@ -83,7 +83,6 @@ SeroData <- function(age_at_sampling,
     stop("age_at_sampling must have only positive numbers (>=1)")
   }
   
-  
   if(!typeof(category)=="character"){
     stop("'category' must contain characters")
   }
@@ -107,7 +106,7 @@ SeroData <- function(age_at_sampling,
   }
   
   if(length(category) == 1){
-    category <- rep(category,1,length(age_at_sampling))
+    category <- as.matrix(rep(category,1,length(age_at_sampling)))
   }
   
   if(is.null(age)){
@@ -123,6 +122,53 @@ SeroData <- function(age_at_sampling,
   age_at_sampling[which(age_at_sampling>max_age)] <- max_age 
   age.groups <-compute.age.groups(age = age,sampling_year = sampling_year)
   
+  
+  
+  # Ncategoryclass =  dim(category)[2]
+  # 
+  # A=apply(category, 2, unique)
+  # maxNcategory=0
+  # V=c()
+  # for(I in 1:Ncategoryclass){
+  #   if(maxNcategory<length(A[[I]])){maxNcategory=length(A[[I]])}
+  #   
+  #   s =  category[,I]
+  #   v1=rep(0,data$N)
+  #   
+  #   u = unique(s) 
+  #   for(i in seq(1,length(u))){
+  #     v1[which(s==u[i])] = i
+  #   }
+  #   V=cbind(V,v1)
+  # }
+  # 
+  # # list of all combinations
+  # l=NULL
+  # for(I in 1:Ncategoryclass){
+  #   
+  #   l[I]  = list(seq(1,length(unique(category[,I]))))
+  #   
+  # }
+  # Exp = expand.grid(l)
+  # 
+  # rowProd <-  function(X){
+  #   return(prod(X==a))
+  # }
+  # 
+  # categoryindex=c()
+  # 
+  # for(i in 1:N){
+  #   a=V[i,]
+  #   apply(Exp,1, FUN = rowProd)
+  #   categoryindex[i]= which(apply(Exp,1, FUN = rowProd)==1)
+  # }
+  # 
+  # MatrixCategory= Exp
+  # Ncategory = dim(Exp)[1]
+  # 
+  param.category =  analyse.categories(category=category, N=N)
+  
+  
   data <- list( A = max_age,
                 N = length(age),
                 Y = Y,
@@ -132,8 +178,13 @@ SeroData <- function(age_at_sampling,
                 location = location,
                 sex = sex,
                 category = category,
-                Ncategory = length(unique(category)), 
-                NGroups = max_age,#??length(ind_by_age), #  New 06/09/2018
+                categoryindex=param.category$categoryindex,
+                MatrixCategory = param.category$MatrixCategory,
+                Ncategory = param.category$Ncategory,
+                maxNcategory=param.category$maxNcategory,
+                Ncategoryclass=param.category$Ncategoryclass,
+                #   Ncategory = length(unique(category)),  # NON
+                NGroups = max_age, 
                 NAgeGroups = age.groups$NAgeGroups, 
                 age_at_init =  as.array(age.groups$age_at_init), # CHECK THIS 25/09/2018 
                 age_group  = age.groups$age_group)
@@ -192,4 +243,59 @@ testInteger <- function(x){
   test <- all.equal(x, as.integer(x), check.attributes = FALSE)
   if(test == TRUE){ return(TRUE) }
   else { return(FALSE) }
+}
+
+
+analyse.categories <- function(category,N){
+  
+  Ncategoryclass =  dim(category)[2]
+  
+  A=apply(category, 2, unique)
+  maxNcategory=0
+  V=c()
+  for(I in 1:Ncategoryclass){
+    if(maxNcategory<length(A[[I]])){maxNcategory=length(A[[I]])}
+    
+    s =  category[,I]
+    v1=rep(0,data$N)
+    
+    u = unique(s) 
+    for(i in seq(1,length(u))){
+      v1[which(s==u[i])] = i
+    }
+    V=cbind(V,v1)
+  }
+  
+  # list of all combinations
+  l=NULL
+  for(I in 1:Ncategoryclass){
+    
+    l[I]  = list(seq(1,length(unique(category[,I]))))
+    
+  }
+  Exp = expand.grid(l)
+  
+  rowProd <-  function(X){
+    return(prod(X==a))
+  }
+  
+  categoryindex=c()
+  
+  for(i in 1:N){
+    a=V[i,]
+    apply(Exp,1, FUN = rowProd)
+    categoryindex[i]= which(apply(Exp,1, FUN = rowProd)==1)
+  }
+  
+  MatrixCategory= Exp
+  Ncategory = dim(Exp)[1]
+  
+  
+  return(  list(category = category,
+                categoryindex=categoryindex,
+                MatrixCategory = MatrixCategory,
+                Ncategory = Ncategory,
+                maxNcategory=maxNcategory,
+                Ncategoryclass=Ncategoryclass))
+           
 }

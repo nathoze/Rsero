@@ -52,7 +52,7 @@
 #' # add example with subset(data, location)
 #' 
 
- 
+
 subset.SeroData <- function(data,sub =seq(1,data$N), loc = NULL, category = NULL){
   
   
@@ -62,13 +62,14 @@ subset.SeroData <- function(data,sub =seq(1,data$N), loc = NULL, category = NULL
     sub  = m[!is.na(m)]#??
     sub=sub1
   }
-  
-  if(!is.null(category)){
-    sub1 = which(data$category %in% category)
+
+  if(!is.null(category)){ 
+    sub1 = which(data$category==category, arr.ind = TRUE)[,1]
     m = match(sub, sub1)
     sub  = m[!is.na(m)]#??
     sub=sub1
   }
+  
   Y=as.matrix(data$Y)
   
   
@@ -77,9 +78,16 @@ subset.SeroData <- function(data,sub =seq(1,data$N), loc = NULL, category = NULL
   age.groups <-compute.age.groups(age = sub.age,sampling_year = data$sampling_year[sub])
   
   
+  N=length(sub)
+  category =  matrix(data$category[sub,],nrow = N) 
+  
+  param.category = analyse.categories(category,N)
+  
+  
+  
   subdata <- list( A = data$A,
                    NGroups = data$NGroups,
-                   N = length(sub),
+                   N = N,
                    Y = Y[sub,],
                    age = sub.age,
                    age_at_sampling = data$age_at_sampling[sub],
@@ -87,8 +95,12 @@ subset.SeroData <- function(data,sub =seq(1,data$N), loc = NULL, category = NULL
                    sampling_year = data$sampling_year[sub],
                    location = data$location[sub],
                    sex = data$sex[sub],
-                   category = data$category[sub],
-                   Ncategory = length(unique(data$category[sub])),
+                   category = category,
+                   categoryindex=param.category$categoryindex,
+                   MatrixCategory = param.category$MatrixCategory,
+                   Ncategory = param.category$Ncategory,
+                   maxNcategory=param.category$maxNcategory,
+                   Ncategoryclass=param.category$Ncategoryclass,
                    NAgeGroups = age.groups$NAgeGroups,
                    age_at_init =  as.array(age.groups$age_at_init), 
                    age_group  = age.groups$age_group)
@@ -99,4 +111,3 @@ subset.SeroData <- function(data,sub =seq(1,data$N), loc = NULL, category = NULL
   return(subdata)
   
 }
- 

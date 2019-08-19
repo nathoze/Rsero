@@ -4,7 +4,7 @@
 ##' 
 ##' @author Nathanael Hoze \email{nathanael.hoze@gmail.com}
 ##'  
-##' @param x The \code{FOIfit} object to be plotted.
+##' @param FOIfit The \code{FOIfit} object to be plotted.
 ##' 
 ##' @param mean_only Boolean. If \code{FALSE}, plot the mean force of infection as well as an envelope of the 95\% credible interval. Default =  \code{FALSE}. 
 ##'  
@@ -26,27 +26,27 @@
 ##' @rdname plot
 ##' @importFrom graphics lines
 
-plot.FOIfit <- function(x,                   
+plot.FOIfit <- function(FOIfit,                   
                         mean_only = FALSE,
                         individual_samples = 0,
                         YLIM=1,
                         maxYears = NULL,
                         ...){
   
-  chains <- rstan::extract(x$fit)
+  chains <- rstan::extract(FOIfit$fit)
   L1 <- chains$lambda
   plots  <- NULL
-  if(x$model$cat_bg == 0 && x$model$cat_lambda==0){
+  if(FOIfit$model$cat_bg == 0 && FOIfit$model$cat_lambda==0){
     Ncat = 1
   }  else{
-    Ncat = x$data$Ncategory
+    Ncat = FOIfit$data$Ncategory
   }
   
   # 3/09/2018  ??
-  if(x$model$cat_lambda==0){
+  if(FOIfit$model$cat_lambda==0){
     Ncat = 1
   }  else{
-    Ncat = x$data$Ncategory
+    Ncat = FOIfit$data$Ncategory
   }
   # Ne pas repeter les plot si cat_bg = TRUE, seulement si cat_lambda = TRUE?
   
@@ -59,10 +59,10 @@ plot.FOIfit <- function(x,
     latest_sampling_year <- max(x$data$sampling_year)
     
     if(is.null(maxYears)  ){
-      maxYears =x$data$A
+      maxYears =FOIfit$data$A
     } 
-    if(maxYears >x$data$A ){
-      maxYears =x$data$A
+    if(maxYears >FOIfit$data$A ){
+      maxYears =FOIfit$data$A
     } 
     
     yrs <- latest_sampling_year-seq(1,maxYears)+1

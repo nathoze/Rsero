@@ -60,25 +60,31 @@ combine_surveys <- function(SeroData1,SeroData2){
   # }
   
   
- # Indices =  combine_ind_by_age(dat1,dat2)  # 7/9/2018
-      
+  # Indices =  combine_ind_by_age(dat1,dat2)  # 7/9/2018
+  
   
   
   age2  = dat2$age_at_sampling+Offset #?
   
   sampling_year = c(dat1$sampling_year,dat2$sampling_year)
-
+  
   a = max(sampling_year)-sampling_year +1
   
   
   age_group = rep(0,N)
-   u  = unique(a) 
-   for(i in 1:length(u)){
+  u  = unique(a) 
+  for(i in 1:length(u)){
     age_group[which(u[i] == a) ] =i
-   } 
-    age_at_init =u
-
-    NAgeGroups = length(u)
+  } 
+  age_at_init =u
+  
+  NAgeGroups = length(u)
+  
+  category = rbind(dat1$category,dat2$category)
+  param.category = analyse.categories(category = category, N=N)
+  
+  
+  
   
   
   data <- list( A = A,#length(Indices),
@@ -91,13 +97,16 @@ combine_surveys <- function(SeroData1,SeroData2){
                 sampling_year = sampling_year,
                 location = c(dat1$location,dat2$location),
                 sex = c(dat1$sex,dat2$sex),
-                category = c(dat1$category,dat2$category),
-                Ncategory = length(unique(c(dat1$category,dat2$category))), 
-                #Ngroups = Alength(Indices), #  New 06/09/2018
+                category=category,
+                categoryindex=param.category$categoryindex,
+                MatrixCategory = param.category$MatrixCategory,
+                Ncategory = param.category$Ncategory,
+                maxNcategory=param.category$maxNcategory,
+                Ncategoryclass=param.category$Ncategoryclass,                
                 NAgeGroups = NAgeGroups,
                 age_at_init =  as.array(age_at_init), 
                 age_group  = age_group
-                )
+  )
   
   
   class(data) <- 'SeroData'
@@ -124,7 +133,7 @@ combine_ind_by_age <- function(data1,data2){
   # 
   # }
   # 
-
+  
   
   
   y1 =max(data1$sampling_year)
@@ -139,12 +148,12 @@ combine_ind_by_age <- function(data1,data2){
   Year1=max(y1,y2)
   Year2=max(z1,z2)
   
- # Year1 = max(data1$sampling_year,data2$sampling_year)
+  # Year1 = max(data1$sampling_year,data2$sampling_year)
   #Year2 = min(data1$sampling_year,data2$sampling_year)
-
+  
   if (Year1 == Year2){
     Offset = Year1-Year2
-
+    
   }else{
     Offset = Year1-Year2
   }
@@ -176,7 +185,7 @@ combine_ind_by_age <- function(data1,data2){
     ind1 = IND1[startIndex]
     ind2 = IND2[startIndex]
     
-#    print(IND1[startIndex:length(IND1)])
+    #    print(IND1[startIndex:length(IND1)])
     #print(IND)
     
     m1 = min(which(IND1[startIndex:length(IND1)]  > ind1))
@@ -184,13 +193,13 @@ combine_ind_by_age <- function(data1,data2){
     if  ( is.finite(m1) &&  is.finite(m2)){
       endIndex =  startIndex+max(m1,m2)-2
       IND[startIndex:endIndex ] = element+1
-          element  = element+1
-    startIndex = endIndex
+      element  = element+1
+      startIndex = endIndex
     }else{
       IND[startIndex:length(IND)]=IND2[startIndex:length(IND)] + Offset
     }
     
-
+    
   }
   return(IND)
   
