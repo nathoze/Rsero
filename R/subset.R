@@ -54,7 +54,7 @@
 
 
 subset.SeroData <- function(data,sub =seq(1,data$N), loc = NULL, category = NULL){
-  
+
   
   if(!is.null(loc)){
     sub1 = which(data$location %in% loc)
@@ -101,6 +101,8 @@ subset.SeroData <- function(data,sub =seq(1,data$N), loc = NULL, category = NULL
                    Ncategory = param.category$Ncategory,
                    maxNcategory=param.category$maxNcategory,
                    Ncategoryclass=param.category$Ncategoryclass,
+                   unique.categories=param.category$unique.categories,
+                   Ncat.unique = param.category$Ncat.unique,
                    NAgeGroups = age.groups$NAgeGroups,
                    age_at_init =  as.array(age.groups$age_at_init), 
                    age_group  = age.groups$age_group)

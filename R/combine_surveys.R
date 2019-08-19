@@ -49,21 +49,7 @@ combine_surveys <- function(SeroData1,SeroData2){
     dat2 = SeroData1
   }
   A = max(dat1$A, dat2$A+Offset)
-  
-  # u1=unique(dat1$sampling_year)
-  # u2=unique(dat2$sampling_year)
-  # 
-  # if( is.na(match(u1,u2)) ) {
-  #   
-  #   NAgeGroups = dat1$NAgeGroups+dat2$NAgeGroups -length(which(!is.na(match(u1,u2) ) ) ) 
-  #   
-  # }
-  
-  
-  # Indices =  combine_ind_by_age(dat1,dat2)  # 7/9/2018
-  
-  
-  
+
   age2  = dat2$age_at_sampling+Offset #?
   
   sampling_year = c(dat1$sampling_year,dat2$sampling_year)
@@ -74,7 +60,7 @@ combine_surveys <- function(SeroData1,SeroData2){
   age_group = rep(0,N)
   u  = unique(a) 
   for(i in 1:length(u)){
-    age_group[which(u[i] == a) ] =i
+    age_group[which(u[i] == a) ] = i
   } 
   age_at_init =u
   
@@ -102,7 +88,9 @@ combine_surveys <- function(SeroData1,SeroData2){
                 MatrixCategory = param.category$MatrixCategory,
                 Ncategory = param.category$Ncategory,
                 maxNcategory=param.category$maxNcategory,
-                Ncategoryclass=param.category$Ncategoryclass,                
+                Ncategoryclass=param.category$Ncategoryclass,       
+                unique.categories=param.category$unique.categories,
+                Ncat.unique = param.category$Ncat.unique,
                 NAgeGroups = NAgeGroups,
                 age_at_init =  as.array(age_at_init), 
                 age_group  = age_group

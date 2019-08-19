@@ -122,7 +122,7 @@ SeroData <- function(age_at_sampling,
   age_at_sampling[which(age_at_sampling>max_age)] <- max_age 
   age.groups <-compute.age.groups(age = age,sampling_year = sampling_year)
   
-   
+  
   N=length(age)
   param.category =  analyse.categories(category=category, N=N)
   
@@ -141,7 +141,8 @@ SeroData <- function(age_at_sampling,
                 Ncategory = param.category$Ncategory,
                 maxNcategory=param.category$maxNcategory,
                 Ncategoryclass=param.category$Ncategoryclass,
-                #   Ncategory = length(unique(category)),  # NON
+                unique.categories=param.category$unique.categories,
+                Ncat.unique = param.category$Ncat.unique,
                 NGroups = max_age, 
                 NAgeGroups = age.groups$NAgeGroups, 
                 age_at_init =  as.array(age.groups$age_at_init), # CHECK THIS 25/09/2018 
@@ -203,7 +204,7 @@ testInteger <- function(x){
   else { return(FALSE) }
 }
 
-
+#' @export
 analyse.categories <- function(category,N){
   
   Ncategoryclass =  dim(category)[2]
@@ -247,6 +248,11 @@ analyse.categories <- function(category,N){
   
   MatrixCategory= Exp
   Ncategory = dim(Exp)[1]
+   
+  
+  unique.categories  = unique(as.vector(data$category))
+  Ncat.unique =length(unique.categories)
+  
   
   
   return(  list(category = category,
@@ -254,6 +260,8 @@ analyse.categories <- function(category,N){
                 MatrixCategory = MatrixCategory,
                 Ncategory = Ncategory,
                 maxNcategory=maxNcategory,
-                Ncategoryclass=Ncategoryclass))
-           
+                Ncategoryclass=Ncategoryclass,
+                unique.categories=unique.categories,
+                Ncat.unique = Ncat.unique))
+  
 }

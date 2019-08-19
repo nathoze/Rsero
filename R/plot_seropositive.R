@@ -46,29 +46,31 @@ seroprevalence.fit<- function(FOIfit,
   years <- seq(1,A)
   
   
-  # rajouter Ncategorysum dans fit 
-  
-#  Ncat = FOIfit$data$Ncategorysum
-  
-  Ncat=length(unique(as.vector(F1$data$category)))
-  # if(FOIfit$model$cat_bg == 0 && FOIfit$model$cat_lambda==0){
-  #   Ncat = 1
-  # }  else{
-  # }
   index.plot=0
   
   for(sampling_year in sort(unique(FOIfit$data$sampling_year)) ){
-    for(k in 1:Ncat){ 
+    for(k in 1:data$Ncat.unique){ 
       
       index.plot=index.plot+1
       age_group = data$age_group[which(data$sampling_year ==  sampling_year)][1]
-      w = which(data$sampling_year ==  sampling_year & data$categoryindex==k)
+      w = which(data$sampling_year ==  sampling_year & data$category==data$unique.categories[k], arr.ind = TRUE)[,1]
       subdat = subset(data,sub = w)
       
       
       years.plotted =  seq(latest_sampling_year-sampling_year+1, dim(chains$P)[2])
       yrs= years[seq(1, dim(chains$P)[2]-latest_sampling_year+sampling_year )]
-      Pinf <- (1-(1-bg[,k])*chains$P[,years.plotted,age_group,k]) # infection probability
+      
+      
+      d = data$categoryindex[w]
+      
+      p1=proportions.index(d)
+      
+      
+      Pinf=matrix(0, nrow = 2500, ncol=60)
+      
+      for(i in 1:length(p1$index)){
+        Pinf =  Pinf+  p1$prop[i]*( 1-(1-bg[,p1$index[i]])*chains$P[,,1,p1$index[i]] ) 
+      }
       
       par_out <- apply(Pinf, 2, function(x)c(mean(x), quantile(x, probs=c(0.025, 0.975))))
       par_out[par_out>YLIM]= YLIM # set to the upper limits for plotting
@@ -82,7 +84,6 @@ seroprevalence.fit<- function(FOIfit,
       
       # histogram  of data
       histdata <- sero.age.groups(dat = subdat,age_class = age_class,YLIM=YLIM)
-      
       
       
       # plot the mean and 95% credible interval of the seroprevalence
@@ -121,4 +122,15 @@ seroprevalence.fit<- function(FOIfit,
 }
 
 
-
+proportions.index <- function(d){
+  b.x=c()
+  b.y=c()
+  ii=0
+  for(i in unique(d)){
+    ii=ii+1
+    b.x[ii]  = i  
+    b.y[ii]  = sum(d==i)/length(d)
+  }
+  return(list(index=b.x,prop = b.y ))
+  
+}
