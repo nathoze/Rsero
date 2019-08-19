@@ -122,55 +122,13 @@ SeroData <- function(age_at_sampling,
   age_at_sampling[which(age_at_sampling>max_age)] <- max_age 
   age.groups <-compute.age.groups(age = age,sampling_year = sampling_year)
   
-  
-  
-  # Ncategoryclass =  dim(category)[2]
-  # 
-  # A=apply(category, 2, unique)
-  # maxNcategory=0
-  # V=c()
-  # for(I in 1:Ncategoryclass){
-  #   if(maxNcategory<length(A[[I]])){maxNcategory=length(A[[I]])}
-  #   
-  #   s =  category[,I]
-  #   v1=rep(0,data$N)
-  #   
-  #   u = unique(s) 
-  #   for(i in seq(1,length(u))){
-  #     v1[which(s==u[i])] = i
-  #   }
-  #   V=cbind(V,v1)
-  # }
-  # 
-  # # list of all combinations
-  # l=NULL
-  # for(I in 1:Ncategoryclass){
-  #   
-  #   l[I]  = list(seq(1,length(unique(category[,I]))))
-  #   
-  # }
-  # Exp = expand.grid(l)
-  # 
-  # rowProd <-  function(X){
-  #   return(prod(X==a))
-  # }
-  # 
-  # categoryindex=c()
-  # 
-  # for(i in 1:N){
-  #   a=V[i,]
-  #   apply(Exp,1, FUN = rowProd)
-  #   categoryindex[i]= which(apply(Exp,1, FUN = rowProd)==1)
-  # }
-  # 
-  # MatrixCategory= Exp
-  # Ncategory = dim(Exp)[1]
-  # 
+   
+  N=length(age)
   param.category =  analyse.categories(category=category, N=N)
   
   
   data <- list( A = max_age,
-                N = length(age),
+                N = N,
                 Y = Y,
                 age = age,
                 age_at_sampling = age_at_sampling,
@@ -257,7 +215,7 @@ analyse.categories <- function(category,N){
     if(maxNcategory<length(A[[I]])){maxNcategory=length(A[[I]])}
     
     s =  category[,I]
-    v1=rep(0,data$N)
+    v1=rep(0,N)
     
     u = unique(s) 
     for(i in seq(1,length(u))){
