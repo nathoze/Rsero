@@ -127,12 +127,13 @@ transformed parameters {
          }
     }
 
-      if(!cat_lambda){
-        for(i in 1:Ncategory){
-            Flambda[i] = 1;
-        }
-    } else{
 
+    c=0;
+    if(!cat_lambda){
+        for(i in 1:Ncategory){
+            Flambda[i] = 1; 
+        }
+    }else{
         for(i in 1:Ncategory){
         c = 0;
         for(I in 1:Ncategoryclass){
@@ -141,12 +142,10 @@ transformed parameters {
             }
         }   
         Flambda[i] =  exp(c);// exp(Flambda2[I,i]);
+        }
     }
-    }
-   
-  
+    
     L=1;
-
 
     if(seroreversion==0){
         for(J in 1:NAgeGroups){
