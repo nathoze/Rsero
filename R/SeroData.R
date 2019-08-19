@@ -250,7 +250,7 @@ analyse.categories <- function(category,N){
   Ncategory = dim(Exp)[1]
    
   
-  unique.categories  = unique(as.vector(data$category))
+  unique.categories  = unique(as.vector(category))
   Ncat.unique =length(unique.categories)
   
   
