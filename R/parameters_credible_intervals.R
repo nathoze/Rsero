@@ -89,19 +89,19 @@ parameters_credible_intervals <- function(FOIfit,
         
         params <- add.quantiles.text(params,variable=chainsout$T[,i], name = paste('T',i), quants= quants, quantilestext=quantilestext )
         
-        
-        if(FOIfit$model$cat_lambda){
-          Ncat_lambda = FOIfit$data$Ncategory
-        }else{
-          Ncat_lambda = 1
-        }
-        
-        for(k in seq(1,Ncat_lambda)){
-          name <- paste('alpha',i)
-          if(Ncat_lambda>1)    name <- paste('alpha',i,' cat',k)
-          params <- add.quantiles.text(params,variable=chainsout$alpha[,i]*chainsout$Flambda[,k], name = name, quants= quants, quantilestext=quantilestext )
-          
-        }
+        # 
+        # if(FOIfit$model$cat_lambda){
+        #   Ncat_lambda = FOIfit$data$Ncategory
+        # }else{
+        #   Ncat_lambda = 1
+        # }
+        # 
+        # for(k in seq(1,Ncat_lambda)){
+        #   name <- paste('alpha',i)
+        #   if(Ncat_lambda>1)    name <- paste('alpha',i,' cat',k)
+        #   params <- add.quantiles.text(params,variable=chainsout$alpha[,i]*chainsout$Flambda[,k], name = name, quants= quants, quantilestext=quantilestext )
+        #   
+        # }
         
         # for(k in seq(1,Ncat_lambda)){
         #   de<-data.frame(t(quantile(FOI*chainsout$Flambda[,k], probs = quants)), mean = mean(FOI*chainsout$Flambda[,k]))
@@ -162,8 +162,25 @@ parameters_credible_intervals <- function(FOIfit,
       rho = chains$rho
       params <- add.quantiles.text(params, variable=rho, name = paste('rho'),quants = quants, quantilestext=quantilestext )
     }
-    
   }
+  
+  
+  
+  if(FOIfit$model$cat_lambda){ # revoir la condition
+    d= FOIfit$data$category.position.in.table
+    for(i in seq(1,dim(d)[1])){
+      
+      name <- paste0('FOI of category ', d[i,]$predictor, " relative to " ,  d[i,]$relative_to)
+      params <- add.quantiles.text(params,variable=chainsout$Flambda[,d[i,]$index],
+                                   name = name,
+                                   quants= quants, 
+                                   quantilestext=quantilestext )
+      
+    }
+    
+  } 
+  
+  
   
   names(params) <- quantilestext
   return(params)

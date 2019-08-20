@@ -143,6 +143,7 @@ SeroData <- function(age_at_sampling,
                 Ncategoryclass=param.category$Ncategoryclass,
                 unique.categories=param.category$unique.categories,
                 Ncat.unique = param.category$Ncat.unique,
+                category.position.in.table=param.category$category.position.in.table,
                 NGroups = max_age, 
                 NAgeGroups = age.groups$NAgeGroups, 
                 age_at_init =  as.array(age.groups$age_at_init), # CHECK THIS 25/09/2018 
@@ -254,6 +255,37 @@ category.parameters <- function(category,N){
   Ncat.unique =length(unique.categories)
   
   
+  L1 <- function(x){ return(length(which(x==1))==2)}
+  L2 <- function(x){ 
+    G=0
+    if(L1(x) == TRUE){
+      G=which(x!=1)
+      
+    }
+    return(G)
+  }
+  
+  
+  index = which(apply(X = Exp, 1, FUN = L1))
+  w=(apply(X = Exp, 1, FUN = L2))
+  
+  col.index = w[w>0]
+  
+  category.position.in.table= data.frame(predictor = character(),
+                                         relative_to = character(),
+                                         index = integer())
+  
+  I=0
+  for(i in unique(col.index)){
+    
+    U = unique(category[,i])
+    for(j in 2:(length(U)) ){
+      I=I+1
+      de<-data.frame(U[j],U[1], index[I])
+      category.position.in.table=rbind(category.position.in.table, setNames(de, names(category.position.in.table)))
+      
+    }
+  }
   
   return(  list(category = category,
                 categoryindex=categoryindex,
@@ -262,6 +294,7 @@ category.parameters <- function(category,N){
                 maxNcategory=maxNcategory,
                 Ncategoryclass=Ncategoryclass,
                 unique.categories=unique.categories,
-                Ncat.unique = Ncat.unique))
+                Ncat.unique = Ncat.unique,
+                category.position.in.table=category.position.in.table))
   
 }

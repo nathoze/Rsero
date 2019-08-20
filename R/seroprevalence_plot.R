@@ -32,7 +32,7 @@ seroprevalence.plot<- function(serodata, age_class = 10, YLIM = 1, ...){
       
       index.plot <- index.plot+1
       
-      w <- which(data$sampling_year ==  sampling_year & data$category==cat, arr.ind = TRUE)[,1]
+      w <- which(data$sampling_year ==  sampling_year & serodata$category==cat, arr.ind = TRUE)[,1]
       subdata <- subset(serodata,sub = w)
       histdata <- sero.age.groups(dat = subdata,age_class = age_class,YLIM=YLIM)
       

@@ -50,7 +50,7 @@ combine_surveys <- function(SeroData1,SeroData2){
   }
   A = max(dat1$A, dat2$A+Offset)
 
-  age2  = dat2$age_at_sampling+Offset #?
+  age2  = dat2$age_at_sampling+Offset 
   
   sampling_year = c(dat1$sampling_year,dat2$sampling_year)
   
@@ -70,8 +70,8 @@ combine_surveys <- function(SeroData1,SeroData2){
   param.category = category.parameters(category = category, N=N)
   
   
-  data <- list( A = A,#length(Indices),
-                NGroups = A,# max(Indices),
+  data <- list( A = A,
+                NGroups = A,
                 N = N,
                 Y = c(dat1$Y,dat2$Y),
                 age = c(dat1$age,age2),
@@ -88,6 +88,7 @@ combine_surveys <- function(SeroData1,SeroData2){
                 Ncategoryclass=param.category$Ncategoryclass,       
                 unique.categories=param.category$unique.categories,
                 Ncat.unique = param.category$Ncat.unique,
+                category.position.in.table=param.category$category.position.in.table,
                 NAgeGroups = NAgeGroups,
                 age_at_init =  as.array(age_at_init), 
                 age_group  = age_group
@@ -101,40 +102,15 @@ combine_surveys <- function(SeroData1,SeroData2){
 
 combine_ind_by_age <- function(data1,data2){
   
-  # 
-  # y1 =max(data1$sampling_year)
-  # y2= max(data2$sampling_year)
-  # 
-  # Year1 = max(y1,y2)
-  # #Year2 = min(z1,z2)
-  # Year2 = min(y1,y2)
-  # 
-  # if (y1 > y2){
-  #   Offset = Year1-Year2
-  # 
-  #   
-  # }else{
-  #   Offset = Year2-Year1 #??
-  # 
-  # }
-  # 
-  
-  
-  
   y1 =max(data1$sampling_year)
   y2= max(data2$sampling_year)
   
   z1 =min(data1$sampling_year)
   z2= min(data2$sampling_year)
-  
-  
-  
+
   
   Year1=max(y1,y2)
   Year2=max(z1,z2)
-  
-  # Year1 = max(data1$sampling_year,data2$sampling_year)
-  #Year2 = min(data1$sampling_year,data2$sampling_year)
   
   if (Year1 == Year2){
     Offset = Year1-Year2
