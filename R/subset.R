@@ -81,7 +81,7 @@ subset.SeroData <- function(data,sub =seq(1,data$N), loc = NULL, category = NULL
   N=length(sub)
   category =  matrix(data$category[sub,],nrow = N) 
   
-  param.category = analyse.categories(category,N)
+  param.category = category.parameters(category,N)
   
   
   

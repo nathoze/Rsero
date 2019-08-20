@@ -4,7 +4,7 @@
 #' 
 #' @author Nathanael Hoze \email{nathanael.hoze@gmail.com}
 #' 
-#' @param data An object of the class \code{SeroData}.
+#' @param serodata An object of the class \code{SeroData}.
 #' 
 #' @param age_class Integer. The length in years of the age classes. Default = 10. 
 #' 
@@ -16,42 +16,37 @@
 #' @examples
 #' 
 #' dat  = data("one_peak_simulation")
-#' seroprevalence.plot(data = dat)
+#' seroprevalence.plot(serodata = dat)
 #' 
 #' 
 
-seroprevalence.plot<- function(data, age_class = 10, YLIM = 1, ...){
+seroprevalence.plot<- function(serodata, age_class = 10, YLIM = 1, ...){
   
   plots  <- NULL
   index.plot=0
   
-  s = data$category
-  s1 = s
-  u = unique(s) 
-  for(i in seq(1,length(u))){
-    s1[which(s==u[i])] = i
-  }
-  u2 = sort(unique(data$sampling_year))
+  s = serodata$category
   
-  for(sampling in u2){
-    for(k in seq(1,data$Ncategory)){
+  for(sampling_year in sort(unique(serodata$sampling_year))){
+    for(cat in serodata$unique.categories){
       
-      index.plot = index.plot+1
-      w = which(data$sampling_year ==  sampling & s1==k)
-      subdata = subset(data,sub = w)
+      index.plot <- index.plot+1
       
+      w <- which(data$sampling_year ==  sampling_year & data$category==cat, arr.ind = TRUE)[,1]
+      subdata <- subset(serodata,sub = w)
       histdata <- sero.age.groups(dat = subdata,age_class = age_class,YLIM=YLIM)
       
-      g <- ggplot(histdata, aes(x=labels, y=mean)) + geom_point()+geom_segment(aes(x=labels,y=lower, xend= labels,yend=upper))
+      g <- ggplot(histdata, aes(x=labels, y=mean)) + geom_point() + geom_segment(aes(x=labels,y=lower, xend= labels,yend=upper))
       g <- g + theme_classic()
       g <- g+theme(axis.text.x = element_text(size=12),
                    axis.text.y = element_text(size=12),
                    text=element_text(size=14))
       g <- g+xlab('Age')+ylab('Proportion seropositive')+ylim(0,YLIM)
       
-      
       plots[[index.plot]]= g
-      print(paste0('Category: ',u[k]))
+      plots[[index.plot]]$category  = cat
+      
+      print(paste0('Category: ',cat))
     }
     
   }

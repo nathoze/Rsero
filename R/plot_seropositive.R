@@ -49,11 +49,11 @@ seroprevalence.fit<- function(FOIfit,
   index.plot=0
   
   for(sampling_year in sort(unique(FOIfit$data$sampling_year)) ){
-    for(k in 1:data$Ncat.unique){ 
+    for(cat in data$unique.categories){ 
       
       index.plot=index.plot+1
       age_group = data$age_group[which(data$sampling_year ==  sampling_year)][1]
-      w = which(data$sampling_year ==  sampling_year & data$category==data$unique.categories[k], arr.ind = TRUE)[,1]
+      w = which(data$sampling_year ==  sampling_year & data$category==cat, arr.ind = TRUE)[,1]
       subdat = subset(data,sub = w)
       
       
@@ -114,6 +114,7 @@ seroprevalence.fit<- function(FOIfit,
       
       
       plots[[index.plot]] <- p 
+      plots[[index.plot]]$category <- cat 
       
     }
   }

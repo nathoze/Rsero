@@ -124,7 +124,7 @@ SeroData <- function(age_at_sampling,
   
   
   N=length(age)
-  param.category =  analyse.categories(category=category, N=N)
+  param.category =  category.parameters(category=category, N=N)
   
   
   data <- list( A = max_age,
@@ -205,7 +205,7 @@ testInteger <- function(x){
 }
 
 #' @export
-analyse.categories <- function(category,N){
+category.parameters <- function(category,N){
   
   Ncategoryclass =  dim(category)[2]
   

@@ -67,10 +67,7 @@ combine_surveys <- function(SeroData1,SeroData2){
   NAgeGroups = length(u)
   
   category = rbind(dat1$category,dat2$category)
-  param.category = analyse.categories(category = category, N=N)
-  
-  
-  
+  param.category = category.parameters(category = category, N=N)
   
   
   data <- list( A = A,#length(Indices),
