@@ -81,7 +81,7 @@ subset.SeroData <- function(data,sub =seq(1,data$N), loc = NULL, category = NULL
   N=length(sub)
   category =  matrix(data$category[sub,],nrow = N) 
   
-  param.category = category.parameters(category,N)
+  param.category = category.parameters(category,N,reference.category = data$reference.category)
   
   
   
@@ -104,6 +104,7 @@ subset.SeroData <- function(data,sub =seq(1,data$N), loc = NULL, category = NULL
                    unique.categories=param.category$unique.categories,
                    Ncat.unique = param.category$Ncat.unique,
                    category.position.in.table=param.category$category.position.in.table,
+                   reference.category=data$reference.category,
                    NAgeGroups = age.groups$NAgeGroups,
                    age_at_init =  as.array(age.groups$age_at_init), 
                    age_group  = age.groups$age_group)

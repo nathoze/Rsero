@@ -121,68 +121,6 @@ fit <- function(model,
             seroreversion = model$seroreversion,
             background = model$background)
   
-  # 
-  # cat=data$category
-  # 
-  # Ncategoryclass =  dim(cat)[2]
-  # 
-  # A=apply(cat, 2, unique)
-  # maxNcategory=0
-  # V=c()
-  # for(I in 1:Ncategoryclass){
-  #   if(maxNcategory<length(A[[I]])){maxNcategory=length(A[[I]])}
-  #   
-  #   
-  #   s =  cat[,I]
-  #   v1=rep(0,data$N)
-  #   
-  #   u = unique(s) 
-  #   for(i in seq(1,length(u))){
-  #     v1[which(s==u[i])] = i
-  #   }
-  #   V=cbind(V,v1)
-  # }
-  # 
-  # 
-  # 
-  # 
-  # 
-  # 
-  # 
-  # 
-  # 
-  # # list of all combinations
-  # l=NULL
-  # for(I in 1:Ncategoryclass){
-  #   
-  #   l[I]  = list(seq(1,length(unique(cat[,I]))))
-  #   
-  # }
-  # Exp = expand.grid(l)
-  # 
-  # rowProd <-  function(X){
-  #   return(prod(X==a))
-  # }
-  # 
-  # categoryindex=c()
-  # 
-  # for(i in 1:N){
-  #   a=V[i,]
-  #   apply(Exp,1, FUN = rowProd)
-  #   categoryindex[i]= which(apply(Exp,1, FUN = rowProd)==1)
-  # }
-  # 
-  # 
-  # MatrixCategory= Exp
-  # Ncategory = dim(Exp)[1]
-  # 
-  # 
-  # data$categoryindex=categoryindex
-  # data$MatrixCategory = MatrixCategory
-  # data$Ncategory = Ncategory
-  # data$maxNcategory=maxNcategory
-  # data$Ncategoryclass=Ncategoryclass
-  
   newdata = append(data,pars)
   if(model$type=='independent'){
     model$estimated_parameters =   model$estimated_parameters+data$A

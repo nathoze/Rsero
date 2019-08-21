@@ -68,6 +68,7 @@ SeroData <- function(age_at_sampling,
                      location = NULL,
                      sex = NULL,
                      category = "Category 1",
+                     reference.category = NULL, ## add in documentation  +  define default
                      ...){
   # Error Messages
   #add  Check : Y and age_at_sampling must have the same length also when Y is multidimensional
@@ -124,9 +125,9 @@ SeroData <- function(age_at_sampling,
   
   
   N=length(age)
-  param.category =  category.parameters(category=category, N=N)
-  
-  
+
+  param.category =  category.parameters(category=category, N=N, reference.category=reference.category)
+
   data <- list( A = max_age,
                 N = N,
                 Y = Y,
@@ -144,6 +145,7 @@ SeroData <- function(age_at_sampling,
                 unique.categories=param.category$unique.categories,
                 Ncat.unique = param.category$Ncat.unique,
                 category.position.in.table=param.category$category.position.in.table,
+                reference.category=reference.category,
                 NGroups = max_age, 
                 NAgeGroups = age.groups$NAgeGroups, 
                 age_at_init =  as.array(age.groups$age_at_init), # CHECK THIS 25/09/2018 
@@ -206,7 +208,7 @@ testInteger <- function(x){
 }
 
 #' @export
-category.parameters <- function(category,N){
+category.parameters <- function(category,N, reference.category){
   
   Ncategoryclass =  dim(category)[2]
   
@@ -214,12 +216,19 @@ category.parameters <- function(category,N){
   maxNcategory=0
   V=c()
   for(I in 1:Ncategoryclass){
-    if(maxNcategory<length(A[[I]])){maxNcategory=length(A[[I]])}
+    
+    if(maxNcategory<length(A[[I]])){
+      maxNcategory=length(A[[I]])
+    }
     
     s =  category[,I]
     v1=rep(0,N)
     
     u = unique(s) 
+    # reorder with reference category as first element
+    ref =  reference.category[I]
+    u=unique(c(ref, u)) # put the reference category as the first element of u
+    
     for(i in seq(1,length(u))){
       v1[which(s==u[i])] = i
     }
@@ -230,7 +239,8 @@ category.parameters <- function(category,N){
   l=NULL
   for(I in 1:Ncategoryclass){
     
-    l[I]  = list(seq(1,length(unique(category[,I]))))
+  # l[I]  = list(seq(1,length(unique(category[,I]))))
+    l[I]  = list(unique(V[,I]))
     
   }
   Exp = expand.grid(l)
@@ -249,13 +259,15 @@ category.parameters <- function(category,N){
   
   MatrixCategory= Exp
   Ncategory = dim(Exp)[1]
-   
+  
   
   unique.categories  = unique(as.vector(category))
   Ncat.unique =length(unique.categories)
   
   
-  L1 <- function(x){ return(length(which(x==1))==2)}
+  L1 <- function(x){ 
+    return(length(which(x==1))==Ncategoryclass-1)
+    }
   L2 <- function(x){ 
     G=0
     if(L1(x) == TRUE){
@@ -271,19 +283,19 @@ category.parameters <- function(category,N){
   
   col.index = w[w>0]
   
+  
+  # comment
   category.position.in.table= data.frame(predictor = character(),
                                          relative_to = character(),
                                          index = integer())
-  
   I=0
   for(i in unique(col.index)){
-    
-    U = unique(category[,i])
+    ref =  reference.category[i]
+    U=unique(c(ref,  unique(category[,i]))) # put the reference category as the first element of u
     for(j in 2:(length(U)) ){
       I=I+1
       de<-data.frame(U[j],U[1], index[I])
       category.position.in.table=rbind(category.position.in.table, setNames(de, names(category.position.in.table)))
-      
     }
   }
   

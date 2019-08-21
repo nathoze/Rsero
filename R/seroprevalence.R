@@ -6,7 +6,7 @@
 #' 
 #' @param serodata An object of the class \code{SeroData}. 
 #' 
-#' @return The mean and 95  \%  confidence interval of the seroprevalence
+#' @return The mean and 95 \%  confidence interval of the seroprevalence
 #'
 #' @export
 #' @examples
@@ -16,12 +16,10 @@
 #' seroprevalence(serodata = data)
 #' 
  
-
-
 seroprevalence <- function(serodata){
   if(serodata$Ncategory>1){
     for(i in  1:serodata$Ncategoryclass){
-      for(j in  unique(serodata$category[,i])){
+      for(j in unique(serodata$category[,i])){
         
         d=subset(serodata,sub  = which(serodata$category[,i]==j)) # not necessarily an integer
         

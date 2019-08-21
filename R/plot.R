@@ -36,6 +36,8 @@ plot.FOIfit <- function(FOIfit,
   chains <- rstan::extract(FOIfit$fit)
   L1 <- chains$lambda
   plots  <- NULL
+  
+  
   if(FOIfit$model$cat_bg == 0 && FOIfit$model$cat_lambda==0){
     Ncat = 1
   }  else{
@@ -49,6 +51,30 @@ plot.FOIfit <- function(FOIfit,
     Ncat = FOIfit$data$Ncategory
   }
   # Ne pas repeter les plot si cat_bg = TRUE, seulement si cat_lambda = TRUE?
+
+  
+  #### HEREEHEREHEREREERH HERE
+  # QU EST CE QUON MONTRE DANS LES FIT? TOUTES LES CATEGORIES??
+  
+  d= FOIfit$data$category.position.in.table
+  
+  if(FOIfit$model$cat_lambda & dim(d)[1]>0){ 
+    
+    Ncat = dim(d)[1]>0
+    for(i in seq(1,dim(d)[1])){
+      
+      name <- paste0('FOI of category ', d[i,]$predictor, " relative to " ,  d[i,]$relative_to)
+      params <- add.quantiles.text(params,
+                                   variable=chainsout$Flambda[,d[i,]$index],
+                                   name = name,
+                                   quants= quants, 
+                                   quantilestext=quantilestext )
+    }
+  } 
+  #### HEREEHEREHEREREERH HERE
+  
+  
+  
   
   
   for(k in seq(1,Ncat)){
@@ -56,7 +82,7 @@ plot.FOIfit <- function(FOIfit,
     L =  chains$Flambda[,k]*L1
     
     par_out <- apply(L, 2, function(x)c(mean(x), quantile(x, probs=c(0.025, 0.975))))
-    latest_sampling_year <- max(x$data$sampling_year)
+    latest_sampling_year <- max(FOIfit$data$sampling_year)
     
     if(is.null(maxYears)  ){
       maxYears =FOIfit$data$A

@@ -115,6 +115,7 @@ seroprevalence.fit<- function(FOIfit,
       
       plots[[index.plot]] <- p 
       plots[[index.plot]]$category <- cat 
+      print(paste0('Category: ',cat))
       
     }
   }
