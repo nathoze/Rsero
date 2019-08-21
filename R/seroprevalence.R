@@ -15,7 +15,7 @@
 #' data = SeroData(age_at_sampling = c(10,32,24), Y=c(0,1,1), max_age = 50, age_class = 1, sampling_year = 2017)
 #' seroprevalence(serodata = data)
 #' 
- 
+
 seroprevalence <- function(serodata){
   if(serodata$Ncategory>1){
     for(i in  1:serodata$Ncategoryclass){
@@ -29,7 +29,7 @@ seroprevalence <- function(serodata){
         print(A)
       }
     }  
-      print("All: ") 
+    print("All: ") 
   }
   B= binom.confint(x=length(which(serodata$Y==TRUE)),n = serodata$N,methods = "exact")
   A=paste0('Mean: ', round(B$mean,2), '    2.5%: ',round(B$lower,2), '    97.5%: ', round(B$upper,2))

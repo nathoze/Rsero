@@ -65,7 +65,7 @@ plot.FOIfit <- function(FOIfit,
       
       name <- paste0('FOI of category ', d[i,]$predictor, " relative to " ,  d[i,]$relative_to)
       params <- add.quantiles.text(params,
-                                   variable=chainsout$Flambda[,d[i,]$index],
+                                   variable=chains$Flambda[,d[i,]$index],
                                    name = name,
                                    quants= quants, 
                                    quantilestext=quantilestext )

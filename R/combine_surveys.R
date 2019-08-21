@@ -67,7 +67,7 @@ combine_surveys <- function(SeroData1,SeroData2){
   NAgeGroups = length(u)
   
   category = rbind(dat1$category,dat2$category)
-  param.category = category.parameters(category = category, N=N)
+  param.category = category.parameters(category = category, N=N, reference.category =SeroData1$reference.category  )
   
   
   data <- list( A = A,
@@ -89,6 +89,7 @@ combine_surveys <- function(SeroData1,SeroData2){
                 unique.categories=param.category$unique.categories,
                 Ncat.unique = param.category$Ncat.unique,
                 category.position.in.table=param.category$category.position.in.table,
+                reference.category = param.category$reference.category,
                 NAgeGroups = NAgeGroups,
                 age_at_init =  as.array(age_at_init), 
                 age_group  = age_group

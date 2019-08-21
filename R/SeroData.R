@@ -18,7 +18,9 @@
 #' 
 #' @param sex An optional character factor defining the sex of the individuals. It can be a single chain of characters or a vector of the same size as the number of sampled individuals. Default = \code{NULL}. 
 #'
-#' @param category Character. An optional element containing the name of the categories and defining the category of the individuals. This feature is used when fitting the models assuming  different risks of infection for the different categories. It can be a single character element or a vector of characters of the size of the number of individuals. Default = "Category 1".
+#' @param category Character. An optional element containing the name of the categories and defining the category of the individuals. This feature is used when fitting the models assuming  different risks of infection for the different categories. It can be a single character element or a matrix of characters with row size equal to the number of individuals and column size equal to the number of different category classes. Default = "Category 1".
+#'
+#' @param reference.category Character. A vector containing the name of the reference categories. It must have the same length as the number of columns of \code{category}. By default, it will take as reference the most common element in each category.
 #' 
 #' @param ... Additional arguments (not used).
 #'  
@@ -125,9 +127,9 @@ SeroData <- function(age_at_sampling,
   
   
   N=length(age)
-
+  
   param.category =  category.parameters(category=category, N=N, reference.category=reference.category)
-
+  
   data <- list( A = max_age,
                 N = N,
                 Y = Y,
@@ -145,7 +147,7 @@ SeroData <- function(age_at_sampling,
                 unique.categories=param.category$unique.categories,
                 Ncat.unique = param.category$Ncat.unique,
                 category.position.in.table=param.category$category.position.in.table,
-                reference.category=reference.category,
+                reference.category=param.category$reference.category,
                 NGroups = max_age, 
                 NAgeGroups = age.groups$NAgeGroups, 
                 age_at_init =  as.array(age.groups$age_at_init), # CHECK THIS 25/09/2018 
@@ -210,7 +212,30 @@ testInteger <- function(x){
 #' @export
 category.parameters <- function(category,N, reference.category){
   
+  
   Ncategoryclass =  dim(category)[2]
+  
+  if(is.null(reference.category)){
+    reference.category = c()
+    for(i in 1:Ncategoryclass){
+      most.common=  names(sort(summary(as.factor(category[,i])), decreasing=T)[1])
+      reference.category=c(reference.category, most.common )  # add the most common element as reference
+    }
+  }
+  
+  if(Ncategoryclass != length(reference.category)){
+    stop("'reference.category' and 'category' don't have the same number of elements ")
+    
+  }
+  
+  # if reference.category doesn't exist in the list 
+  
+  for(i in 1:Ncategoryclass){
+    if(sum(category[,i]==reference.category[i])==0) {
+      print(paste0('The reference category ', reference.category[i], ' is not in category'))
+    }
+  }
+  
   
   A=apply(category, 2, unique)
   maxNcategory=0
@@ -239,7 +264,7 @@ category.parameters <- function(category,N, reference.category){
   l=NULL
   for(I in 1:Ncategoryclass){
     
-  # l[I]  = list(seq(1,length(unique(category[,I]))))
+    # l[I]  = list(seq(1,length(unique(category[,I]))))
     l[I]  = list(unique(V[,I]))
     
   }
@@ -267,7 +292,7 @@ category.parameters <- function(category,N, reference.category){
   
   L1 <- function(x){ 
     return(length(which(x==1))==Ncategoryclass-1)
-    }
+  }
   L2 <- function(x){ 
     G=0
     if(L1(x) == TRUE){
@@ -307,6 +332,7 @@ category.parameters <- function(category,N, reference.category){
                 Ncategoryclass=Ncategoryclass,
                 unique.categories=unique.categories,
                 Ncat.unique = Ncat.unique,
-                category.position.in.table=category.position.in.table))
+                category.position.in.table=category.position.in.table,
+                reference.category=reference.category))
   
 }
