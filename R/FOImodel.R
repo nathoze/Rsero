@@ -22,9 +22,7 @@
 ##' @param seroreversion integer, equal to 0 or 1. If \code{seroreversion=0} the model includes a rate of seroreversion (waning immunity). See the vignette \code{models} for details.  Default = 0. 
 ##' 
 ##' @param cat_lambda integer, equal to 0 or 1.  If \code{cat_lambda=1} the force of infection varies accross the different categories defined in an objet \code{SeroData}.  See the vignette \code{models} for details. Default = 0. 
-##' 
-##' @param cat_bg integer, equal to 0 or 1. If \code{cat_bg=1} a specific value of the background infection probability \code{pB} is attributed to each category (see \code{SeroData}). See the vignette \code{models} for details. Default = 0. 
-##' 
+##'  
 ##' @param cat_lambda integer, equal to 0 or 1.  If \code{cat_lambda=1} the force of infection varies accross the different categories defined in an objet \code{SeroData}.
 ##'   See the vignette \code{models} for details. Default = 1. 
 ##' 
@@ -108,7 +106,6 @@ FOImodel <- function(type = 'constant',
                      priorbg2 = 1,
                      priorRho1  =0,
                      priorRho2 = 10,
-                     cat_bg = 0,  # cat_background
                      cat_lambda = 1,
                      ...) {
   
@@ -144,7 +141,7 @@ FOImodel <- function(type = 'constant',
   if(type=='constantoutbreak'){
     stanname= 'constantoutbreak'
   }
-
+  
   if(type %in% model.list(whichmodels = 'Outbreak models')  ){
     estimated_parameters <- estimated_parameters + K*3
   } 
@@ -178,7 +175,6 @@ FOImodel <- function(type = 'constant',
                 K = K,
                 seroreversion=seroreversion,
                 background=background,
-                cat_bg = cat_bg, 
                 cat_lambda = cat_lambda,
                 estimated_parameters = estimated_parameters,
                 priors = priors)
@@ -207,9 +203,6 @@ print.FOImodel <- function(x, ...){
       cat('\t Estimated parameters: ',x$estimated_parameters ,'\n')
     }
     
-    if(x$cat_bg){
-      cat('Model with categories for background infection \n')
-    }
     if(x$cat_lambda){
       cat('Model with categories for the force of infection \n')
     }
@@ -284,9 +277,9 @@ model.list <-function(whichmodels){
   if (whichmodels == 'All models'){
     out <-  c('outbreak','independent','constant','intervention', 'constantoutbreak')
   } 
- # if (whichmodels == 'P models'){
-#    out <- c('PG','PGB')
- # } 
+  # if (whichmodels == 'P models'){
+  #    out <- c('PG','PGB')
+  # } 
   if (whichmodels == 'Outbreak models'){
     out <-  c('outbreak', 'constantoutbreak')
   } 

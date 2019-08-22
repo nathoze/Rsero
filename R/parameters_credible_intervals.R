@@ -39,28 +39,17 @@ parameters_credible_intervals <- function(FOIfit,
     
     if(FOIfit$model$background){
       background = chains$bg
-      if(FOIfit$model$cat_bg){
-        Ncat = FOIfit$data$Ncategory
-      }else{
-        Ncat = 1
-      }
-      
-      for(k in seq(1,Ncat)){
-        
-        name = 'bg'
-        if(Ncat>1)   name= paste0('background cat ',k)
-        params <- add.quantiles.text(params,variable=background[,k], name = name, quants= quants, quantilestext=quantilestext )
-        
-      }
+      name= paste0('background ')
+      params <- add.quantiles.text(params,variable=background, name = name, quants= quants, quantilestext=quantilestext )
     }
     
     if(FOIfit$model$type  %in% model.list('Outbreak models')){
-
+      
       C<- chains$T
       Torder <- data.frame(C, t(apply(-C, 1, rank, ties.method='min')))
       K=FOIfit$model$K
       Ranks <- matrix(0,ncol(C),nrow(C))
-            YearMax <- max(FOIfit$data$sampling_year)
+      YearMax <- max(FOIfit$data$sampling_year)
       Years = matrix(0,ncol(C),nrow(C))
       
       for (i in 1:K) { 
@@ -88,9 +77,9 @@ parameters_credible_intervals <- function(FOIfit,
         # }
         # 
         # for(k in seq(1,Ncat_lambda)){
-         name <- paste('alpha',i)
+        name <- paste('alpha',i)
         #   if(Ncat_lambda>1)    name <- paste('alpha',i,' cat',k)
-         params <- add.quantiles.text(params,variable=chainsout$alpha[,i], name = name, quants= quants, quantilestext=quantilestext )
+        params <- add.quantiles.text(params,variable=chainsout$alpha[,i], name = name, quants= quants, quantilestext=quantilestext )
         #   
         # }
         

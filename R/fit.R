@@ -116,7 +116,6 @@ fit <- function(model,
   mdls <- model$stanname
   pars =  c(model$priors,
             K = model$K,
-            cat_bg=model$cat_bg,
             cat_lambda=model$cat_lambda,
             seroreversion = model$seroreversion,
             background = model$background)
@@ -126,12 +125,9 @@ fit <- function(model,
     model$estimated_parameters =   model$estimated_parameters+data$A
   }
   
-  if(model$cat_bg) {
-    model$estimated_parameters <- model$estimated_parameters+data$Ncategory-1
-  }
   
   if(model$cat_lambda){
-    model$estimated_parameters <- model$estimated_parameters+data$Ncategory-1
+    model$estimated_parameters <- model$estimated_parameters+data$Ncat.unique-1
   }
   F <- rstan::sampling(stanmodels[[mdls]],
                        data= newdata,

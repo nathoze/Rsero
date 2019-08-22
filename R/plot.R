@@ -109,4 +109,3 @@ plot.FOIfit <- function(FOIfit,
   
   return(plots)
 }
- 

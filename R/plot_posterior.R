@@ -162,32 +162,22 @@ plot_posterior<- function(FOIfit) {
     
     if(FOIfit$model$background){
       bg = chainsout$bg
-      if(FOIfit$model$cat_bg){
-        Ncat = FOIfit$data$Ncategory
-      }else{
-        Ncat = 1
-      }
       
-      for(k in 1:Ncat){
-        if(Ncat==1){
-          Title = 'Histogram for background infection probability'
-        }
-        else{
-          Title = paste0('Histogram for background infection probability, category ',k)
-        }
-        
-        distribution<-data.frame(bg = bg[,k])
-        gT <- ggplot2::ggplot(distribution, aes(bg)) +
-          geom_histogram(bins = 12, fill = "red", col="red",alpha=.4) +
-          labs(title = Title, x='value', y='Count')
-        
-        plotindex <- plotindex+1
-        plots[[plotindex]]  = gT
-        
-      }
+      
+      Title = 'Histogram for background infection probability'
+      
+      distribution<-data.frame(bg = bg)
+      gT <- ggplot2::ggplot(distribution, aes(bg)) +
+        geom_histogram(bins = 12, fill = "red", col="red",alpha=.4) +
+        labs(title = Title, x='value', y='Count')
+      
+      plotindex <- plotindex+1
+      plots[[plotindex]]  = gT
+      
     }
   }
-  
-  return(plots)
-  
+}
+
+return(plots)
+
 }

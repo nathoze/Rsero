@@ -136,7 +136,7 @@ simulate_SeroData <- function(number_samples = 500,
                   age_class = age_class,
                   location = location,
                   sex = sex,
-                  category =category)
+                  category =category) 
   
   
   return(dat)

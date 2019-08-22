@@ -57,7 +57,7 @@ compute_information_criteria <- function(FOIfit,...){
   LogLikelihoods <- matrix(0, nrow = M, ncol = N) # as many elements as there are lambdas
   Y <- FOIfit$data$Y
   age <- FOIfit$data$age
-  category <-FOIfit$data$categoryindex
+  category <- FOIfit$data$categoryindex
   
   for (i in seq(1,M)){
     
@@ -79,7 +79,7 @@ compute_information_criteria <- function(FOIfit,...){
   
   # posterior mean
   
-  pc=colMeans(bg)
+  pc=mean(bg)
   LogLikelihoodMean <- 0
   P <- (colMeans(chains$P))
   
@@ -92,9 +92,9 @@ compute_information_criteria <- function(FOIfit,...){
     p <- P[age,age_group, cat]
     
     if(Y[j] == TRUE){
-      LogLikelihoodMean <- LogLikelihoodMean + log(1-(1-pc[cat])*p)#log(1-pc[category[j]])-cumfoi[age[j],category[j]]
+      LogLikelihoodMean <- LogLikelihoodMean + log(1-(1-pc)*p)
     }else{
-      LogLikelihoodMean <- LogLikelihoodMean + log((1-pc[cat])*p)# log(1 - (1-pc[category[j]])*exp( -cumfoi[age[j],category[j]] ))
+      LogLikelihoodMean <- LogLikelihoodMean + log((1-pc)*p)
     }
   }
   
@@ -138,9 +138,6 @@ compute_information_criteria <- function(FOIfit,...){
   return(information_criteria)
   
 }
-
-
-
 
 #' @export
 print.information_criteria <- function(x,...){
