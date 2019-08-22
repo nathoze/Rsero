@@ -174,10 +174,10 @@ plot_posterior<- function(FOIfit) {
       plotindex <- plotindex+1
       plots[[plotindex]]  = gT
       
+      
     }
   }
-}
-
-return(plots)
-
+  
+  return(plots)
+  
 }
