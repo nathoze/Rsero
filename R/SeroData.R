@@ -78,6 +78,16 @@ SeroData <- function(age_at_sampling,
     stop("Error : Y and age_at_sampling must have the same length") 
   }
   
+  if(sum(is.na(Y))){
+    stop("Error : remove NA from the seropositivity Y") 
+  }
+  if(sum(is.na(age_at_sampling))){
+    stop("Error : remove NA from the age age_at_sampling") 
+    
+  }
+  
+  
+  
   if(!testInteger(age_at_sampling)){ 
     stop("age_at_sampling must be given as integer")
   }
