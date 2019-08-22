@@ -13,28 +13,25 @@ data {
 
     int<lower = 0, upper=1> background; 
 
-    int <lower=1> categoryindex[N]; // Addition here 
+    int <lower=1> categoryindex[N];
 
-    int <lower=1> Ncategory;  // Addition here
+    int <lower=1> Ncategory;  
 
-    int<lower= 1> Ncategoryclass; // 14/08
+    int<lower= 1> Ncategoryclass; 
 
-    int<lower=1> maxNcategory; // 14/08
+    int<lower=1> maxNcategory; 
 
     int<lower=1> MatrixCategory[Ncategory,Ncategoryclass];
+      
+    int <lower=0> age_at_sampling[N]; 
+
+    int <lower=0> sampling_year[N];  
+
+    int <lower=1> NAgeGroups ; 
+
+    int <lower=1> age_group[N] ; 
   
-  //  int <lower=1, upper=NGroups> ind_by_age[A]; // 
-    
-    int <lower=0> age_at_sampling[N]; // NEW VARIABLE
-
-    int <lower=0> sampling_year[N]; // NEW VARIABLE 
-
-    int <lower=1> NAgeGroups ; // NEW VARIABLE
-
-    int <lower=1> age_group[N] ; // NEW VARIABLE
-  
-    int <lower=1> age_at_init[NAgeGroups]; // NEW VARIABLE
-
+    int <lower=1> age_at_init[NAgeGroups]; 
 
     int <lower=1> K; // the number of peaks of epidemics
 
@@ -62,8 +59,6 @@ data {
 
     real <lower = 0> priorRho2;
 
-    int <lower = 0> cat_bg;  // 1 or 0: characterizes whether we distinguish categories by different bg 
-
     int <lower = 0> cat_lambda; // 1 or 0: characterizes whether we distinguish categories by different FOI
 }
 
@@ -74,7 +69,7 @@ parameters {
     real<lower=0> alpha[K];
     real<lower=0> beta[K];
     real<lower = 0, upper = 1> rho;    
-    real<lower = 0, upper=1> bg2[Ncategory];
+    real<lower = 0, upper=1> bg2;
     real  Flambda2[maxNcategory,Ncategoryclass]; //14 08
     real<lower = 0> constant;
  
@@ -88,30 +83,18 @@ transformed parameters {
     real S[K]; // Normalization constant
 
     real<lower =0, upper=1> P[A,NAgeGroups,Ncategory]; //14 08 
-    real<lower =0> bg[Ncategory];
+    real<lower =0> bg;
     real<lower =0> Flambda[Ncategory]; //14 08
     real<lower = 0, upper=1> Like[N];  
     real c; // 14/08
 
 
-
- 
-    if(!cat_bg){
-        for(i in 1:Ncategory){
-            bg[i] = bg2[1];
-        }
-    }else{
-        for(i in 1:Ncategory){
-            bg[i] = bg2[i];
-        }
-    }
-
     if(background==0){
-        for(i in 1:Ncategory){
-            bg[i] = 0;
-        }
+        bg = 0;
+    }else{
+        bg=bg2;
     }
-    
+
     for(i in 1:K){
         S[i] =0;
         for(j in 1:A){
@@ -182,7 +165,7 @@ transformed parameters {
 
 
    for(j in 1:N){
-        Like[j] =1-(1-bg[categoryindex[j]])*P[age[j],age_group[j],categoryindex[j]];
+        Like[j] =1-(1-bg)*P[age[j],age_group[j],categoryindex[j]];
     }
 
 }
@@ -199,9 +182,8 @@ model {
     constant ~ uniform(priorC1, priorC2);
 
 
-    for(i in 1:Ncategory){
-        bg2[i] ~uniform(priorbg1, priorbg2);   // category background infection. Size = Ncategory 
-    }
+    bg2 ~uniform(priorbg1, priorbg2);   // category background infection. Size = Ncategory 
+    
 
     for(I in 1:Ncategoryclass){
         for(i in 1:maxNcategory){      

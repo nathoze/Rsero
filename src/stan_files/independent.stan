@@ -47,7 +47,6 @@ data {
 
     real <lower = 0> priorRho2;
 
-    int <lower = 0> cat_bg;  // 1 or 0: characterizes whether we distinguish categories by different background infection probability
 
     int <lower = 0> cat_lambda; // 1 or 0: characterizes whether we distinguish categories by different FOI
 }
@@ -56,7 +55,7 @@ data {
 parameters {
     real logitlambda[NGroups]; 
     real<lower = 0, upper = 1> rho;    
-    real<lower = 0, upper=1> bg2[Ncategory];
+    real<lower = 0, upper=1> bg2;
     real  Flambda2[maxNcategory,Ncategoryclass]; //14 08
 }
 
@@ -66,7 +65,7 @@ transformed parameters {
     real L;
     real lambda[A];
     real<lower =0, upper=1> P[A,NAgeGroups,Ncategory]; //14 08 
-    real<lower =0> bg[Ncategory];
+    real<lower =0> bg;
     real<lower =0> Flambda[Ncategory]; //14 08
     real<lower = 0, upper=1> Like[N];  
     real c; // 14/08
@@ -76,22 +75,12 @@ transformed parameters {
     
     }
 
-    if(!cat_bg){
-        for(i in 1:Ncategory){
-            bg[i] = bg2[1];
-        }
-    }else{
-        for(i in 1:Ncategory){
-            bg[i] = bg2[i];
-        }
-    }
-
-
     if(background==0){
-        for(i in 1:Ncategory){
-            bg[i] = 0;
-        }
+        bg = 0;
+    }else{
+        bg=bg2;
     }
+
     
 
     c=0;
@@ -148,7 +137,7 @@ transformed parameters {
     }
 
    for(j in 1:N){
-        Like[j] =1-(1-bg[categoryindex[j]])*P[age[j],age_group[j],categoryindex[j]];
+        Like[j] =1-(1-bg)*P[age[j],age_group[j],categoryindex[j]];
     }
 
 }
@@ -163,9 +152,8 @@ model {
     }
  
 
-    for(i in 1:Ncategory){
-        bg2[i] ~uniform(priorbg1, priorbg2);   // category background infection. Size = Ncategory 
-    }
+    bg2 ~uniform(priorbg1, priorbg2);   // category background infection. Size = Ncategory 
+    
 
     for(I in 1:Ncategoryclass){
         for(i in 1:maxNcategory){      

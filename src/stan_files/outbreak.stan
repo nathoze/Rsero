@@ -60,8 +60,6 @@ data {
 
     real <lower = 0> priorRho2;
 
-    int <lower = 0> cat_bg;  // 1 or 0: characterizes whether we distinguish categories by different bg 
-
     int <lower = 0> cat_lambda; // 1 or 0: characterizes whether we distinguish categories by different FOI
 }
 
@@ -72,7 +70,7 @@ parameters {
     real<lower=0> alpha[K];
     real<lower=0> beta[K];
     real<lower = 0, upper = 1> rho;    
-    real<lower = 0, upper=1> bg2[Ncategory];
+    real<lower = 0, upper=1> bg2;
     real  Flambda2[maxNcategory,Ncategoryclass]; //14 08
 }
 
@@ -83,27 +81,18 @@ transformed parameters {
     real lambda[A];
     real S[K]; // Normalization constant
     real<lower =0, upper=1> P[A,NAgeGroups,Ncategory]; //14 08 
-    real<lower =0> bg[Ncategory];
+    real<lower =0> bg;
     real<lower =0> Flambda[Ncategory]; //14 08
     real<lower = 0, upper=1> Like[N];  
     real c; // 14/08
 
      
-    if(!cat_bg){
-        for(i in 1:Ncategory){
-            bg[i] = bg2[1];
-        }
-    }else{
-        for(i in 1:Ncategory){
-            bg[i] = bg2[i];
-        }
-    }
     if(background==0){
-        for(i in 1:Ncategory){
-            bg[i] = 0;
-        }
+        bg = 0;
+    }else{
+        bg=bg2;
     }
-    
+
 
     for(i in 1:K){
         S[i] =0;
@@ -119,8 +108,6 @@ transformed parameters {
             lambda[j]  =  lambda[j]  + alpha[i]/S[i]*exp(-((j-T[i])^2)/(beta[i])^2);
         }
     }
-
-
 
 
     c=0;
@@ -178,52 +165,9 @@ transformed parameters {
             }
         }
     }
-
-
-
-
-
-
-/* 14 08 
-
-
-    if(seroreversion==0){
-        for(J in 1:NAgeGroups){
-            for(i in 1:Ncategory){      
-                P[1,J,i] = exp(-Flambda[i]*lambda[1]) ;
-                for(j in 1:A-1){
-                    x[j]=1;         
-                    if(j<age_at_init[J]){
-                        P[j+1,J,i] = exp(-Flambda[i]*lambda[j]) ;    
-                    }else{
-                        P[j+1,J,i] = P[j,J,i]*exp(-Flambda[i]*lambda[j+1]);                 
-                    } 
-                }
-                x[A]=1;
-            }
-        } 
-    }
-
-    if(seroreversion==1){
-        for(J in 1:NAgeGroups){
-            for(i in 1:Ncategory){        
-                for(j in 1:A){
-                    x[j] = 1; 
-                    for(k in 2:j){
-                        L=Flambda[i]*lambda[j-k+2];
-                        x[j-k+2-1] = x[j-k+2]*exp(-(rho+L)) +rho/(L+rho)*(1- exp(-(rho+L)));
-                    }
-                    P[j,J,i]  = x[age_at_init[J]];
-                }
-            }
-        }
-    }
-
-
-*/
  
    for(j in 1:N){
-        Like[j] =1-(1-bg[categoryindex[j]])*P[age[j],age_group[j],categoryindex[j]];///q[age_group[j],categoryindex[j]] ;
+        Like[j] =1-(1-bg)*P[age[j],age_group[j],categoryindex[j]];///q[age_group[j],categoryindex[j]] ;
     }
 
 
@@ -240,9 +184,8 @@ model {
     rho  ~ uniform(priorRho1, priorRho2);
 
 
-    for(i in 1:Ncategory){
-        bg2[i] ~ uniform(priorbg1, priorbg2);   // category background infection. Size = Ncategory 
-    }
+    bg2 ~ uniform(priorbg1, priorbg2);   // category background infection. Size = Ncategory 
+
 
    for(I in 1:Ncategoryclass){
         for(i in 1:maxNcategory){      

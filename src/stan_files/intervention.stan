@@ -51,8 +51,6 @@ data {
 
     real <lower = 0> priorRho2;
 
-    int <lower = 0> cat_bg;  // 1 or 0: characterizes whether we distinguish categories by different bg 
-
     int <lower = 0> cat_lambda; // 1 or 0: characterizes whether we distinguish categories by different FOI
 }
 
@@ -61,7 +59,7 @@ parameters {
     real  T[K];
     real<lower = 0.00001>  foi[K]; 
     real<lower = 0, upper = 1> rho;    
-    real<lower = 0, upper=1> bg2[Ncategory];
+    real<lower = 0, upper=1> bg2;
     real  Flambda2[maxNcategory,Ncategoryclass]; //14 08
 
  
@@ -76,7 +74,7 @@ transformed parameters {
 
 
     real<lower =0, upper=1> P[A,NAgeGroups,Ncategory]; //14 08 
-    real<lower =0> bg[Ncategory];
+    real<lower =0> bg;
     real<lower =0> Flambda[Ncategory]; //14 08
     real<lower = 0, upper=1> Like[N];  
     real c; // 14/08
@@ -105,21 +103,13 @@ transformed parameters {
         }
     } 
 
-    if(!cat_bg){
-        for(i in 1:Ncategory){
-            bg[i] = bg2[1];
-        }
+ 
+    if(background==0){
+        bg = 0;
     }else{
-        for(i in 1:Ncategory){
-            bg[i] = bg2[i];
-        }
+        bg=bg2;
     }
 
-    if(background==0){
-        for(i in 1:Ncategory){
-            bg[i] = 0;
-        }
-    }
 
     c=0;
     if(!cat_lambda){
@@ -175,7 +165,7 @@ transformed parameters {
     }
 
    for(j in 1:N){
-        Like[j] =1-(1-bg[categoryindex[j]])*P[age[j],age_group[j],categoryindex[j]];///q[age_group[j],category[j]] ;
+        Like[j] =1-(1-bg)*P[age[j],age_group[j],categoryindex[j]];///q[age_group[j],category[j]] ;
     }
 
 }
@@ -189,9 +179,8 @@ model {
         foi[i] ~ uniform(priorC1, priorC2);
     }
 
-    for(i in 1:Ncategory){
-        bg2[i] ~uniform(priorbg1, priorbg2);   // category bg . Size = Ncategory 
-    }
+    bg2  ~uniform(priorbg1, priorbg2);    
+    
 
     for(I in 1:Ncategoryclass){
         for(i in 1:maxNcategory){      
