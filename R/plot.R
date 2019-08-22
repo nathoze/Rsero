@@ -50,8 +50,8 @@ plot.FOIfit <- function(FOIfit,
     d = FOIfit$data$categoryindex[w]
     p1=proportions.index(d)
     
-    
-    L=matrix(0, nrow = 2500, ncol=60)
+    M=dim(chains$P)[1] 
+    L=matrix(0, nrow = M, ncol=FOIfit$data$A)
     # weighted average of the force of infection for each subcategory
     
     for(i in 1:length(p1$index)){

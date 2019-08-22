@@ -25,7 +25,6 @@ plot_posterior<- function(FOIfit) {
   name <- FOIfit$model$type
   
   if(name %in% model.list('All models')){
-    
     if(name %in% model.list('I models')){
       
       C<- chains$Time

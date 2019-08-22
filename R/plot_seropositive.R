@@ -65,11 +65,15 @@ seroprevalence.fit<- function(FOIfit,
       
       p1=proportions.index(d)
       
+       
+      M=dim(chains$P)[1] 
+      Pinf=matrix(0, nrow = M, ncol=FOIfit$data$A)
       
-      Pinf=matrix(0, nrow = 2500, ncol=60)
+      m = matrix(rep(bg,1), nrow = 2500, ncol=60)      
       
       for(i in 1:length(p1$index)){
-        Pinf =  Pinf+  p1$prop[i]*( 1-(1-bg)*chains$P[,,1,p1$index[i]] ) 
+
+        Pinf =  Pinf+  p1$prop[i]*( 1-(1-m)*chains$P[,,1,p1$index[i]] ) 
       }
       
       par_out <- apply(Pinf, 2, function(x)c(mean(x), quantile(x, probs=c(0.025, 0.975))))
