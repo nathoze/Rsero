@@ -20,6 +20,7 @@
 ##' Fit <- fit(model = model, data = data)
 ##' p <- plot(Fit)
 ##' p+ylim(0,1)
+##' p[[1]]$category # the name of the category plotted 
 ##' 
 ##' 
 ##' @export
@@ -37,51 +38,28 @@ plot.FOIfit <- function(FOIfit,
   L1 <- chains$lambda
   plots  <- NULL
   
-  
-  if(FOIfit$model$cat_bg == 0 && FOIfit$model$cat_lambda==0){
-    Ncat = 1
-  }  else{
-    Ncat = FOIfit$data$Ncategory
-  }
-  
-  # 3/09/2018  ??
-  if(FOIfit$model$cat_lambda==0){
-    Ncat = 1
-  }  else{
-    Ncat = FOIfit$data$Ncategory
-  }
-  # Ne pas repeter les plot si cat_bg = TRUE, seulement si cat_lambda = TRUE?
-
-  
-  #### HEREEHEREHEREREERH HERE
-  # QU EST CE QUON MONTRE DANS LES FIT? TOUTES LES CATEGORIES??
-  # copier plot_seropositive
-  
-  d= FOIfit$data$category.position.in.table
-  
-  if(FOIfit$model$cat_lambda & dim(d)[1]>0){ 
+  index.plot=0
+  for(cat in FOIfit$data$unique.categories){ 
     
-    Ncat = dim(d)[1]>0
-    for(i in seq(1,dim(d)[1])){
-      
-      name <- paste0('FOI of category ', d[i,]$predictor, " relative to " ,  d[i,]$relative_to)
-      params <- add.quantiles.text(params,
-                                   variable=chains$Flambda[,d[i,]$index],
-                                   name = name,
-                                   quants= quants, 
-                                   quantilestext=quantilestext )
+    index.plot=index.plot+1
+    
+    
+    w = which( FOIfit$data$category==cat, arr.ind = TRUE)[,1]
+    
+    
+    d = FOIfit$data$categoryindex[w]
+    p1=proportions.index(d)
+    
+    
+    L=matrix(0, nrow = 2500, ncol=60)
+    # weighted average of the force of infection for each subcategory
+    
+    for(i in 1:length(p1$index)){
+      L =  L+  p1$prop[i]*chains$Flambda[, p1$index[i]]*L1 
     }
-  } 
-  #### HEREEHEREHEREREERH HERE
-  
-  
-  
-  
-  
-  for(k in seq(1,Ncat)){
     
-    L =  chains$Flambda[,k]*L1
     
+    # compute mean and 95% credible interval  
     par_out <- apply(L, 2, function(x)c(mean(x), quantile(x, probs=c(0.025, 0.975))))
     latest_sampling_year <- max(FOIfit$data$sampling_year)
     
@@ -122,9 +100,13 @@ plot.FOIfit <- function(FOIfit,
     p <- p + ggplot2::geom_line(data = meanData, ggplot2::aes(x = x, y = y), size = 1,color  ="#5e6b91",alpha=1)
     
     p <- p + ggplot2::xlab("Year") + ggplot2::ylab("Force of infection")+ylim(0,YLIM)
-    plots[[k]] <- p 
+    
+    plots[[index.plot]] <- p 
+    plots[[index.plot]]$category <- cat 
+    
+    
   }
   
   return(plots)
 }
-
+ 

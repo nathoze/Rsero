@@ -124,6 +124,8 @@ seroprevalence.fit<- function(FOIfit,
 }
 
 
+#' @export
+
 proportions.index <- function(d){
   b.x=c()
   b.y=c()

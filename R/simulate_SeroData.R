@@ -79,7 +79,7 @@ simulate_SeroData <- function(number_samples = 500,
                               foi = c(0.3,0.2,0.4),
                               location = NULL, 
                               sex = NULL, 
-                              category = 1,
+                              category = "Category 1",
                               pb=  0,
                               rho=0){
   
