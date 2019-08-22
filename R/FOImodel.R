@@ -16,7 +16,8 @@
 ##' 
 ##' @param K integer. An additional parameter used in the outbreak, constantoutbreak and intervention stan models. This parameter is the number of Gaussians used in the model.  Default = 1.
 ##' 
-##' @param background integer, equal to 0 or 1. If \code{background=1}  the model includes a background infection probability. See the vignette \code{models} for details.  Default = 0. 
+##' @param background integer, equal to 0 or 1. If \code{background=1}  the model includes a background infection probability.
+##'  See the vignette \code{models} for details.  Default = 0. 
 ##' 
 ##' @param seroreversion integer, equal to 0 or 1. If \code{seroreversion=0} the model includes a rate of seroreversion (waning immunity). See the vignette \code{models} for details.  Default = 0. 
 ##' 
@@ -24,7 +25,8 @@
 ##' 
 ##' @param cat_bg integer, equal to 0 or 1. If \code{cat_bg=1} a specific value of the background infection probability \code{pB} is attributed to each category (see \code{SeroData}). See the vignette \code{models} for details. Default = 0. 
 ##' 
-##' @param cat_lambda integer, equal to 0 or 1.  If \code{cat_lambda=1} the force of infection varies accross the different categories defined in an objet \code{SeroData}.  See the vignette \code{models} for details. Default = 0. 
+##' @param cat_lambda integer, equal to 0 or 1.  If \code{cat_lambda=1} the force of infection varies accross the different categories defined in an objet \code{SeroData}.
+##'   See the vignette \code{models} for details. Default = 1. 
 ##' 
 ##' @param prioralpha1 First parameter of the uniform prior distribution  of the parameter alpha, used as the intensity of the force of infection in the outbreak and intervention models. Default = 0.
 ##' 
@@ -107,7 +109,7 @@ FOImodel <- function(type = 'constant',
                      priorRho1  =0,
                      priorRho2 = 10,
                      cat_bg = 0,  # cat_background
-                     cat_lambda = 0,
+                     cat_lambda = 1,
                      ...) {
   
   

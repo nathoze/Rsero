@@ -212,6 +212,7 @@ testInteger <- function(x){
 #' @export
 category.parameters <- function(category,N, reference.category){
   
+  category =  as.matrix(category)
   
   Ncategoryclass =  dim(category)[2]
   
@@ -232,7 +233,7 @@ category.parameters <- function(category,N, reference.category){
   
   for(i in 1:Ncategoryclass){
     if(sum(category[,i]==reference.category[i])==0) {
-      print(paste0('The reference category ', reference.category[i], ' is not in category'))
+      print(paste0('The reference category ', reference.category[i], ' was not found in the variable category'))
     }
   }
   

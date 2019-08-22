@@ -55,6 +55,7 @@ plot.FOIfit <- function(FOIfit,
   
   #### HEREEHEREHEREREERH HERE
   # QU EST CE QUON MONTRE DANS LES FIT? TOUTES LES CATEGORIES??
+  # copier plot_seropositive
   
   d= FOIfit$data$category.position.in.table
   
