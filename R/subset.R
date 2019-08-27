@@ -95,7 +95,7 @@ subset.SeroData <- function(data,sub =seq(1,data$N), loc = NULL, category = NULL
                    sampling_year = data$sampling_year[sub],
                    location = data$location[sub],
                    sex = data$sex[sub],
-                   category = category,
+                   category = param.category$category,
                    categoryindex=param.category$categoryindex,
                    MatrixCategory = param.category$MatrixCategory,
                    Ncategory = param.category$Ncategory,

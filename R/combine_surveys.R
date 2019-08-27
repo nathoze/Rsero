@@ -80,7 +80,7 @@ combine_surveys <- function(SeroData1,SeroData2){
                 sampling_year = sampling_year,
                 location = c(dat1$location,dat2$location),
                 sex = c(dat1$sex,dat2$sex),
-                category=category,
+                category=param.category$category,
                 categoryindex=param.category$categoryindex,
                 MatrixCategory = param.category$MatrixCategory,
                 Ncategory = param.category$Ncategory,

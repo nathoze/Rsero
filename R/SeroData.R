@@ -148,7 +148,7 @@ SeroData <- function(age_at_sampling,
                 sampling_year = sampling_year,
                 location = location,
                 sex = sex,
-                category = category,
+                category = param.category$category,
                 categoryindex=param.category$categoryindex,
                 MatrixCategory = param.category$MatrixCategory,
                 Ncategory = param.category$Ncategory,
@@ -236,7 +236,6 @@ category.parameters <- function(category,N, reference.category){
   
   if(Ncategoryclass != length(reference.category)){
     stop("'reference.category' and 'category' don't have the same number of elements ")
-    
   }
   
   # if reference.category doesn't exist in the list 
@@ -249,6 +248,12 @@ category.parameters <- function(category,N, reference.category){
   
   
   A=apply(category, 2, unique)
+  if(typeof(A)=="character"){ # needed in the case there is only one type of category
+    B=list()
+    B[[1]]=A
+    A=B
+  }
+  
   maxNcategory=0
   V=c()
   for(I in 1:Ncategoryclass){
@@ -274,8 +279,6 @@ category.parameters <- function(category,N, reference.category){
   # list of all combinations
   l=NULL
   for(I in 1:Ncategoryclass){
-    
-    # l[I]  = list(seq(1,length(unique(category[,I]))))
     l[I]  = list(unique(V[,I]))
     
   }
