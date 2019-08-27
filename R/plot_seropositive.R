@@ -62,14 +62,13 @@ seroprevalence.fit<- function(FOIfit,
       
       
       d = data$categoryindex[w]
-      
       p1=proportions.index(d)
       
        
       M=dim(chains$P)[1] 
       Pinf=matrix(0, nrow = M, ncol=FOIfit$data$A)
       
-      m = matrix(rep(bg,1), nrow = 2500, ncol=60)      
+      m = matrix(rep(bg,1), nrow = M, ncol=FOIfit$data$A)      
       
       for(i in 1:length(p1$index)){
 
