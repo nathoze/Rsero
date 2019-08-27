@@ -38,7 +38,7 @@ sero.dta =  read.csv('CHIKVVietnam.csv', header = TRUE, sep=';')
 chikv_vietnam = Rsero::SeroData(age_at_sampling = round(as.numeric(sero.dta$age)), 
                Y = as.numeric(sero.dta$Y)>9,
                sampling_year = as.numeric(sero.dta$sampling_year), 
-               category = sero.dta$Loc,
-               location = sero.dta$Loc)
+               category = as.character(sero.dta$Loc),
+               location = as.character(sero.dta$Loc))
 
-devtools::use_data(chikv_vietnam)
+devtools::use_data(chikv_vietnam, overwrite = TRUE)

@@ -21,7 +21,7 @@
 #' @examples
 #' denv_mayotte
 #'
-
+set.seed(100)
 
 
 transform_data_from_histogram_uniform <- function(n, sero, age.range){
@@ -57,4 +57,4 @@ denv_mayotte <- SeroData(age_at_sampling =  transformed_data[[2]],
                  sampling_year = 2006,
                  location = 'Mayotte')
 
-devtools::use_data(denv_mayotte)
+devtools::use_data(denv_mayotte, overwrite = TRUE)
