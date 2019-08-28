@@ -2,7 +2,7 @@
 Rsero: Estimate the annual force of infection using serological data
 ====================================================================
 
-Rsero is R package dedicated to the implementation of serocatalytic models that are used to estimate the force of infection from age-stratified serological surveys.
+Rsero is an R package dedicated to the implementation of serocatalytic models that are used to estimate the force of infection from age-stratified serological surveys.
 
 Estimations requires:
 - The age of each individual
@@ -58,16 +58,20 @@ This is the minimum requirement for creating a *SeroData* and it can be already 
 
 ``` r
 sex= c(rep('males',250), rep('females', 250))
-simulated.survey  = SeroData(age_at_sampling =  age, Y = seropositive, sex = sex, location  = 'Paris', sampling = 2015) 
+simulated.survey  = SeroData(age_at_sampling =  age,
+                             Y = seropositive,
+                             sex = sex,
+                             location  = 'Paris',
+                             sampling_year = 2015) 
 ```
 
 Some basic analysis can be done on this dataset. The seroprevalence is obtained by calling the function *seroprevalence* and the age-profile of seroprevalence by calling *seroprevalence.plot*
 
 ``` r
 seroprevalence(simulated.survey)
-#> [1] "Mean: 0.23    2.5%: 0.19    97.5%: 0.27"
+#> [1] "Mean: 0.18    2.5%: 0.15    97.5%: 0.22"
 seroprevalence.plot(simulated.survey,YLIM=0.3)
-#> [1] "Category: 1"
+#> [1] "Category: Category 1"
 #> [[1]]
 ```
 
@@ -77,7 +81,7 @@ If for instance we want to estimate different values of the force of infection f
 
 ``` r
 sex= c(rep('males',250), rep('females', 250))
-simulated.survey  = SeroData(age_at_sampling =  age, Y = seropositive, sex = sex, location  = 'Paris', sampling = 2015, category = sex) 
+simulated.survey  = SeroData(age_at_sampling =  age, Y = seropositive, sex = sex, location  = 'Paris', sampling_year = 2015, category = sex) 
 ```
 
 Example.
@@ -93,14 +97,14 @@ The data is saved under a custom format *SeroData*, which stores information abo
 
 ``` r
 seroprevalence(one_peak_simulation)
-#> [1] "Mean: 0.11    2.5%: 0.09    97.5%: 0.15"
+#> [1] "Mean: 0.15    2.5%: 0.12    97.5%: 0.18"
 ```
 
 and a graph of the age profile of seroprevalence is obtained using
 
 ``` r
 seroprevalence.plot(one_peak_simulation)
-#> [1] "Category: 1"
+#> [1] "Category: Category 1"
 #> [[1]]
 ```
 
@@ -124,12 +128,6 @@ We can now fit the defined model to the data:
 FOIfit.constant = fit( data = one_peak_simulation,  model = ConstantModel, chains=1)
 #> 
 #> SAMPLING FOR MODEL 'intervention' NOW (CHAIN 1).
-#> Rejecting initial value:
-#>   Log probability evaluates to log(0), i.e. negative infinity.
-#>   Stan can't start sampling from this initial value.
-#> Rejecting initial value:
-#>   Log probability evaluates to log(0), i.e. negative infinity.
-#>   Stan can't start sampling from this initial value.
 #> 
 #> Gradient evaluation took 0 seconds
 #> 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
@@ -149,10 +147,10 @@ FOIfit.constant = fit( data = one_peak_simulation,  model = ConstantModel, chain
 #> Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Iteration: 5000 / 5000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 4.355 seconds (Warm-up)
-#>                1.55 seconds (Sampling)
-#>                5.905 seconds (Total)
-#> Warning: There were 1772 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
+#>  Elapsed Time: 3.849 seconds (Warm-up)
+#>                4 seconds (Sampling)
+#>                7.849 seconds (Total)
+#> Warning: There were 1671 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
 #> http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #> Warning: Examine the pairs() plot to diagnose sampling problems
 ```
@@ -161,6 +159,7 @@ FOIfit.constant = fit( data = one_peak_simulation,  model = ConstantModel, chain
 
 ``` r
 seroprevalence.fit(FOIfit.constant, YLIM=0.5)
+#> [1] "Category: Category 1"
 #> [[1]]
 ```
 
@@ -178,9 +177,12 @@ We can now fit the defined model to the data:
 FOIfit.outbreak = fit( data = one_peak_simulation,  model = OutbreakModel, chains=1)
 #> 
 #> SAMPLING FOR MODEL 'outbreak' NOW (CHAIN 1).
+#> Rejecting initial value:
+#>   Log probability evaluates to log(0), i.e. negative infinity.
+#>   Stan can't start sampling from this initial value.
 #> 
-#> Gradient evaluation took 0 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
+#> Gradient evaluation took 0.005 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 50 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -197,10 +199,10 @@ FOIfit.outbreak = fit( data = one_peak_simulation,  model = OutbreakModel, chain
 #> Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Iteration: 5000 / 5000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 2.435 seconds (Warm-up)
-#>                2.068 seconds (Sampling)
-#>                4.503 seconds (Total)
-#> Warning: There were 609 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
+#>  Elapsed Time: 5.724 seconds (Warm-up)
+#>                2.972 seconds (Sampling)
+#>                8.696 seconds (Total)
+#> Warning: There were 760 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
 #> http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #> Warning: Examine the pairs() plot to diagnose sampling problems
 ```
@@ -209,6 +211,7 @@ and we plot the result
 
 ``` r
 seroprevalence.fit(FOIfit.outbreak)
+#> [1] "Category: Category 1"
 #> [[1]]
 ```
 

@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 # Rsero: Estimate the annual force of infection using serological data
 
-Rsero is R package dedicated to the implementation of serocatalytic models that are used to estimate the force of infection from age-stratified serological surveys. 
+Rsero is an R package dedicated to the implementation of serocatalytic models that are used to estimate the force of infection from age-stratified serological surveys. 
 
 Estimations requires:   
 - The age of each individual 
@@ -70,7 +70,11 @@ This is the minimum requirement for creating a *SeroData* and it can be already 
 However we can still enter more information about the survey. Suppose the first 250 are males, the last 250 are females, that they were all sampled in 2015 in Paris. 
 ```{r dataexample3, eval=TRUE}
 sex= c(rep('males',250), rep('females', 250))
-simulated.survey  = SeroData(age_at_sampling =  age, Y = seropositive, sex = sex, location  = 'Paris', sampling = 2015) 
+simulated.survey  = SeroData(age_at_sampling =  age,
+                             Y = seropositive,
+                             sex = sex,
+                             location  = 'Paris',
+                             sampling_year = 2015) 
 ```
 Some basic analysis can be done on this dataset. The seroprevalence is obtained by calling the function *seroprevalence* and the age-profile of seroprevalence by calling *seroprevalence.plot*
 ```{r dataexample4, eval=TRUE, warning = FALSE}
@@ -81,7 +85,7 @@ seroprevalence.plot(simulated.survey,YLIM=0.3)
 If for instance we want to estimate different values of the force of infection for males and females, the variable *category* has to be defined: 
 ```{r dataexample5, eval=TRUE}
 sex= c(rep('males',250), rep('females', 250))
-simulated.survey  = SeroData(age_at_sampling =  age, Y = seropositive, sex = sex, location  = 'Paris', sampling = 2015, category = sex) 
+simulated.survey  = SeroData(age_at_sampling =  age, Y = seropositive, sex = sex, location  = 'Paris', sampling_year = 2015, category = sex) 
 ```
 
 
