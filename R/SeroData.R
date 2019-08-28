@@ -238,13 +238,13 @@ category.parameters <- function(category,N, reference.category){
     stop("'reference.category' and 'category' don't have the same number of elements ")
   }
   
-  # if reference.category doesn't exist in the list 
-  
-  for(i in 1:Ncategoryclass){
-    if(sum(category[,i]==reference.category[i])==0) {
-      print(paste0('The reference category ', reference.category[i], ' was not found in the variable category'))
-    }
-  }
+  # # if reference.category doesn't exist in the list 
+  # 
+  # for(i in 1:Ncategoryclass){
+  #   if(sum(category[,i]==reference.category[i])==0) {
+  #     print(paste0('The reference category ', reference.category[i], ' was not found in the variable category'))
+  #   }
+  # }
   
   
   A=apply(category, 2, unique)
