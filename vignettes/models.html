@@ -12,7 +12,7 @@
 
 <meta name="author" content="Nathanael Hoze" />
 
-<meta name="date" content="2019-06-03" />
+<meta name="date" content="2019-08-29" />
 
 <title>Using the models defined in the Rsero package</title>
 
@@ -95,7 +95,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Using the models defined in the Rsero package</h1>
 <h4 class="author">Nathanael Hoze</h4>
-<h4 class="date">2019-06-03</h4>
+<h4 class="date">2019-08-29</h4>
 
 
 
@@ -104,41 +104,18 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2>The data</h2>
 <p>We first load the package</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(Rsero)</code></pre></div>
-<pre><code>## Loading required package: Rcpp</code></pre>
-<pre><code>## Loading required package: corrplot</code></pre>
-<pre><code>## corrplot 0.84 loaded</code></pre>
-<pre><code>## Loading required package: ggplot2</code></pre>
-<pre><code>## Loading required package: binom</code></pre>
-<pre><code>## Loading required package: bayesplot</code></pre>
-<pre><code>## This is bayesplot version 1.5.0</code></pre>
-<pre><code>## - Plotting theme set to bayesplot::theme_default()</code></pre>
-<pre><code>## - Online documentation at mc-stan.org/bayesplot</code></pre>
-<pre><code>## Loading required package: rstan</code></pre>
-<pre><code>## Loading required package: StanHeaders</code></pre>
-<pre><code>## rstan (Version 2.17.3, GitRev: 2e1f913d3ca3)</code></pre>
-<pre><code>## For execution on a local, multicore CPU with excess RAM we recommend calling
-## options(mc.cores = parallel::detectCores()).
-## To avoid recompilation of unchanged Stan programs, we recommend calling
-## rstan_options(auto_write = TRUE)</code></pre>
-<pre><code>## Loading required package: rstantools</code></pre>
-<pre><code>## This is rstantools version 1.5.0</code></pre>
-<pre><code>## Loading required package: shinystan</code></pre>
-<pre><code>## Loading required package: shiny</code></pre>
-<pre><code>## 
-## This is shinystan version 2.4.0</code></pre>
-<pre><code>## Loading required package: httpuv</code></pre>
 <p>The data must be in the following format</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data &lt;-<span class="st"> </span><span class="kw">simulate_SeroData</span>(<span class="dt">number_samples =</span> <span class="dv">5</span>)
 <span class="kw">print</span>(data)</code></pre></div>
 <pre><code>## &lt;SeroData object&gt;
 ## 5 serological samples  
 ## Max age: 70  
-##   age age_at_sampling     Y sampling_year location sex category
-## 1  50              50  TRUE          2019       NA All        1
-## 2  63              63  TRUE          2019       NA All        1
-## 3  38              38  TRUE          2019       NA All        1
-## 4  22              22 FALSE          2019       NA All        1
-## 5  38              38 FALSE          2019       NA All        1</code></pre>
+##   age age_at_sampling     Y sampling_year location sex   category
+## 1  24              24 FALSE          2019       NA All Category 1
+## 2   2               2 FALSE          2019       NA All Category 1
+## 3  51              51  TRUE          2019       NA All Category 1
+## 4  48              48 FALSE          2019       NA All Category 1
+## 5  34              34 FALSE          2019       NA All Category 1</code></pre>
 </div>
 <div id="models-of-the-force-of-infection" class="section level2">
 <h2>Models of the force of infection</h2>
@@ -158,17 +135,18 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div id="using-the-models" class="section level3">
 <h3>Using the models</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model &lt;-<span class="st"> </span><span class="kw">FOImodel</span>(<span class="dt">type =</span> <span class="st">&quot;constant&quot;</span>)
-model &lt;-<span class="st"> </span><span class="kw">FOImodel</span>(<span class="dt">type =</span> <span class="st">&quot;intervention&quot;</span>, <span class="dt">K =</span> <span class="dv">2</span>)
-model &lt;-<span class="st"> </span><span class="kw">FOImodel</span>(<span class="dt">type =</span> <span class="st">&quot;constantoutbreak&quot;</span>, <span class="dt">K =</span> <span class="dv">2</span>)
-model &lt;-<span class="st"> </span><span class="kw">FOImodel</span>(<span class="dt">type =</span> <span class="st">&quot;independent&quot;</span>)
-model &lt;-<span class="st"> </span><span class="kw">FOImodel</span>(<span class="dt">type =</span> <span class="st">&quot;outbreak&quot;</span>, <span class="dt">K =</span> <span class="dv">1</span>)
+<p>The different models are defined using the following commands</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model &lt;-<span class="st"> </span><span class="kw">FOImodel</span>(<span class="dt">type =</span> <span class="st">&quot;constant&quot;</span>) <span class="co"># a constant model</span>
+model &lt;-<span class="st"> </span><span class="kw">FOImodel</span>(<span class="dt">type =</span> <span class="st">&quot;independent&quot;</span>) <span class="co"># independent annual force of infection</span>
+model &lt;-<span class="st"> </span><span class="kw">FOImodel</span>(<span class="dt">type =</span> <span class="st">&quot;intervention&quot;</span>, <span class="dt">K =</span> <span class="dv">2</span>) <span class="co"># intervention model: two constant phase </span>
+model &lt;-<span class="st"> </span><span class="kw">FOImodel</span>(<span class="dt">type =</span> <span class="st">&quot;outbreak&quot;</span>, <span class="dt">K =</span> <span class="dv">1</span>) <span class="co"># one outbreak</span>
+model &lt;-<span class="st"> </span><span class="kw">FOImodel</span>(<span class="dt">type =</span> <span class="st">&quot;constantoutbreak&quot;</span>, <span class="dt">K =</span> <span class="dv">2</span>) <span class="co"># two outbreaks and a constant annual force of infection</span>
 <span class="kw">print</span>(model)</code></pre></div>
 <pre><code>## &lt;FOImodel object&gt;
-## Model name:  outbreak 
-##   Estimated parameters:  3 
+## Model name:  constantoutbreak 
+##   Estimated parameters:  7 
+## Model with categories for the force of infection 
 ## Parameters: 
-##   K:  1 
 ## Priors: 
 ##   alpha1:  0 
 ##   alpha2:  5 
@@ -216,6 +194,7 @@ model &lt;-<span class="st"> </span><span class="kw">FOImodel</span>(<span class
 <pre><code>## &lt;FOImodel object&gt;
 ## Model name:  outbreak 
 ##   Estimated parameters:  4 
+## Model with categories for the force of infection 
 ## Parameters: 
 ##   K:  1 
 ## Priors: 
@@ -237,20 +216,27 @@ First, we load the dataset:</p>
 chikv_vietnam =<span class="st"> </span>Rsero::<span class="kw">SeroData</span>(<span class="dt">age_at_sampling =</span> <span class="kw">round</span>(<span class="kw">as.numeric</span>(sero.dta$age)), 
                <span class="dt">Y =</span> <span class="kw">as.numeric</span>(sero.dta$Y)&gt;<span class="dv">9</span>,
                <span class="dt">sampling_year =</span> <span class="kw">as.numeric</span>(sero.dta$sampling_year), 
-               <span class="dt">category =</span> sero.dta$Loc,
-               <span class="dt">location =</span> sero.dta$Loc)</code></pre></div>
+               <span class="dt">category =</span> <span class="kw">as.character</span>(sero.dta$Loc),
+               <span class="dt">location =</span> <span class="kw">as.character</span>(sero.dta$Loc))</code></pre></div>
 <p>We could have loaded the dataset directly too</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"> <span class="kw">data</span>(<span class="st">&quot;chikv_vietnam&quot;</span>)</code></pre></div>
-<p>We defined categories corresponding to the different regions. This can be seen in the column <em>category</em> of the dataset <em>chikv_vietnam</em> that associate to each individual one of the four region:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(<span class="kw">levels</span>(chikv_vietnam$category))</code></pre></div>
-<pre><code>## [1] &quot;An Giang&quot;    &quot;Dak Lak&quot;     &quot;Ho Chi Minh&quot; &quot;Hue&quot;</code></pre>
+<p>We defined categories corresponding to the different regions. This can be seen in the column <em>category</em> of the dataset <em>chikv_vietnam</em> that associates to each individual one of the four region:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(chikv_vietnam$unique.categories) <span class="co"># the different categories</span></code></pre></div>
+<pre><code>## [1] &quot;An Giang&quot;    &quot;Ho Chi Minh&quot; &quot;Dak Lak&quot;     &quot;Hue&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(<span class="kw">head</span>(chikv_vietnam$category))</code></pre></div>
+<pre><code>##      [,1]      
+## [1,] &quot;An Giang&quot;
+## [2,] &quot;An Giang&quot;
+## [3,] &quot;An Giang&quot;
+## [4,] &quot;An Giang&quot;
+## [5,] &quot;An Giang&quot;
+## [6,] &quot;An Giang&quot;</code></pre>
 <p>We define a model of the annual force of infection that accounts for different risks of infection in each region.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">modelI2Full  =<span class="kw">FOImodel</span>(<span class="dt">type=</span><span class="st">'intervention'</span>,
                        <span class="dt">K=</span><span class="dv">2</span>,
                        <span class="dt">background =</span> <span class="dv">1</span>,
-                       <span class="dt">cat_bg =</span> <span class="ot">TRUE</span>,
                        <span class="dt">cat_lambda =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<p>We defined an <em>intervention</em> model, to describe that we expect a drop of the force of infection at a certain point in time. The parameter <em>cat_lambda = TRUE</em> is used to set different relative values of the force of infection while keeping equal the timing of the drop in infection probability. The parameter <em>cat_bg = TRUE</em> is similarly used to model specific probabilities of background infections in each location. Therefore, the fit is done simultaneously on the four regions.</p>
+<p>We defined an <em>intervention</em> model, to describe that we expect a drop of the force of infection at a certain point in time. The parameter <em>cat_lambda = TRUE</em> is used to set different relative values of the force of infection while keeping equal the timing of the drop in infection probability. Therefore, the fit is done simultaneously on the four regions.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">FOIfit.vietnam =<span class="st"> </span><span class="kw">fit</span>(<span class="dt">model =</span> modelI2full, <span class="dt">data=</span>chikv_vietnam)</code></pre></div>
 </div>
 <div id="model-comparison" class="section level2">
@@ -266,10 +252,9 @@ FOIfit.vietnam2 =<span class="st"> </span><span class="kw">fit</span>(<span clas
 </div>
 <div id="priors" class="section level2">
 <h2>Priors</h2>
-<p>Flat priors were chosen for all parameters except the force of infection in the <em>independent</em> model.</p>
+<p>Flat priors were chosen for all parameters except the force of infection in the <em>independent</em> model and the relative risk of infection of the different categories. We give below the default values of the hyperparameters where the first and second parameters are respectively the lower and upper boundary of the uniform distributions.</p>
 <div id="default-values-of-the-hyperparameters" class="section level3">
 <h3>Default values of the hyperparameters</h3>
-<p>The default values of the hyperparameters are given for uniform distributions. The first and second parameters are respectively the lower and upper boundary of the distributions.</p>
 <div id="for-the-constant-model" class="section level4">
 <h4>For the constant model</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">priorC1 =<span class="st"> </span><span class="dv">0</span>
@@ -304,6 +289,7 @@ priorC2 =<span class="st"> </span><span class="dv">10</span></code></pre></div>
 </div>
 <div id="for-the-independent-model" class="section level4">
 <h4>For the independent model</h4>
+<p>The the <em>independent</em> model, the prior distribution for the logit of each annual probability of infection is drawn with a normal distribution <span class="math inline">\(\mathcal{N}(priorY1, priorY2)\)</span> with default hyperparameters</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">priorY1 =<span class="st"> </span><span class="dv">0</span>
 priorY2 =<span class="st"> </span><span class="dv">100</span></code></pre></div>
 </div>
@@ -328,6 +314,7 @@ priorbg2 =<span class="st"> </span><span class="dv">1</span></code></pre></div>
 <pre><code>## &lt;FOImodel object&gt;
 ## Model name:  outbreak 
 ##   Estimated parameters:  7 
+## Model with categories for the force of infection 
 ## Parameters: 
 ##   K:  2 
 ## Priors: 

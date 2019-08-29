@@ -18,11 +18,11 @@ We included in this package various models of the force of infection, but also o
 ## The data
 
 We first load the package 
-```{r data1, warning=FALSE}
+```{r data1, warning=FALSE, message = FALSE,warning = FALSE}
 library(Rsero)
 ```
 The data must be in the following format 
-```{r data2, echo=TRUE, warning=FALSE}
+```{r data2, echo=TRUE, message = FALSE,warning = FALSE}
 data <- simulate_SeroData(number_samples = 5)
 print(data)
 ```
@@ -55,13 +55,13 @@ In the case where the $T_j$ are far apart, the gaussians are well separated and 
 
 
 ### Using the models
-
+The different models are defined using the following commands 
 ```{r modelUse, echo=TRUE}
-model <- FOImodel(type = "constant")
-model <- FOImodel(type = "intervention", K = 2)
-model <- FOImodel(type = "constantoutbreak", K = 2)
-model <- FOImodel(type = "independent")
-model <- FOImodel(type = "outbreak", K = 1)
+model <- FOImodel(type = "constant") # a constant model
+model <- FOImodel(type = "independent") # independent annual force of infection
+model <- FOImodel(type = "intervention", K = 2) # intervention model: two constant phase 
+model <- FOImodel(type = "outbreak", K = 1) # one outbreak
+model <- FOImodel(type = "constantoutbreak", K = 2) # two outbreaks and a constant annual force of infection
 print(model)
 ```
 
@@ -138,17 +138,18 @@ sero.dta =  read.csv('../data-raw/CHIKVVietnam.csv', header = TRUE, sep=';')
 chikv_vietnam = Rsero::SeroData(age_at_sampling = round(as.numeric(sero.dta$age)), 
                Y = as.numeric(sero.dta$Y)>9,
                sampling_year = as.numeric(sero.dta$sampling_year), 
-               category = sero.dta$Loc,
-               location = sero.dta$Loc)
+               category = as.character(sero.dta$Loc),
+               location = as.character(sero.dta$Loc))
 
 ```
 We could have loaded the dataset directly too
 ```{r vietnam2, echo=TRUE, warning=FALSE}
  data("chikv_vietnam")
 ```
-We defined categories corresponding to the different regions. This can be seen in the column *category* of the dataset *chikv_vietnam* that associate to each individual one  of the four region: 
+We defined categories corresponding to the different regions. This can be seen in the column *category* of the dataset *chikv_vietnam* that associates to each individual one  of the four region: 
 ```{r vietnam3, echo=TRUE, warning=FALSE}
-print(levels(chikv_vietnam$category))
+print(chikv_vietnam$unique.categories) # the different categories
+print(head(chikv_vietnam$category))
 
 ```
 We define a model of the annual force of infection that accounts for different risks of infection in each region.
@@ -156,12 +157,10 @@ We define a model of the annual force of infection that accounts for different r
 modelI2Full  =FOImodel(type='intervention',
                        K=2,
                        background = 1,
-                       cat_bg = TRUE,
                        cat_lambda = TRUE)
 ```
 
 We defined an *intervention* model, to describe that we expect a drop of the force of infection at a certain point in time. The parameter *cat_lambda = TRUE* is used to set different relative values of the force of infection while keeping equal the timing of the drop in infection probability. 
-The parameter *cat_bg = TRUE* is similarly used to model specific probabilities of background infections in each location.
 Therefore, the fit is done simultaneously on the four regions. 
 
 
@@ -191,12 +190,11 @@ The DIC of the intervention model is lower than the DIC of the outbreak model. T
 
 ## Priors
 
-Flat priors were chosen for all parameters except the force of infection in the *independent* model. 
+Flat priors were chosen for all parameters except the force of infection in the *independent* model and the relative risk of infection of the different categories. We give below the default values of the hyperparameters where the first and second parameters are respectively the lower and upper boundary of the uniform distributions.  
 
 ### Default values of the hyperparameters
 
-The default values of the hyperparameters are given for uniform distributions. The first and second parameters are respectively the lower and upper boundary of the distributions.  
-
+ 
 #### For the constant model
 ```{r prior1, echo=TRUE, warning=FALSE, eval=FALSE}
 priorC1 = 0
@@ -230,6 +228,7 @@ priorC1 = 0
 priorC2 = 10
 ```
 #### For the independent model
+The the *independent* model, the prior distribution for the logit of each annual probability of infection is drawn with a normal distribution $\mathcal{N}(priorY1, priorY2)$ with default hyperparameters
 ```{r independent}
 priorY1 = 0
 priorY2 = 100
