@@ -37,15 +37,17 @@ plot_posterior<- function(FOIfit) {
       
       
       for(i in 1:K){
-        chainsout$T[,i] <- Years[,i]
         
-        distribution<-data.frame(Time = chainsout$T[,i])
-        gT <- ggplot(distribution, aes(Time)) +
-          geom_histogram(bins = 16, fill = "red", col="red",alpha=.4) +
-          labs(title = paste('Histogram for Time',i), x='Year', y='Count')
-        plotindex <- plotindex+1
-        plots[[plotindex]]  = gT
-        
+        if(name != 'constant'){
+          chainsout$T[,i] <- Years[,i]
+          
+          distribution<-data.frame(Time = chainsout$T[,i])
+          gT <- ggplot(distribution, aes(Time)) +
+            geom_histogram(bins = 16, fill = "red", col="red",alpha=.4) +
+            labs(title = paste('Histogram for Time',i), x='Year', y='Count')
+          plotindex <- plotindex+1
+          plots[[plotindex]]  = gT
+        }
       }
       
       for(i in 1:K){
@@ -83,7 +85,6 @@ plot_posterior<- function(FOIfit) {
         }
         
         chainsout$T[,i] <- t(Years[i, ]) 
-        #chainsout$alpha[, i] <- t(chains$alpha[Ranks[i,]]/chains$beta[Ranks[i, ]])
         chainsout$alpha[, i] <- t(chains$alpha)[Ranks[i,]] 
         chainsout$beta[, i] <- t(chains$beta)[Ranks[i,]]
         
@@ -124,7 +125,8 @@ plot_posterior<- function(FOIfit) {
     
     if(name =='constant'){
       
-      L = chains$lambda[,1]
+      #L = chains$lambda[,1]
+      L = chains$foi
       
       distribution <- data.frame(L=L) 
       gT <- ggplot(distribution, aes(L))+
@@ -162,7 +164,6 @@ plot_posterior<- function(FOIfit) {
     if(FOIfit$model$background){
       bg = chainsout$bg
       
-      
       Title = 'Histogram for background infection probability'
       
       distribution<-data.frame(bg = bg)
@@ -173,8 +174,32 @@ plot_posterior<- function(FOIfit) {
       plotindex <- plotindex+1
       plots[[plotindex]]  = gT
       
-      
     }
+    
+    
+    
+    d= FOIfit$data$category.position.in.table
+    
+    if(FOIfit$model$cat_lambda & dim(d)[1]>0){ 
+      for(i in seq(1,dim(d)[1])){
+        
+        Title <- paste0('Histogram of FOI of category ', d[i,]$predictor, " relative to " ,  d[i,]$relative_to)
+        
+        var=chains$Flambda[,d[i,]$index]
+        distribution<-data.frame(var = var)
+        gT <- ggplot2::ggplot(distribution, aes(var)) +
+          geom_histogram(bins = 16, fill = "red", col="red",alpha=.4) +
+          labs(title = Title, x='value', y='Count')
+        
+        plotindex <- plotindex+1
+        plots[[plotindex]]  = gT
+        
+        
+      }
+      
+    } 
+    
+    
   }
   
   return(plots)

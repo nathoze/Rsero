@@ -6,7 +6,7 @@
 ##' 
 ##' @param quants Numeric. Contains the list of the estimated quantiles given between 0 and 1. Default parameters are the 2.5\%, 50 \% and 97.5 \% quantiles given by \code{quants = c(0.025,0.5,0.975)}.
 ##' 
-##' @return A dataframe containing the input quantiles and the mean of the posterior distributions.    
+##' @return A dataframe containing the 2.5%, 50% and 97.5% quantiles and the mean of the posterior distributions. The force of infection is given for the reference category.     
 ##'
 ##' @author Nathanael Hoze \email{nathanael.hoze@gmail.com}
 ##' 
@@ -40,7 +40,10 @@ parameters_credible_intervals <- function(FOIfit,
     if(FOIfit$model$background){
       background = chains$bg
       name= paste0('background ')
-      params <- add.quantiles.text(params,variable=background, name = name, quants= quants, quantilestext=quantilestext )
+      params <- add.quantiles.text(params,variable=background,
+                                   name = name,
+                                   quants= quants,
+                                   quantilestext=quantilestext)
     }
     
     if(FOIfit$model$type  %in% model.list('Outbreak models')){
@@ -59,37 +62,23 @@ parameters_credible_intervals <- function(FOIfit,
       
       for(i in 1:K){
         chainsout$T[,i] <- t(Years[i, ]) 
-        # chainsout$alpha[, i] <- t(chains$alpha[Ranks[i, ]]/chains$beta[Ranks[i, ]])
         chainsout$alpha[, i] <- t(chains$alpha)[Ranks[i, ]]
         chainsout$beta[, i] <- t(chains$beta)[Ranks[i, ]]
         
-        # FOI = measure.foi.Gmodel(alpha=chainsout$alpha[, i], beta =chainsout$beta[, i], T = chainsout$T[,i] , years = seq(YearMax-FOIfit$data$A,YearMax,by =1) )
+        params <- add.quantiles.text(params,
+                                     variable=chainsout$T[,i],
+                                     name = paste('T',i),
+                                     quants= quants,
+                                     quantilestext=quantilestext )
         
-        # FOI = rowSums(chains$lambda) # TO DO: if there are categories
         
-        params <- add.quantiles.text(params,variable=chainsout$T[,i], name = paste('T',i), quants= quants, quantilestext=quantilestext )
-        
-        # 
-        # if(FOIfit$model$cat_lambda){
-        #   Ncat_lambda = FOIfit$data$Ncategory
-        # }else{
-        #   Ncat_lambda = 1
-        # }
-        # 
-        # for(k in seq(1,Ncat_lambda)){
         name <- paste('alpha',i)
-        #   if(Ncat_lambda>1)    name <- paste('alpha',i,' cat',k)
-        params <- add.quantiles.text(params,variable=chainsout$alpha[,i], name = name, quants= quants, quantilestext=quantilestext )
-        #   
-        # }
         
-        # for(k in seq(1,Ncat_lambda)){
-        #   de<-data.frame(t(quantile(FOI*chainsout$Flambda[,k], probs = quants)), mean = mean(FOI*chainsout$Flambda[,k]))
-        #   name <- paste('total foi',i)
-        #   if(Ncat_lambda>1)    name <- paste('total foi',i,' cat',k)
-        #   params <- add.quantiles.text(params,variable  = FOI*chainsout$Flambda[,k], name = name, quants= quants, quantilestext=quantilestext )
-        #   
-        # }
+        params <- add.quantiles.text(params,
+                                     variable=chainsout$alpha[,i],
+                                     name = name,
+                                     quants= quants,
+                                     quantilestext=quantilestext )
         
         params <- add.quantiles.text(params,
                                      variable  = chainsout$beta[,i],
@@ -116,7 +105,6 @@ parameters_credible_intervals <- function(FOIfit,
                                        quantilestext=quantilestext )
           
         }
-        #        LL <- chains$logitlambda[,i]
         LL <- chains$foi[,i]
         params <- add.quantiles.text(params,
                                      variable  = LL,
@@ -126,22 +114,12 @@ parameters_credible_intervals <- function(FOIfit,
         LL <- 100*(1-exp(-chains$foi[,i]))
         params <- add.quantiles.text(params,
                                      variable  = LL,
-                                     name = paste0('Annual Prob. Infection (%)_',i),
+                                     name = paste0('Annual Prob. Infection (in %)_',i),
                                      quants= quants,
                                      quantilestext=quantilestext )
-        
       }
     }
     
-    # if(FOIfit$model$type=='constant'){
-    #   
-    #   L = chains$lambda
-    #   params <- add.quantiles.text(params,variable  = L[,dim(L)[2]],
-    #                                name =paste('Constant'),
-    #                                quants= quants,
-    #                                quantilestext=quantilestext )
-    #   
-    # }
     
     if(FOIfit$model$type=='constantoutbreak'){
       

@@ -18,7 +18,8 @@
 #' 
 #' @param sex An optional character factor defining the sex of the individuals. It can be a single chain of characters or a vector of the same size as the number of sampled individuals. Default = \code{NULL}. 
 #'
-#' @param category Character. An optional element containing the name of the categories and defining the category of the individuals. This feature is used when fitting the models assuming  different risks of infection for the different categories. It can be a single character element or a matrix of characters with row size equal to the number of individuals and column size equal to the number of different category classes. Default = "Category 1".
+#' @param category Character. An optional element containing the name of the categories and defining the category of the individuals. 
+#' This feature is used when fitting the models assuming  different risks of infection for the different categories. It can be a single character element or a matrix of characters with row size equal to the number of individuals and column size equal to the number of different category classes. Default = "Category 1".
 #'
 #' @param reference.category Character. A vector containing the name of the reference categories. It must have the same length as the number of columns of \code{category}. By default, it will take as reference the most common element in each category.
 #' 
@@ -59,6 +60,14 @@
 #' seroprevalence(data = data)
 #' data2 = subset(data,c(1,3))
 #' seroprevalence(data = data2, age_class = 5) 
+#' 
+#' ## A example using categories 
+#' sex= c('male', 'male', 'female')
+#' data = SeroData(age_at_sampling = c(10,32,24), Y=c(0,1,1),  category= sex )
+#' 
+#' # defining the reference category 'female'
+#'
+#' data = SeroData(age_at_sampling = c(10,32,24), Y=c(0,1,1),  category= sex, reference.category='female')
 
 
 SeroData <- function(age_at_sampling,
