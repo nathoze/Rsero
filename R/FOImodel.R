@@ -21,8 +21,6 @@
 ##' 
 ##' @param seroreversion integer, equal to 0 or 1. If \code{seroreversion=0} the model includes a rate of seroreversion (waning immunity). See the vignette \code{models} for details.  Default = 0. 
 ##' 
-##' @param cat_lambda integer, equal to 0 or 1.  If \code{cat_lambda=1} the force of infection varies accross the different categories defined in an objet \code{SeroData}.  See the vignette \code{models} for details. Default = 0. 
-##'  
 ##' @param cat_lambda integer, equal to 0 or 1.  If \code{cat_lambda=1} the force of infection varies accross the different categories defined in an objet \code{SeroData}.
 ##'   See the vignette \code{models} for details. Default = 1. 
 ##' 
