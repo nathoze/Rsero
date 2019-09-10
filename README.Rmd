@@ -151,8 +151,8 @@ The DIC obtained for the outbreak model is lower than that for the constant mode
 ## More information
 
 
-More details on the models can be found in the vignette  *models* and [here](http://htmlpreview.github.io/?https://github.com/nathoze/Rsero/blob/master/vignettes/models.html), 
-A full running example  is available [here] (https://htmlpreview.github.io/?https://github.com/nathoze/Rsero/blob/master/vignettes/FullExample.html)
+More details on the models can be found in the vignette  *models* and [here](http://htmlpreview.github.io/?https://github.com/nathoze/Rsero/blob/master/vignettes/models.html).
+A full running example  is available [here](https://htmlpreview.github.io/?https://github.com/nathoze/Rsero/blob/master/vignettes/FullExample.html).
 
 The following schematic summarizes the different functions available with the package
 ![ ](/schema.png){width=1000px}

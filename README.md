@@ -69,7 +69,7 @@ Some basic analysis can be done on this dataset. The seroprevalence is obtained 
 
 ``` r
 seroprevalence(simulated.survey)
-#> [1] "Mean: 0.18    2.5%: 0.15    97.5%: 0.22"
+#> [1] "Mean: 0.21    2.5%: 0.17    97.5%: 0.25"
 seroprevalence.plot(simulated.survey,YLIM=0.3)
 #> [1] "Category: Category 1"
 #> [[1]]
@@ -129,8 +129,8 @@ FOIfit.constant = fit( data = one_peak_simulation,  model = ConstantModel, chain
 #> 
 #> SAMPLING FOR MODEL 'intervention' NOW (CHAIN 1).
 #> 
-#> Gradient evaluation took 0.001 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 10 seconds.
+#> Gradient evaluation took 0 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
@@ -147,10 +147,10 @@ FOIfit.constant = fit( data = one_peak_simulation,  model = ConstantModel, chain
 #> Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Iteration: 5000 / 5000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 3.211 seconds (Warm-up)
-#>                7.242 seconds (Sampling)
-#>                10.453 seconds (Total)
-#> Warning: There were 1622 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
+#>  Elapsed Time: 3.339 seconds (Warm-up)
+#>                1.228 seconds (Sampling)
+#>                4.567 seconds (Total)
+#> Warning: There were 1643 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
 #> http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #> Warning: Examine the pairs() plot to diagnose sampling problems
 ```
@@ -177,21 +177,6 @@ We can now fit the defined model to the data:
 FOIfit.outbreak = fit( data = one_peak_simulation,  model = OutbreakModel, chains=1)
 #> 
 #> SAMPLING FOR MODEL 'outbreak' NOW (CHAIN 1).
-#> Rejecting initial value:
-#>   Log probability evaluates to log(0), i.e. negative infinity.
-#>   Stan can't start sampling from this initial value.
-#> Rejecting initial value:
-#>   Log probability evaluates to log(0), i.e. negative infinity.
-#>   Stan can't start sampling from this initial value.
-#> Rejecting initial value:
-#>   Log probability evaluates to log(0), i.e. negative infinity.
-#>   Stan can't start sampling from this initial value.
-#> Rejecting initial value:
-#>   Log probability evaluates to log(0), i.e. negative infinity.
-#>   Stan can't start sampling from this initial value.
-#> Rejecting initial value:
-#>   Log probability evaluates to log(0), i.e. negative infinity.
-#>   Stan can't start sampling from this initial value.
 #> 
 #> Gradient evaluation took 0 seconds
 #> 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
@@ -211,10 +196,10 @@ FOIfit.outbreak = fit( data = one_peak_simulation,  model = OutbreakModel, chain
 #> Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Iteration: 5000 / 5000 [100%]  (Sampling)
 #> 
-#>  Elapsed Time: 3.529 seconds (Warm-up)
-#>                6.229 seconds (Sampling)
-#>                9.758 seconds (Total)
-#> Warning: There were 577 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
+#>  Elapsed Time: 4.013 seconds (Warm-up)
+#>                3.569 seconds (Sampling)
+#>                7.582 seconds (Total)
+#> Warning: There were 691 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
 #> http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #> Warning: Examine the pairs() plot to diagnose sampling problems
 ```
@@ -241,6 +226,6 @@ The DIC obtained for the outbreak model is lower than that for the constant mode
 More information
 ----------------
 
-More details on the models can be found in the vignette *models* and [here](http://htmlpreview.github.io/?https://github.com/nathoze/Rsero/blob/master/vignettes/models.html), A full running example is available \[here\] (<https://htmlpreview.github.io/?https://github.com/nathoze/Rsero/blob/master/vignettes/FullExample.html>)
+More details on the models can be found in the vignette *models* and [here](http://htmlpreview.github.io/?https://github.com/nathoze/Rsero/blob/master/vignettes/models.html). A full running example is available [here](https://htmlpreview.github.io/?https://github.com/nathoze/Rsero/blob/master/vignettes/FullExample.html).
 
 The following schematic summarizes the different functions available with the package <img src="/schema.png" width="1000" />
