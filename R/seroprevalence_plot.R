@@ -23,7 +23,7 @@ seroprevalence.plot<- function(serodata, age_class = 10, YLIM = 1, ...){
   
   plots  <- NULL
   index.plot=0
-
+  
   for(sampling_year in sort(unique(serodata$sampling_year))){
     for(cat in serodata$unique.categories){
       
@@ -32,22 +32,23 @@ seroprevalence.plot<- function(serodata, age_class = 10, YLIM = 1, ...){
       w <- which(serodata$sampling_year ==  sampling_year & serodata$category==cat, arr.ind = TRUE)[,1]
       #w <- as.matrix(which(serodata$sampling_year ==  sampling_year & serodata$category==cat, arr.ind = TRUE))[,1]
       
- 
-      
-      subdata <- subset(serodata,sub = w)
-      histdata <- sero.age.groups(dat = subdata,age_class = age_class,YLIM=YLIM)
-      
-      g <- ggplot(histdata, aes(x=labels, y=mean)) + geom_point() + geom_segment(aes(x=labels,y=lower, xend= labels,yend=upper))
-      g <- g + theme_classic()
-      g <- g+theme(axis.text.x = element_text(size=12),
-                   axis.text.y = element_text(size=12),
-                   text=element_text(size=14))
-      g <- g+xlab('Age')+ylab('Proportion seropositive')+ylim(0,YLIM)
-      
-      plots[[index.plot]]= g
-      plots[[index.plot]]$category  = cat
-      
-      print(paste0('Category: ',cat))
+      if(length(w)>0){
+        
+        subdata <- subset(serodata,sub = w)
+        histdata <- sero.age.groups(dat = subdata,age_class = age_class,YLIM=YLIM)
+        
+        g <- ggplot(histdata, aes(x=labels, y=mean)) + geom_point() + geom_segment(aes(x=labels,y=lower, xend= labels,yend=upper))
+        g <- g + theme_classic()
+        g <- g+theme(axis.text.x = element_text(size=12),
+                     axis.text.y = element_text(size=12),
+                     text=element_text(size=14))
+        g <- g+xlab('Age')+ylab('Proportion seropositive')+ylim(0,YLIM)
+        
+        plots[[index.plot]]= g
+        plots[[index.plot]]$category  = cat
+        
+        print(paste0('Category: ',cat))
+      }
     }
     
   }

@@ -256,6 +256,16 @@ category.parameters <- function(category,N, reference.category){
   # }
   
   
+  
+  #Verfier ICI pour plusieurs dimensions
+  for(i in 1:Ncategoryclass){
+    if(sum(category[,i]==reference.category[i])==0) {
+      most.common=  names(sort(summary(as.factor(category[,i])), decreasing=T)[1])
+      reference.category[i] =   most.common    # add the most common element as reference
+     }
+   }
+  
+  
   A=apply(category, 2, unique)
   if(typeof(A)=="character"){ # needed in the case there is only one type of category
     B=list()
