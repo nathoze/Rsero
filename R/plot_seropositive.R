@@ -77,7 +77,8 @@ seroprevalence.fit<- function(FOIfit,
       
       par_out <- apply(Pinf, 2, function(x)c(mean(x), quantile(x, probs=c(0.025, 0.975))))
       par_out[par_out>YLIM]= YLIM # set to the upper limits for plotting
-      meanFit <- data.frame(x = yrs, y = par_out[1, ])
+      #      meanFit <- data.frame(x = yrs, y = par_out[1, ])
+      meanFit <- data.frame(x = seq(1, dim(par_out)[2]), y = par_out[1, ])
       
       
       # create the envelope
