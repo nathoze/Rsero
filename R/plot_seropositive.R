@@ -45,11 +45,14 @@ seroprevalence.fit<- function(FOIfit,
   latest_sampling_year <- max(FOIfit$data$sampling_year)
   years <- seq(1,A)
   
-  
   index.plot=0
   
-  for(sampling_year in sort(unique(FOIfit$data$sampling_year)) ){
+  sorted.year = sort.int(unique(FOIfit$data$sampling_year),index.return = TRUE)
+  Y=0
+  for(sampling_year in sorted.year$x ){
+    Y=Y+1
     for(cat in data$unique.categories){ 
+      
       
       index.plot=index.plot+1
       age_group = data$age_group[which(data$sampling_year ==  sampling_year)][1]
@@ -57,33 +60,34 @@ seroprevalence.fit<- function(FOIfit,
       subdat = subset(data,sub = w)
       
       
-      years.plotted =  seq(latest_sampling_year-sampling_year+1, dim(chains$P)[2])
-      yrs= years[seq(1, dim(chains$P)[2]-latest_sampling_year+sampling_year )]
-      
-      
+      # compute the proportion of seropositive
+      P=chains$P[,,sorted.year$ix[Y], 1]
       d = data$categoryindex[w]
       p1=proportions.index(d)
-      
-       
+    
       M=dim(chains$P)[1] 
       Pinf=matrix(0, nrow = M, ncol=FOIfit$data$A)
       
       m = matrix(rep(bg,1), nrow = M, ncol=FOIfit$data$A)      
-      
-      for(i in 1:length(p1$index)){
 
-        Pinf =  Pinf+  p1$prop[i]*( 1-(1-m)*chains$P[,,1,p1$index[i]] ) 
+      # infection probability weighted on the categories      
+      for(i in 1:length(p1$index)){
+        Pinf =  Pinf+  p1$prop[i]*( 1-(1-m)*chains$P[,,sorted.year$ix[Y],p1$index[i]] ) 
       }
       
       par_out <- apply(Pinf, 2, function(x)c(mean(x), quantile(x, probs=c(0.025, 0.975))))
       par_out[par_out>YLIM]= YLIM # set to the upper limits for plotting
-      #      meanFit <- data.frame(x = yrs, y = par_out[1, ])
-      meanFit <- data.frame(x = seq(1, dim(par_out)[2]), y = par_out[1, ])
+
+      
+      # X axis
+      years.plotted =  seq(latest_sampling_year-sampling_year+1, dim(chains$P)[2])
+      years.plotted.normal= years.plotted-min(years.plotted)+1
+      meanFit <- data.frame(x = years.plotted.normal, y = par_out[1,years.plotted ])
       
       
       # create the envelope
-      xpoly <- (c(yrs, rev(yrs)))
-      ypoly <-  c(par_out[3, ], rev(par_out[2, ]))
+      xpoly <- (c(years.plotted.normal, rev(years.plotted.normal)))
+      ypoly <-  c(par_out[3,years.plotted ], rev(par_out[2,years.plotted ]))
       DataEnvelope = data.frame(x = xpoly, y = ypoly)
       
       # histogram  of data
@@ -95,12 +99,11 @@ seroprevalence.fit<- function(FOIfit,
       p <- p + ggplot2::geom_polygon(data=DataEnvelope, ggplot2::aes(x, y), fill="#d7def3")
       p <- p + ggplot2::geom_line(data = meanFit, ggplot2::aes(x = x, y = y), size = 1, color ='#5e6b91')
       
-      
-      # plot individual runs of the chain
+      # if plot individual runs of the chain
       if(individual_samples>0){
         Index_samples <- sample(nrow(Pinf), individual_samples)
         for (i in Index_samples){
-          ind_foi <-  data.frame(x = yrs,y = Pinf[i, ])
+          ind_foi <-  data.frame(x = years.plotted.normal,y = Pinf[i, years.plotted])
           p <- p + ggplot2::geom_line(data = ind_foi, ggplot2::aes(x = x, y = y), size = 0.8, colour = "#bbbbbb", alpha = 0.6)
         }
       }
@@ -119,7 +122,9 @@ seroprevalence.fit<- function(FOIfit,
       
       plots[[index.plot]] <- p 
       plots[[index.plot]]$category <- cat 
+      plots[[index.plot]]$year <- sampling_year 
       print(paste0('Category: ',cat))
+      print(paste0('Sampling year: ',sampling_year))
       
     }
   }
