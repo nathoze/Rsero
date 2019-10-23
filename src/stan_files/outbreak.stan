@@ -178,7 +178,7 @@ transformed parameters {
             for(j in 1:A){
                 P[j,J,i]=0;
                 for(k in class1[j]:class2[j]){
-                    P[j,J,i]  =  1/(class2[j]-class1[j]+1)*P1[j,J,i]+P[j,J,i];
+                    P[j,J,i]  =  1/(class2[j]-class1[j]+1)*P1[k,J,i]+P[j,J,i];
                 }
             }
         }
