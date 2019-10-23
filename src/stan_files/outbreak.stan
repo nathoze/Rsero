@@ -180,8 +180,10 @@ transformed parameters {
                 print(j);
                 for(k in class1[j]:class2[j]){
                 print(k);
-                    P[j,J,i]  =  1/(class2[j]-class1[j]+1)*P1[k,J,i]+P[j,J,i];
+                    P[j,J,i]  =  P1[k,J,i]+P[j,J,i];
                 } 
+                
+                P[j,J,i] =P[j,J,i] /(class2[j]-class1[j]+1);
                 print(P[j,J,i]);
             }
         }
