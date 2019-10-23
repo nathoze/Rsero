@@ -1,5 +1,9 @@
 data {
     int <lower=0> A; //the number of age classes
+
+    int <lower=1> class1[A]; //lower boundary for the age class corresponding to the indexed age
+
+    int <lower=1> class2[A]; //upper boundary for the age class corresponding to the indexed age
   
     int <lower=0> NGroups; //the number of foi groups
       
@@ -80,6 +84,7 @@ transformed parameters {
     real L;
     real lambda[A];
     real S[K]; // Normalization constant
+    real<lower =0, upper=1> P1[A,NAgeGroups,Ncategory]; //14 08 
     real<lower =0, upper=1> P[A,NAgeGroups,Ncategory]; //14 08 
     real<lower =0> bg;
     real<lower =0> Flambda[Ncategory]; //14 08
@@ -137,13 +142,13 @@ transformed parameters {
     if(seroreversion==0){
         for(J in 1:NAgeGroups){
             for(i in 1:Ncategory){      // Ici Ncategory est un entier et pas un tableau
-                P[1,J,i ] = exp(-Flambda[i]*lambda[1]) ;
+                P1[1,J,i ] = exp(-Flambda[i]*lambda[1]) ;
                 for(j in 1:A-1){
                     x[j]=1;         
                     if(j<age_at_init[J]){
-                        P[j+1,J,i] = exp(- Flambda[i]*lambda[j]) ;    
+                        P1[j+1,J,i] = exp(- Flambda[i]*lambda[j]) ;    
                     }else{
-                        P[j+1,J,i] = P[j,J,i]*exp(- Flambda[i]*lambda[j+1]);                 
+                        P1[j+1,J,i] = P1[j,J,i]*exp(- Flambda[i]*lambda[j+1]);                 
                     } 
                 }
                 x[A]=1;
@@ -160,12 +165,26 @@ transformed parameters {
                         L=Flambda[i]*lambda[j-k+2];
                         x[j-k+2-1] = x[j-k+2]*exp(-(rho+L)) +rho/(L+rho)*(1- exp(-(rho+L)));
                     }
-                    P[j,J,i]  = x[age_at_init[J]];
+                    P1[j,J,i]  = x[age_at_init[J]];
                 }
             }
         }
     }
  
+// accounting for age classes
+
+    for(J in 1:NAgeGroups){
+        for(i in 1:Ncategory){        
+            for(j in 1:A){
+                P[j,J,i]=0;
+                for(k in class1[j]:class2[j]){
+                    P[j,J,i]  =  1/(class2[j]-class1[j]+1)*P1[j,J,i]+P[j,J,i];
+                }
+            }
+        }
+    }
+    
+
    for(j in 1:N){
         Like[j] =1-(1-bg)*P[age[j],age_group[j],categoryindex[j]];///q[age_group[j],categoryindex[j]] ;
     }
