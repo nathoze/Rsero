@@ -6,7 +6,8 @@
 ##' 
 ##' @param quants Numeric. Contains the list of the estimated quantiles given between 0 and 1. Default parameters are the 2.5\%, 50 \% and 97.5 \% quantiles given by \code{quants = c(0.025,0.5,0.975)}.
 ##' 
-##' @return A dataframe containing the 2.5%, 50% and 97.5% quantiles and the mean of the posterior distributions. The force of infection is given for the reference category.     
+##' @return A dataframe containing the 2.5%, 50% and 97.5% quantiles and the mean of the posterior distributions. If several categories are specified, the force of infection is given for the reference category and the relative force of infection is given for the other categories.
+##' In the case of an outbreak model (outbreak or outbreak+constant), the total force of infection is given by alpha. For models with constant phases, the annual probability of infection is given.      
 ##'
 ##' @author Nathanael Hoze \email{nathanael.hoze@gmail.com}
 ##' 
@@ -105,12 +106,12 @@ parameters_credible_intervals <- function(FOIfit,
                                        quantilestext=quantilestext )
           
         }
-        LL <- chains$foi[,i]
-        params <- add.quantiles.text(params,
-                                     variable  = LL,
-                                     name = paste0('FOI_',i),
-                                     quants= quants,
-                                     quantilestext=quantilestext )
+        # LL <- chains$foi[,i]
+        # params <- add.quantiles.text(params,
+        #                              variable  = LL,
+        #                              name = paste0('FOI_',i),
+        #                              quants= quants,
+        #                              quantilestext=quantilestext )
         LL <- 100*(1-exp(-chains$foi[,i]))
         params <- add.quantiles.text(params,
                                      variable  = LL,
@@ -123,11 +124,16 @@ parameters_credible_intervals <- function(FOIfit,
     
     if(FOIfit$model$type=='constantoutbreak'){
       
-      L = chains$constant
-      params <- add.quantiles.text(params,variable  = L,
-                                   name =paste('Constant'),
+      
+      
+      LL <- 100*(1-exp(-chains$constant))
+      params <- add.quantiles.text(params,
+                                   variable  = LL,
+                                   name = paste0('Annual Prob. Infection (in %)_',i),
                                    quants= quants,
                                    quantilestext=quantilestext )
+      
+      
       
     }
     if(FOIfit$model$type=='independent'){

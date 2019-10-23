@@ -80,6 +80,8 @@ SeroData <- function(age_at_sampling,
                      sex = NULL,
                      category = "Category 1",
                      reference.category = NULL, ## add in documentation  +  define default
+                     class1 = NULL,
+                     class2 = NULL
                      ...){
   # Error Messages
   #add  Check : Y and age_at_sampling must have the same length also when Y is multidimensional
@@ -139,6 +141,14 @@ SeroData <- function(age_at_sampling,
     max_age <- max(age)
   }  
   
+  
+  if(is.null(class1) & is.null(class2)){
+    class1 = as.array(1:max_age)
+    class2= class1
+  }
+  
+  
+  
   age[which(age>max_age)] <- max_age
   
   age_at_sampling[which(age_at_sampling>max_age)] <- max_age 
@@ -148,6 +158,9 @@ SeroData <- function(age_at_sampling,
   N=length(age)
   
   param.category =  category.parameters(category=category, N=N, reference.category=reference.category)
+  
+  
+  
   
   data <- list( A = max_age,
                 N = N,
@@ -170,7 +183,9 @@ SeroData <- function(age_at_sampling,
                 NGroups = max_age, 
                 NAgeGroups = age.groups$NAgeGroups, 
                 age_at_init =  as.array(age.groups$age_at_init), # CHECK THIS 25/09/2018 
-                age_group  = age.groups$age_group)
+                age_group  = age.groups$age_group,
+                class1  = class1,
+                class2 = class2)
   
   
   class(data) <- 'SeroData'
@@ -262,8 +277,8 @@ category.parameters <- function(category,N, reference.category){
     if(sum(category[,i]==reference.category[i])==0) {
       most.common=  names(sort(summary(as.factor(category[,i])), decreasing=T)[1])
       reference.category[i] =   most.common    # add the most common element as reference
-     }
-   }
+    }
+  }
   
   
   A=apply(category, 2, unique)

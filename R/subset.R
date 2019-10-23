@@ -107,7 +107,9 @@ subset.SeroData <- function(data,sub =seq(1,data$N), loc = NULL, category = NULL
                    reference.category=param.category$reference.category,
                    NAgeGroups = age.groups$NAgeGroups,
                    age_at_init =  as.array(age.groups$age_at_init), 
-                   age_group  = age.groups$age_group)
+                   age_group  = age.groups$age_group,
+                   class1=data$class1,
+                   class2= data$class2)
   
   
   class(subdata) <- 'SeroData'
