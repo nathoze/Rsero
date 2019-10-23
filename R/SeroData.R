@@ -81,7 +81,7 @@ SeroData <- function(age_at_sampling,
                      category = "Category 1",
                      reference.category = NULL, ## add in documentation  +  define default
                      class1 = NULL,
-                     class2 = NULL
+                     class2 = NULL,
                      ...){
   # Error Messages
   #add  Check : Y and age_at_sampling must have the same length also when Y is multidimensional
