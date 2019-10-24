@@ -140,7 +140,7 @@ transformed parameters {
     if(seroreversion==0){
         for(J in 1:NAgeGroups){
             for(i in 1:Ncategory){      
-                P[1,J,i] = exp(-Flambda[i]*lambda[1]) ;
+                P1[1,J,i] = exp(-Flambda[i]*lambda[1]) ;
                 for(j in 1:A-1){
                     x[j]=1;         
                     if(j<age_at_init[J]){
