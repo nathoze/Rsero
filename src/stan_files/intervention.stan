@@ -144,9 +144,9 @@ transformed parameters {
                 for(j in 1:A-1){
                     x[j]=1;         
                     if(j<age_at_init[J]){
-                        P[j+1,J,i] = exp(-Flambda[i]*lambda[j]) ;    
+                        P1[j+1,J,i] = exp(-Flambda[i]*lambda[j]) ;    
                     }else{
-                        P[j+1,J,i] = P[j,J,i]*exp(-Flambda[i]*lambda[j+1]);                 
+                        P1[j+1,J,i] = P1[j,J,i]*exp(-Flambda[i]*lambda[j+1]);                 
                     } 
                 }
                 x[A]=1;
@@ -163,7 +163,7 @@ transformed parameters {
                         L=Flambda[i]*lambda[j-k+2];
                         x[j-k+2-1] = x[j-k+2]*exp(-(rho+L)) +rho/(L+rho)*(1- exp(-(rho+L)));
                     }
-                    P[j,J,i]  = x[age_at_init[J]];
+                    P1[j,J,i]  = x[age_at_init[J]];
                 }
             }
         }
