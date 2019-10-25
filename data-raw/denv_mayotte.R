@@ -21,8 +21,6 @@
 #' @examples
 #' denv_mayotte
 #'
-set.seed(100)
-
 
 transform_data_from_histogram_uniform <- function(n, sero, age.range){
   
@@ -35,26 +33,41 @@ transform_data_from_histogram_uniform <- function(n, sero, age.range){
   
   age.at.sampling <- c()
   for( i in 1:dim(age.range)[2]){
-    age <- round(runif(n = n[i],min = age.range[1,i], max=age.range[2,i]) )
+    #age <- round(runif(n = n[i],min = age.range[1,i], max=age.range[2,i]) )
+    age <- round(runif(n = n[i],min = age.range[1,i], max=age.range[1,i]) )
     age.at.sampling <- c(age.at.sampling, age)
     
   } 
   list(S, age.at.sampling) 
 }
 
-age.range <- matrix(c(2,14,15,24, 25,34,35,44,45,54, 55, 60), nrow=2) # age groups (2-15; 15-24; ...)
-n <- c(302,294,193,169,107,89) # number of individuals in each age group
-ninfected <- c(93,72,52,56,53,46,41) # number of seropositive individuals in each age group
+#age.range <- matrix(c(2,14,15,24, 25,34,35,44,45,54, 55, 60), nrow=2) # age groups (2-15; 15-24; ...)
+n <- c(0,302,294,193,169,107,89) # number of individuals in each age group
+ninfected <- c(0,93,72,52,56,53,46,41) # number of seropositive individuals in each age group
 
-sero <-c(2.2,19.1, 34,35.8,38.8,28.4)
+sero <-c(0,2.2,19.1, 34,35.8,38.8,28.4)
+
+age.range <- matrix(c(1,1, 2,14,15,24, 25,34,35,44,45,54, 55, 60), nrow=2) # age groups (2-15; 15-24; ...)
+
+# define the age groups
+class1 = c()
+class2 = c()
+for(i in 1:7){
+  class1=c(class1, rep(age.range[1,i],age.range[2,i]-age.range[1,i]+1))
+  class2=c(class2, rep(age.range[2,i],age.range[2,i]-age.range[1,i]+1))
+}
+
+
 
 transformed_data <- transform_data_from_histogram_uniform(n, sero, age.range = age.range)
 
 denv_mayotte <- SeroData(age_at_sampling =  transformed_data[[2]],
                  Y = transformed_data[[1]],
-                 max_age =  55,
+                 max_age =  60,
                  age_cats = 1,
                  sampling_year = 2006,
-                 location = 'Mayotte')
+                 location = 'Mayotte',
+                 class1 =  class1,
+                 class2 = class2)
 
 devtools::use_data(denv_mayotte, overwrite = TRUE)
