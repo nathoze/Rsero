@@ -47,8 +47,9 @@ The intervention models consider successive constant phases. They take as an inp
 
 
 In the case of the outbreak model, the force of infection at year $i$ is given as a sum of $K$ gaussians: 
-  $$\lambda_i  = \sum_{j=1}^K\alpha_{j} e^{-\frac{(i-T_j)^2}{\beta_j^2}}.$$
-  The $T_j$ are the time points where the force of infection is maximal and is equal to $\alpha_j$. The width of the gaussians is quantified with the parameters $\beta_j$. The width of the gaussian is actually a parameter that can quantify two things: the duration of the epidemics, or the uncertainty for the location of the peak of the epidemics. 
+  $$\lambda_i  = \sum_{j=1}^K\bar{\alpha}_{j} e^{-\frac{(i-T_j)^2}{\beta_j^2}}.$$
+  The $T_j$ are the time points where the force of infection is maximal and is equal to $\bar{\alpha}_j$. The parameter $\bar{\alpha}_j$ is normalized so that  $\alpha_j=\bar{\alpha}_j \sum_i e^{-\frac{(i-T_j)^2}{\beta_j^2}}$. 
+  The width of the gaussians is quantified with the parameters $\beta_j$. The width of the gaussian is actually a parameter that can quantify two things: the duration of the epidemics, or the uncertainty for the location of the peak of the epidemics. 
 In the case where the $T_j$ are far apart, the gaussians are well separated and around $T_j$ the force of infection is given by a single gaussian. 
 
 
