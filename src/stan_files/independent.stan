@@ -77,7 +77,8 @@ transformed parameters {
     real c; // 14/08
 
     for (j in 1:A) {
-         lambda[j] = inv_logit(logitlambda[j]);
+       //  lambda[j] = inv_logit(logitlambda[j]);
+    //  lambda[j] =logitlambda[j];
     
     }
 
