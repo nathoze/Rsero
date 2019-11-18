@@ -78,7 +78,7 @@ transformed parameters {
 
     for (j in 1:A) {
        //  lambda[j] = inv_logit(logitlambda[j]);
-    //  lambda[j] =logitlambda[j];
+        lambda[j] =logitlambda[j];
     
     }
 
