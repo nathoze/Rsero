@@ -167,7 +167,7 @@ model {
   //FOI by group
  
     for (j in 1:NGroups) {    
-        logitlambda[j] ~ normal(priorY1,priorY2);
+        logitlambda[j] ~ uniform(priorY1,priorY2);
     }
  
 
