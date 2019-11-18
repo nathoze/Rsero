@@ -58,7 +58,7 @@ data {
 
 
 parameters {
-    real logitlambda[NGroups]; 
+    real<lower =0> logitlambda[NGroups]; 
     real<lower = 0, upper = 1> rho;    
     real<lower = 0, upper=1> bg2;
     real  Flambda2[maxNcategory,Ncategoryclass]; //14 08
