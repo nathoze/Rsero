@@ -68,7 +68,7 @@ parameters {
 transformed parameters {
     real x[A]; 
     real L;
-    real lambda[A];
+    real<lower=0> lambda[A];
     real<lower =0, upper=1> P1[A,NAgeGroups,Ncategory]; //14 08 
     real<lower =0, upper=1> P[A,NAgeGroups,Ncategory]; //14 08 
     real<lower =0> bg;
