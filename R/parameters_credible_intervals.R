@@ -7,7 +7,7 @@
 ##' @param quants Numeric. Contains the list of the estimated quantiles given between 0 and 1. Default parameters are the 2.5\%, 50 \% and 97.5 \% quantiles given by \code{quants = c(0.025,0.5,0.975)}.
 ##' 
 ##' @return A dataframe containing the 2.5%, 50% and 97.5% quantiles and the mean of the posterior distributions. If several categories are specified, the force of infection is given for the reference category and the relative force of infection is given for the other categories.
-##' In the case of an outbreak model (outbreak or outbreak+constant), the total force of infection is given by alpha. For models with constant phases, the annual probability of infection is given.      
+##' In the case of an outbreak model (outbreak or outbreak+constant), the total force of infection is given by alpha, and the probability of infection by "Outbreak Prob. Inf.". For models with constant phases, the annual probability of infection is given.      
 ##'
 ##' @author Nathanael Hoze \email{nathanael.hoze@gmail.com}
 ##' 
@@ -81,9 +81,18 @@ parameters_credible_intervals <- function(FOIfit,
                                      quants= quants,
                                      quantilestext=quantilestext )
         
+        
+        
         params <- add.quantiles.text(params,
                                      variable  = chainsout$beta[,i],
                                      name = paste('beta',i),
+                                     quants= quants,
+                                     quantilestext=quantilestext )      
+        
+        
+        params <- add.quantiles.text(params,
+                                     variable  = 100*(1-exp(-chainsout$alpha[,i])),
+                                     name = paste('Outbreak Prob. Inf. ',i),
                                      quants= quants,
                                      quantilestext=quantilestext )
         
@@ -142,7 +151,7 @@ parameters_credible_intervals <- function(FOIfit,
       for(k in seq(1,dim(L)[2])){
         params <- add.quantiles.text(params,
                                      variable=L[,k],
-                                     name = paste0('Y_',FOIfit$data$sampling_year-k),
+                                     name = paste0('Y_',max(FOIfit$data$sampling_year)-k),
                                      quants=quants,
                                      quantilestext=quantilestext)
         

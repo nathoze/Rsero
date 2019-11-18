@@ -48,8 +48,12 @@ combine_surveys <- function(SeroData1,SeroData2){
     dat1 = SeroData2
     dat2 = SeroData1
   }
+  
+  
+  
+  
   A = max(dat1$A, dat2$A+Offset)
-
+  
   age2  = dat2$age_at_sampling+Offset 
   
   sampling_year = c(dat1$sampling_year,dat2$sampling_year)
@@ -70,13 +74,33 @@ combine_surveys <- function(SeroData1,SeroData2){
   param.category = category.parameters(category = category, N=N, reference.category =SeroData1$reference.category  )
   
   
+  # age classes
+  class1_1 =SeroData1$class1
+  class2_1 =SeroData1$class2
+  class1_2 =SeroData2$class1
+  class2_2 =SeroData2$class2
+  if(Offset>0){
+    class1_2=c(class1_1[1:Offset], class1_2+Offset)
+    class2_2=c(class2_1[1:Offset], class2_2+Offset)
+  }
+  
+  n11=length(class1_1)
+  n12=length(class1_2)
+  
+  if(n11!=n12){
+    class1_1=c(class1_1, class1_2[(n11+1):n12])
+    class2_1=c(class2_1, class2_2[(n11+1):n12])
+  }
+  
+  class1= apply(cbind(class1_1, class1_2), 1, min)
+  class2= apply(cbind(class2_1, class2_2), 1, max)
+  
   data <- list( A = A,
                 NGroups = A,
                 N = N,
                 Y = c(dat1$Y,dat2$Y),
                 age = c(dat1$age,age2),
                 age_at_sampling = c(dat1$age_at_sampling,dat2$age_at_sampling),
-                #  New 06/09/2018    ind_by_age = Indices,
                 sampling_year = sampling_year,
                 location = c(dat1$location,dat2$location),
                 sex = c(dat1$sex,dat2$sex),
@@ -92,8 +116,9 @@ combine_surveys <- function(SeroData1,SeroData2){
                 reference.category = param.category$reference.category,
                 NAgeGroups = NAgeGroups,
                 age_at_init =  as.array(age_at_init), 
-                age_group  = age_group
-  )
+                age_group  = age_group,
+                class1=class1,
+                class2=class2)
   
   
   class(data) <- 'SeroData'
@@ -108,7 +133,7 @@ combine_ind_by_age <- function(data1,data2){
   
   z1 =min(data1$sampling_year)
   z2= min(data2$sampling_year)
-
+  
   
   Year1=max(y1,y2)
   Year2=max(z1,z2)

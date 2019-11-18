@@ -8,7 +8,7 @@
 #' 
 #' @param Y A vector containing the seropositivy status of the sampled individuals. It can be in a numeric form (1 or 0) or boolean (\code{TRUE} or \code{FALSE}). This vector must have the same size as \code{age}.
 #'  
-#' @param age_class Integer. The length in years of the age classes. Default = 1.
+#' @param age_class Integer. The length in years of the age classes. Default = 1. 
 #' 
 #' @param max_age Integer. The maximal age considered for the individuals in the sample. Individuals older than \code{max_age} are set equal to \code{max_age}. 
 #' 
@@ -142,9 +142,16 @@ SeroData <- function(age_at_sampling,
   }  
   
   
-  if(is.null(class1) & is.null(class2)){
+  if(is.null(class1) & is.null(class2) & age_class==1){
     class1 = as.array(1:max_age)
     class2= class1
+  }
+  
+  if(is.null(class1) & is.null(class2)){
+
+    class1 = as.array(rep(seq(1,max_age,age_class), each = age_class) )
+    class2 = as.array(age_class-1 + rep(seq(1,max_age,age_class), each = age_class) ) 
+
   }
   
   

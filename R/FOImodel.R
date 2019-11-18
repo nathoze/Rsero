@@ -40,9 +40,9 @@
 ##' 
 ##' @param priorC2  Second parameter of the uniform prior distribution for the constant force of infection, used in the constant and intervention models. Default = 10. 
 ##' 
-##' @param priorY1 Mean of the normal distribution for the logit of the annual hazard of infection, used in the independent models. Default = 0. 
+##' @param priorY1 Mean of the normal distribution for the annual hazard of infection, used in the independent models. Default = 0. 
 ##' 
-##' @param priorY2 Standard-deviation of the normal distribution for the logit of the annual hazard of infection, used in the independent models.  Default = 100.
+##' @param priorY2 Standard-deviation of the normal distribution for the annual hazard of infection, used in the independent models.  Default = 10.
 ##' 
 ##' @param priorbg1 First  parameter of the uniform prior distribution for the \code{pB} parameter (background probability of infection) when background = 1.  Default = 0.
 ##' 
@@ -99,7 +99,7 @@ FOImodel <- function(type = 'constant',
                      priorC1 = 0, # 0
                      priorC2 = 10, # 100
                      priorY1 = 0, 
-                     priorY2 = 100, 
+                     priorY2 = 10, 
                      priorbg1 = 0,
                      priorbg2 = 1,
                      priorRho1  =0,
