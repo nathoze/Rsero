@@ -115,7 +115,6 @@ transformed parameters {
         for(J in 1:NAgeGroups){
             for(i in 1:Ncategory){      
                 P1[1,J,i] = exp(-Flambda[i]*lambda[1]) ;
-                print(lambda);
                 for(j in 1:A-1){
               
                     x[j]=1;         
