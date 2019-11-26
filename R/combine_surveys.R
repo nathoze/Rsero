@@ -75,25 +75,34 @@ combine_surveys <- function(SeroData1,SeroData2){
   
   
   # age classes
-  class1_1 =SeroData1$class1
-  class2_1 =SeroData1$class2
-  class1_2 =SeroData2$class1
-  class2_2 =SeroData2$class2
-  if(Offset>0){
-    class1_2=c(class1_1[1:Offset], class1_2+Offset)
-    class2_2=c(class2_1[1:Offset], class2_2+Offset)
-  }
+  class1_1 =dat1$class1
+  class2_1 =dat1$class2
+  class1_2 =dat2$class1
+  class2_2 =dat2$class2
   
-  n11=length(class1_1)
-  n12=length(class1_2)
+  # 
   
-  if(n11!=n12){
-    class1_1=c(class1_1, class1_2[(n11+1):n12])
-    class2_1=c(class2_1, class2_2[(n11+1):n12])
-  }
+  class1 = c(class1_1[1:Offset], class1_2+Offset)
+  class2=c(class2_1[1:Offset], class2_2+Offset)
   
-  class1= apply(cbind(class1_1, class1_2), 1, min)
-  class2= apply(cbind(class2_1, class2_2), 1, max)
+  # if(Offset>0){
+  #   class1_2=c(class1_1[1:Offset], class1_2+Offset)
+  #   class2_2=c(class2_1[1:Offset], class2_2+Offset)
+  # }
+  # 
+  
+  
+  # 
+  # n11=length(class1_1)
+  # n12=length(class1_2)
+  # 
+  # if(n11!=n12){
+  #   class1_1=c(class1_1, class1_2[(n11+1):n12])
+  #   class2_1=c(class2_1, class2_2[(n11+1):n12])
+  # }
+  
+  #class1= apply(cbind(class1_1, class1_2), 1, min)
+  #class2= apply(cbind(class2_1, class2_2), 1, max)
   
   data <- list( A = A,
                 NGroups = A,

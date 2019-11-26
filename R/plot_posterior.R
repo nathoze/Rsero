@@ -113,6 +113,26 @@ plot_posterior<- function(FOIfit) {
         }
         
         
+        for(k in 1:Ncat){
+          if(Ncat==1){
+            Title = 'Histogram for total force of infection'
+          }
+          else{
+            Title = paste0('Histogram for total force of infection, category ',k)
+          }
+          
+          
+          distribution<-data.frame(FOI = 1-exp(-chains$Flambda[,k]*chainsout$alpha[,i]))
+          gT <- ggplot(distribution, aes(FOI))+
+            geom_histogram(bins = 12, fill = "red", col="red",alpha=.4) +
+            labs(title = paste(Title,i), x='Value', y='Count')
+          plotindex <- plotindex+1
+          plots[[plotindex]]  = gT
+        }
+        
+        
+        
+        
         distribution<-data.frame(beta = chainsout$beta[,i])
         gT <- ggplot(distribution, aes(beta)) +
           geom_histogram(bins = 12, fill = "red", col="red",alpha=.4) +
