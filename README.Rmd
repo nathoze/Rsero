@@ -120,7 +120,7 @@ In its basic form a model is defined by specifying the mode of circulation of th
 ConstantModel = FOImodel(type = 'constant')
 ```
  We can now fit the defined model to the data: 
-```{r fit2, eval=TRUE}
+```{r fit2, eval=TRUE, message = FALSE}
 FOIfit.constant = fit(data = one_peak_simulation,  model = ConstantModel, chains=1)
 ```
 (we simulate only one MCMC chain here). 

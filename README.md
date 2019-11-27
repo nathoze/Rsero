@@ -100,7 +100,7 @@ seroprevalence by calling *seroprevalence.plot*
 
 ``` r
 seroprevalence(simulated.survey)
-#> [1] "Mean: 0.2    2.5%: 0.16    97.5%: 0.23"
+#> [1] "Mean: 0.21    2.5%: 0.18    97.5%: 0.25"
 seroprevalence.plot(simulated.survey,YLIM=0.3)
 #> [1] "Category: Category 1"
 #> [[1]]
@@ -183,33 +183,6 @@ FOIfit.constant = fit(data = one_peak_simulation,  model = ConstantModel, chains
 #> Chain 1: Rejecting initial value:
 #> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
 #> Chain 1:   Stan can't start sampling from this initial value.
-#> Chain 1: Rejecting initial value:
-#> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
-#> Chain 1:   Stan can't start sampling from this initial value.
-#> Chain 1: Rejecting initial value:
-#> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
-#> Chain 1:   Stan can't start sampling from this initial value.
-#> Chain 1: Rejecting initial value:
-#> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
-#> Chain 1:   Stan can't start sampling from this initial value.
-#> Chain 1: Rejecting initial value:
-#> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
-#> Chain 1:   Stan can't start sampling from this initial value.
-#> Chain 1: Rejecting initial value:
-#> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
-#> Chain 1:   Stan can't start sampling from this initial value.
-#> Chain 1: Rejecting initial value:
-#> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
-#> Chain 1:   Stan can't start sampling from this initial value.
-#> Chain 1: Rejecting initial value:
-#> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
-#> Chain 1:   Stan can't start sampling from this initial value.
-#> Chain 1: Rejecting initial value:
-#> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
-#> Chain 1:   Stan can't start sampling from this initial value.
-#> Chain 1: Rejecting initial value:
-#> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
-#> Chain 1:   Stan can't start sampling from this initial value.
 #> Chain 1: 
 #> Chain 1: Gradient evaluation took 0 seconds
 #> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
@@ -229,11 +202,11 @@ FOIfit.constant = fit(data = one_peak_simulation,  model = ConstantModel, chains
 #> Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 4.347 seconds (Warm-up)
-#> Chain 1:                2.21 seconds (Sampling)
-#> Chain 1:                6.557 seconds (Total)
+#> Chain 1:  Elapsed Time: 3.283 seconds (Warm-up)
+#> Chain 1:                1.842 seconds (Sampling)
+#> Chain 1:                5.125 seconds (Total)
 #> Chain 1:
-#> Warning: There were 1748 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
+#> Warning: There were 1727 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
 #> http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #> Warning: Examine the pairs() plot to diagnose sampling problems
 ```
@@ -279,33 +252,6 @@ FOIfit.outbreak = fit( data = one_peak_simulation,  model = OutbreakModel, chain
 #> Chain 1: Rejecting initial value:
 #> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
 #> Chain 1:   Stan can't start sampling from this initial value.
-#> Chain 1: Rejecting initial value:
-#> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
-#> Chain 1:   Stan can't start sampling from this initial value.
-#> Chain 1: Rejecting initial value:
-#> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
-#> Chain 1:   Stan can't start sampling from this initial value.
-#> Chain 1: Rejecting initial value:
-#> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
-#> Chain 1:   Stan can't start sampling from this initial value.
-#> Chain 1: Rejecting initial value:
-#> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
-#> Chain 1:   Stan can't start sampling from this initial value.
-#> Chain 1: Rejecting initial value:
-#> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
-#> Chain 1:   Stan can't start sampling from this initial value.
-#> Chain 1: Rejecting initial value:
-#> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
-#> Chain 1:   Stan can't start sampling from this initial value.
-#> Chain 1: Rejecting initial value:
-#> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
-#> Chain 1:   Stan can't start sampling from this initial value.
-#> Chain 1: Rejecting initial value:
-#> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
-#> Chain 1:   Stan can't start sampling from this initial value.
-#> Chain 1: Rejecting initial value:
-#> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
-#> Chain 1:   Stan can't start sampling from this initial value.
 #> Chain 1: 
 #> Chain 1: Gradient evaluation took 0 seconds
 #> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
@@ -325,13 +271,16 @@ FOIfit.outbreak = fit( data = one_peak_simulation,  model = OutbreakModel, chain
 #> Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 4.121 seconds (Warm-up)
-#> Chain 1:                3.212 seconds (Sampling)
-#> Chain 1:                7.333 seconds (Total)
+#> Chain 1:  Elapsed Time: 6.15 seconds (Warm-up)
+#> Chain 1:                2.632 seconds (Sampling)
+#> Chain 1:                8.782 seconds (Total)
 #> Chain 1:
-#> Warning: There were 2064 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
+#> Warning: There were 2109 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
 #> http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #> Warning: Examine the pairs() plot to diagnose sampling problems
+#> Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+#> Running the chains for more iterations may help. See
+#> http://mc-stan.org/misc/warnings.html#tail-ess
 ```
 
 and we plot the result
