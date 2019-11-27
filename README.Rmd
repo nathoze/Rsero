@@ -40,6 +40,11 @@ Installation may take a few minutes due to the compilation of the stan files tha
 
 MCMC simulations are done using the package rstan, that requires Rtools 3.3 on Windows computers. Rtools 3.3 can be found here https://cran.r-project.org/bin/windows/Rtools/
 
+On Windows 10, you might want to try the command
+```{r devtoolinstallWindows10, eval=FALSE}
+devtools::install_github("nathoze/Rsero", INSTALL_opts = "--no-multiarch")
+```
+
 ## More details
 
 
@@ -116,7 +121,7 @@ ConstantModel = FOImodel(type = 'constant')
 ```
  We can now fit the defined model to the data: 
 ```{r fit2, eval=TRUE}
-FOIfit.constant = fit( data = one_peak_simulation,  model = ConstantModel, chains=1)
+FOIfit.constant = fit(data = one_peak_simulation,  model = ConstantModel, chains=1)
 ```
 (we simulate only one MCMC chain here). 
  We now visualize the result of the fit 
