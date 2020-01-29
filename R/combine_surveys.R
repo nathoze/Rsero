@@ -34,28 +34,21 @@ combine_surveys <- function(SeroData1,SeroData2){
   z2= min(SeroData2$sampling_year)
   
   Year1 = max(y1,y2)
-  #Year2 = min(z1,z2)
   Year2 = min(y1,y2)
+  Offset = Year1-Year2
   
   if (y1 > y2){
-    Offset = Year1-Year2
-    
     dat1 = SeroData1
     dat2 = SeroData2
     
   }else{
-    Offset = Year1-Year2
     dat1 = SeroData2
     dat2 = SeroData1
   }
-  
-  
-  
+   
   
   A = max(dat1$A, dat2$A+Offset)
-  
   age2  = dat2$age_at_sampling+Offset 
-  
   sampling_year = c(dat1$sampling_year,dat2$sampling_year)
   
   a = max(sampling_year)-sampling_year +1
@@ -80,16 +73,14 @@ combine_surveys <- function(SeroData1,SeroData2){
   class1_2 =dat2$class1
   class2_2 =dat2$class2
   
-  # 
-  
-  class1 = c(class1_1[1:Offset], class1_2+Offset)
-  class2=c(class2_1[1:Offset], class2_2+Offset)
-  
-  # if(Offset>0){
-  #   class1_2=c(class1_1[1:Offset], class1_2+Offset)
-  #   class2_2=c(class2_1[1:Offset], class2_2+Offset)
-  # }
-  # 
+
+  if(Offset==0){
+    class1= class1_2
+    class2=class2_2
+  }else{
+    class1 = c(class1_1[1:Offset], class1_2+Offset)
+    class2=c(class2_1[1:Offset], class2_2+Offset)
+  }
   
   
   # 
