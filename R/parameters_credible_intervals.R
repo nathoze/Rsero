@@ -145,7 +145,7 @@ parameters_credible_intervals <- function(FOIfit,
       
       
     }
-    if(FOIfit$model$type=='independent'){
+    if(FOIfit$model$type=='independent' | FOIfit$model$type=='independent-group'){
       
       L = chains$lambda
       for(k in seq(1,dim(L)[2])){

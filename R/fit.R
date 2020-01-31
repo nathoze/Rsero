@@ -116,6 +116,7 @@ fit <- function(model,
   mdls <- model$stanname
   pars =  c(model$priors,
             K = model$K,
+            group_size = model$group_size,
             cat_lambda=model$cat_lambda,
             seroreversion = model$seroreversion,
             background = model$background)
@@ -124,7 +125,9 @@ fit <- function(model,
   if(model$type=='independent'){
     model$estimated_parameters =   model$estimated_parameters+data$A
   }
-  
+  if(model$type=='independent-group'){
+    model$estimated_parameters =   model$estimated_parameters+ceiling(data$A/data$group_size)
+  }
   
   if(model$cat_lambda){
     model$estimated_parameters <- model$estimated_parameters+data$Ncat.unique-1

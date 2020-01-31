@@ -9,12 +9,15 @@
 ##' \itemize{
 ##'   \item 'constant': Constant force of infection
 ##'   \item 'outbreak': Series of outbreak modeled with gaussians 
-##'   \item 'independent': Yearly independent values of the force of infection
+##'   \item 'independent': Annual independent values of the force of infection
 ##'   \item 'intervention': Piecewise constant force of infection. The number of phases with a constant level is given by the variable \code{K}
 ##'   \item 'constantoutbreak': A combination of \code{K} outbreaks with a constant yearly force of infection
+##'   \item 'independent-group': Similar to the independent model, but with piecewise constant values of the force annual force of infection in time periods of length \code{group_size} years.
 ##' }
 ##' 
 ##' @param K integer. An additional parameter used in the outbreak, constantoutbreak and intervention stan models. This parameter is the number of Gaussians used in the model.  Default = 1.
+##' 
+##' @param group_size integer. An additional parameter used in the independent-group models. The force of infection is averaged over \code{group_size} year period. By default \code{group_size} = 1, which is equivalent ot the independent model.
 ##' 
 ##' @param background integer, equal to 0 or 1. If \code{background=1}  the model includes a background infection probability.
 ##'  See the vignette \code{models} for details.  Default = 0. 
@@ -88,6 +91,7 @@
 ##' @export
 FOImodel <- function(type = 'constant',
                      K = 1,
+                     group_size=1,
                      seroreversion =0,
                      background = 0, 
                      prioralpha1 = 0,
@@ -134,6 +138,10 @@ FOImodel <- function(type = 'constant',
   
   if(type=='independent'){
     stanname= 'independent'
+  }
+  
+  if(type=='independent-group'){
+    stanname= 'independent-group'
   }
   
   if(type=='constantoutbreak'){
@@ -194,9 +202,9 @@ print.FOImodel <- function(x, ...){
   
   if(x$type %in% model.list(whichmodels = 'All models')){
     
-    if(x$type== 'independent'){
+    if(x$type== 'independent' |x$type== 'independent-group'){
       cat('\t Estimated parameters: ',x$estimated_parameters ,' + number of age classes \n')
-    }
+    }  
     else{
       cat('\t Estimated parameters: ',x$estimated_parameters ,'\n')
     }
@@ -226,7 +234,7 @@ print.FOImodel <- function(x, ...){
       cat('\t C2: ',x$priors$priorC2 ,'\n')
     }
     
-    if(x$type=='independent'){
+    if(x$type=='independent' | x$type=='independent-group'){
       cat('\t Y1: ',x$priors$priorY1 ,'\n')
       cat('\t Y2: ',x$priors$priorY2 ,'\n')
     }
@@ -273,7 +281,7 @@ model.list <-function(whichmodels){
   } 
   
   if (whichmodels == 'All models'){
-    out <-  c('outbreak','independent','constant','intervention', 'constantoutbreak')
+    out <-  c('outbreak','independent','constant','intervention', 'constantoutbreak','independent-group')
   } 
   # if (whichmodels == 'P models'){
   #    out <- c('PG','PGB')
