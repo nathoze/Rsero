@@ -74,10 +74,12 @@ transformed parameters {
     real<lower = 0, upper=1> Like[N];  
     real c; // 14/08
 
+    int G; 
     for (j in 1:A) {
 
+        G = ceil(j/group_size); 
        # group size 
-        lambda[j] =logitlambda[ceil(j/group_size)];
+        lambda[j] =logitlambda[G];
     
     }
 
