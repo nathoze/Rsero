@@ -133,7 +133,7 @@ fit <- function(model,
   if(model$type=='independent'){
     model$estimated_parameters =   model$estimated_parameters+data$A
   }
-  if(model$type=='independent-group'){
+  if(model$type=='independent_group'){
     model$estimated_parameters =   model$estimated_parameters+ceiling(data$A/data$group_size)
   }
   
