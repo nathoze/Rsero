@@ -128,7 +128,6 @@ simulate_SeroData <- function(number_samples = 500,
   sampling_year <- rep(sampling_year, 1, number_samples) 
   
   #age <-  ceiling(age_class*floor((age-1)/age_class)+age_class/2)
-  
   dat <- SeroData(age_at_sampling =  age,
                   Y = as.logical(as.integer(Y)),
                   sampling_year = sampling_year,

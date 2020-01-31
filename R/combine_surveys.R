@@ -45,14 +45,17 @@ combine_surveys <- function(SeroData1,SeroData2){
     dat1 = SeroData2
     dat2 = SeroData1
   }
-   
   
+  print(Offset)
   A = max(dat1$A, dat2$A+Offset)
   age2  = dat2$age_at_sampling+Offset 
   sampling_year = c(dat1$sampling_year,dat2$sampling_year)
-  
   a = max(sampling_year)-sampling_year +1
+    
+  category = rbind(dat1$category,dat2$category)
+  param.category = category.parameters(category = category, N=N, reference.category =SeroData1$reference.category  )
   
+  # age classes
   
   age_group = rep(0,N)
   u  = unique(a) 
@@ -61,29 +64,39 @@ combine_surveys <- function(SeroData1,SeroData2){
   } 
   age_at_init =u
   
-  NAgeGroups = length(u)
-  
-  category = rbind(dat1$category,dat2$category)
-  param.category = category.parameters(category = category, N=N, reference.category =SeroData1$reference.category  )
-  
-  
-  # age classes
+ # NAgeGroups = length(u)
+ 
+  NAgeGroups = dat1$NAgeGroups+dat2$NAgeGroups
+ 
   class1_1 =dat1$class1
   class2_1 =dat1$class2
+  
   class1_2 =dat2$class1
   class2_2 =dat2$class2
   
-
-  if(Offset==0){
-    class1= class1_2
-    class2=class2_2
-  }else{
-    class1 = c(class1_1[1:Offset], class1_2+Offset)
-    class2=c(class2_1[1:Offset], class2_2+Offset)
+  if(Offset>0 ){
+    D1=matrix(1,ncol = ncol(class1_2), nrow =Offset) 
+    D2=matrix(1,ncol = ncol(class2_2), nrow =Offset) 
+    
+    class1_2=rbind(D1, class1_2+Offset)
+    class2_2=rbind(D2,class2_2+Offset)
   }
   
+
+  if(A>max(class2_1) ){
+    D=matrix(1,ncol = ncol(class1_1), nrow =A - max(class2_1)) 
+    class1_1=rbind(class1_1,D)
+    class2_1=rbind(class2_1,D)
+  }
+  if(A>max(class2_2) ){
+    D=matrix(1,ncol = ncol(class1_2), nrow =A - max(class2_2)) 
+    class1_2=rbind(class1_2,D)
+    class2_2=rbind(class2_2,D)
+  }
   
-  # 
+  class1 = cbind(class1_1,class1_2)
+  class2 = cbind(class2_1,class2_2)
+  
   # n11=length(class1_1)
   # n12=length(class1_2)
   # 
