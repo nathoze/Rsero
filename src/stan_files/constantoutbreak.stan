@@ -1,10 +1,12 @@
 data {
     int <lower=0> A; //the number of age classes
   
-    int <lower=1> class1[A]; //lower boundary for the age class corresponding to the indexed age
+    int <lower=1> NAgeGroups ;  
+ 
+    int <lower=1> class1[A,NAgeGroups]; //lower boundary for the age class corresponding to the indexed age
 
-    int <lower=1> class2[A]; //upper boundary for the age class corresponding to the indexed age
-  
+    int <lower=1> class2[A,NAgeGroups]; //upper boundary for the age class corresponding to the indexed age
+   
     int <lower=0> NGroups; //the number of foi groups
       
     int <lower=0> N; //the number of individuals
@@ -30,8 +32,6 @@ data {
     int <lower=0> age_at_sampling[N]; 
 
     int <lower=0> sampling_year[N];  
-
-    int <lower=1> NAgeGroups ; 
 
     int <lower=1> age_group[N] ; 
   
@@ -167,19 +167,18 @@ transformed parameters {
         }
     }
 
-
     for(J in 1:NAgeGroups){
         for(i in 1:Ncategory){        
             for(j in 1:A){
                 P[j,J,i]=0;
-                for(k in class1[j]:class2[j]){
+                for(k in class1[j,J]:class2[j,J]){
                     P[j,J,i]  = P1[k,J,i]+P[j,J,i];
                 }
-                 P[j,J,i] = P[j,J,i]/(class2[j]-class1[j]+1);
-
+                 P[j,J,i] = P[j,J,i]/(class2[j,J]-class1[j,J]+1);
             }
         }
     }
+
    for(j in 1:N){
         Like[j] =1-(1-bg)*P[age[j],age_group[j],categoryindex[j]];
     }
