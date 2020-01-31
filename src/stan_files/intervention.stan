@@ -1,6 +1,8 @@
 data {
     int <lower=0> A; //the number of age classes
-  
+   
+    int <lower=1> NAgeGroups ;  
+ 
     int <lower=1> class1[A,NAgeGroups]; //lower boundary for the age class corresponding to the indexed age
 
     int <lower=1> class2[A,NAgeGroups]; //upper boundary for the age class corresponding to the indexed age
@@ -11,7 +13,7 @@ data {
   
     int <lower=0> age[N]; 
   
-    int <lower=0, upper=1> Y[N]; // Outcome
+     int <lower=0, upper=1> Y[N]; // Outcome
 
     int<lower = 0, upper=1> seroreversion; 
 
@@ -31,7 +33,6 @@ data {
 
     int <lower=0> sampling_year[N]; 
 
-    int <lower=1> NAgeGroups ;  
 
     int <lower=1> age_group[N] ;  
   
