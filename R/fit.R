@@ -114,9 +114,17 @@ fit <- function(model,
                 ...){
   
   mdls <- model$stanname
+  
+  
+  group_size_array =ceiling(seq(1,data$A)/group_size)
+  group_size_length = length(group_size_array)
+  
+  
   pars =  c(model$priors,
             K = model$K,
             group_size = model$group_size,
+            group_size_array = group_size_array,
+            group_size_length=group_size_length,
             cat_lambda=model$cat_lambda,
             seroreversion = model$seroreversion,
             background = model$background)
