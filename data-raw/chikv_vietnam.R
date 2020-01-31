@@ -41,4 +41,4 @@ chikv_vietnam = Rsero::SeroData(age_at_sampling = round(as.numeric(sero.dta$age)
                category = as.character(sero.dta$Loc),
                location = as.character(sero.dta$Loc))
 
-devtools::use_data(chikv_vietnam, overwrite = TRUE)
+usethis::use_data(chikv_vietnam, overwrite = TRUE)

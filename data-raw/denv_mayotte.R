@@ -70,4 +70,4 @@ denv_mayotte <- SeroData(age_at_sampling =  transformed_data[[2]],
                  class1 =  class1,
                  class2 = class2)
 
-devtools::use_data(denv_mayotte, overwrite = TRUE)
+usethis::use_data(denv_mayotte, overwrite = TRUE)
