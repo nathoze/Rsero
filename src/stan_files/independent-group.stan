@@ -37,7 +37,9 @@ data {
   
     int <lower=1> age_at_init[NAgeGroups]; 
 
-    int <lower=1> group_size; 
+    int <lower=1> group_size_length; 
+
+    int <lower=1> group_size_array[group_size_length]; 
     
     real <lower = 0> priorY1;
 
@@ -74,12 +76,10 @@ transformed parameters {
     real<lower = 0, upper=1> Like[N];  
     real c; // 14/08
 
-    int G; 
-    for (j in 1:A) {
+     for (j in 1:A) {
 
-        G = ceil(j/group_size); 
-       # group size 
-        lambda[j] =logitlambda[G];
+        # group size 
+        lambda[j] =logitlambda[group_size_array[j]];
     
     }
 
