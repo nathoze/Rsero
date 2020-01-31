@@ -142,24 +142,17 @@ SeroData <- function(age_at_sampling,
   }  
   
   if(is.null(class1) & is.null(class2) & age_class==1){
-  #  class1 = as.array(1:max_age)
- #   class2= class1    
+ 
     class1 = as.matrix(1:max_age)
     class2= class1
 
   }
   
   if(is.null(class1) & is.null(class2)){
-
- #   class1 = as.array(rep(seq(1,max_age,age_class), each = age_class) )
- #   class2 = as.array(age_class-1 + rep(seq(1,max_age,age_class), each = age_class) ) 
-    
     class1 = as.matrix(rep(seq(1,max_age,age_class), each = age_class) )
     class2 = as.matrix(age_class-1 + rep(seq(1,max_age,age_class), each = age_class) ) 
   }
-  
-  print('BB')
-  
+   
   
   age[which(age>max_age)] <- max_age
   

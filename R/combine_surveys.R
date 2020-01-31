@@ -46,7 +46,6 @@ combine_surveys <- function(SeroData1,SeroData2){
     dat2 = SeroData1
   }
   
-  print(Offset)
   A = max(dat1$A, dat2$A+Offset)
   age2  = dat2$age_at_sampling+Offset 
   sampling_year = c(dat1$sampling_year,dat2$sampling_year)
@@ -62,12 +61,12 @@ combine_surveys <- function(SeroData1,SeroData2){
   for(i in 1:length(u)){
     age_group[which(u[i] == a) ] = i
   } 
-  age_at_init =u
+  age_at_init = u
   
- # NAgeGroups = length(u)
- 
   NAgeGroups = dat1$NAgeGroups+dat2$NAgeGroups
- 
+  age_at_init =c(dat1$age_at_init, dat2$age_at_init+Offset)
+
+  
   class1_1 =dat1$class1
   class2_1 =dat1$class2
   
