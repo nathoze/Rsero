@@ -158,7 +158,7 @@ plot_posterior<- function(FOIfit) {
       
     }
     
-    if(name =='independent' | name='independent_group'){
+    if(name =='independent' | name=='independent_group'){
       
       # L = chains$lambda
       # for(k in seq(1,dim(L)[2])){
