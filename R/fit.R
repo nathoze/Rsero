@@ -116,7 +116,7 @@ fit <- function(model,
   mdls <- model$stanname
   
   
-  group_size_array =ceiling(seq(1,data$A)/group_size)
+  group_size_array =ceiling(seq(1,data$A)/model$group_size)
   group_size_length = length(group_size_array)
   
   
