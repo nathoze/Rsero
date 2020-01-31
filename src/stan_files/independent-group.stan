@@ -77,13 +77,10 @@ transformed parameters {
     real c; // 14/08
 
      for (j in 1:A) {
-
         # group size 
         lambda[j] =logitlambda[group_size_array[j]];
-    
     }
 
- 
 
     if(background==0){
         bg = 0;
