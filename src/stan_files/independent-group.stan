@@ -77,7 +77,7 @@ transformed parameters {
     real c; // 14/08
 
      for (j in 1:A) {
-        # group size 
+        // group size 
         lambda[j] =logitlambda[group_size_array[j]];
     }
 
