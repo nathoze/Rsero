@@ -68,6 +68,9 @@
 #' # defining the reference category 'female'
 #'
 #' data = SeroData(age_at_sampling = c(10,32,24), Y=c(0,1,1),  category= sex, reference.category='female')
+#' 
+#' # Grouping individuals by age categories 1-10, 11-20, 21-30, etc. 
+#' data = SeroData(age_at_sampling = c(10,32,24), Y=c(0,1,1),  category= sex, reference.category='female', age_class = 10)
 
 
 SeroData <- function(age_at_sampling,
@@ -83,7 +86,7 @@ SeroData <- function(age_at_sampling,
                      class1 = NULL,
                      class2 = NULL,
                      ...){
-  # Error Messages
+  # Error control
   #add  Check : Y and age_at_sampling must have the same length also when Y is multidimensional
   if(dim(as.matrix(Y))[1] != dim(as.matrix(age_at_sampling))[1] ){
     stop("Error : Y and age_at_sampling must have the same length") 
@@ -94,11 +97,8 @@ SeroData <- function(age_at_sampling,
   }
   if(sum(is.na(age_at_sampling))){
     stop("Error : remove NA from the age age_at_sampling") 
-    
   }
-  
-  
-  
+ 
   if(!testInteger(age_at_sampling)){ 
     stop("age_at_sampling must be given as integer")
   }
@@ -141,31 +141,24 @@ SeroData <- function(age_at_sampling,
     max_age <- max(age)
   }  
   
-  if(is.null(class1) & is.null(class2) & age_class==1){
- 
-    class1 = as.matrix(1:max_age)
-    class2= class1
-
-  }
-  
-  if(is.null(class1) & is.null(class2)){
-    class1 = as.matrix(rep(seq(1,max_age,age_class), each = age_class) )
-    class2 = as.matrix(age_class-1 + rep(seq(1,max_age,age_class), each = age_class) ) 
-  }
-   
+  # setting max_age above the largest multiple of an age category (e.g above 5, 10, 15 if age_class=5)
+  max_age = ceiling(max_age/age_class)*age_class
   
   age[which(age>max_age)] <- max_age
-  
   age_at_sampling[which(age_at_sampling>max_age)] <- max_age 
   age.groups <-compute.age.groups(age = age,sampling_year = sampling_year)
-  
+   
+  class1 = matrix(0, nrow = max_age, ncol = age.groups$NAgeGroups)
+  class2= matrix(0, nrow = max_age, ncol = age.groups$NAgeGroups)
+  for(i in 1:age.groups$NAgeGroups){
+    
+    class1[,i] = as.matrix(rep(seq(1,max_age,age_class), each = age_class) ) 
+    class2[,i] = as.matrix(age_class-1 + rep(seq(1,max_age,age_class), each = age_class) ) 
+  } 
   
   N=length(age)
   
   param.category =  category.parameters(category=category, N=N, reference.category=reference.category)
-  
-  
-  
   
   data <- list( A = max_age,
                 N = N,
@@ -203,6 +196,7 @@ SeroData <- function(age_at_sampling,
 #' @export
 compute.age.groups <- function(age,sampling_year){
   
+  # HERE ADD CLASS1 AND CLASS2
   N=length(age)
   a = max(sampling_year)-sampling_year +1
   age_group = rep(0,N)
