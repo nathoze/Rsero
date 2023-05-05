@@ -1,65 +1,38 @@
 data {
     int <lower=0> A; //the number of age classes
-
-    int <lower=1> NAgeGroups ;  
- 
+    int <lower=1> NAgeGroups ;   
     int <lower=1> class1[A,NAgeGroups]; //lower boundary for the age class corresponding to the indexed age
-
-    int <lower=1> class2[A,NAgeGroups]; //upper boundary for the age class corresponding to the indexed age
-  
-    int <lower=0> NGroups; //the number of foi groups
-      
-    int <lower=0> N; //the number of individuals
-  
-    int <lower=0> age[N]; // Age 
-  
+    int <lower=1> class2[A,NAgeGroups]; //upper boundary for the age class corresponding to the indexed age  
+    int <lower=0> NGroups; //the number of foi groups      
+    int <lower=0> N; //the number of individuals  
+    int <lower=0> age[N]; // Age   
     int <lower=0, upper=1> Y[N]; // Outcome
-
     int<lower = 0, upper=1> seroreversion; 
-
     int<lower = 0, upper=1> background; 
-
-    int <lower=1> categoryindex[N]; // 14/08
-
-    int<lower= 1> Ncategoryclass; // 14/08
-
- //   int <lower=1> Ncategory[Ncategoryclass];  // 14/08
-    int <lower=1> Ncategory;  // 14/08
-
-    int<lower=1> maxNcategory; // 14/08
-
+    int <lower=1> categoryindex[N]; 
+    int<lower= 1> Ncategoryclass; 
+    int <lower=1> Ncategory;  
+    int<lower=1> maxNcategory;
     int<lower=1> MatrixCategory[Ncategory,Ncategoryclass];
-
     int <lower=0> age_at_sampling[N]; 
-
     int <lower=0> sampling_year[N];  
-
-    int <lower=1> age_group[N] ; 
-  
+    int <lower=1> age_group[N] ;   
     int <lower=1> age_at_init[NAgeGroups]; 
-
     int <lower=1> K; // the number of peaks of epidemics
-
     real <lower = 0> prioralpha1;
-
     real <lower = 0> prioralpha2;
-
     real <lower = 0> priorbeta1;
-
     real <lower = 0> priorbeta2;
-
     real priorT1;
-
     real <lower = 0> priorT2;
-
     real <lower = 0> priorbg1;
-
     real <lower = 0> priorbg2;
-
+    real <lower = 0, upper=1> priorse1;
+    real <lower = 0, upper=1> priorse2;
+    real <lower = 0, upper=1> priorsp1;
+    real <lower = 0, upper=1> priorsp2;
     real <lower = 0> priorRho1;
-
     real <lower = 0> priorRho2;
-
     int <lower = 0> cat_lambda; // 1 or 0: characterizes whether we distinguish categories by different FOI
 }
 
@@ -137,7 +110,7 @@ transformed parameters {
     L=1;
     if(seroreversion==0){
         for(J in 1:NAgeGroups){
-            for(i in 1:Ncategory){      // Ici Ncategory est un entier et pas un tableau
+            for(i in 1:Ncategory){      
                 P1[1,J,i ] = exp(-Flambda[i]*lambda[1]) ;
                 for(j in 1:A-1){
                     x[j]=1;         
@@ -199,13 +172,13 @@ model {
     }
     rho  ~ uniform(priorRho1, priorRho2);
 
-
     bg2 ~ uniform(priorbg1, priorbg2);   // category background infection. Size = Ncategory 
-
+    se ~ uniform(priorse1, priorse2);   //  sensitivity 
+    sp ~ uniform(priorsp1, priorsp2);   // specificity
 
    for(I in 1:Ncategoryclass){
         for(i in 1:maxNcategory){      
-            Flambda2[i,I] ~ normal(0,1.73) ;
+            Flambda2[i,I] ~ normal(0,1.73) ; // the prior corresponds to xx
         }
     }
 

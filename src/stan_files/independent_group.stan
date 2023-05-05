@@ -52,7 +52,10 @@ data {
     real <lower = 0> priorRho1;
 
     real <lower = 0> priorRho2;
-
+    real <lower = 0, upper=1> priorse1;
+    real <lower = 0, upper=1> priorse2;
+    real <lower = 0, upper=1> priorsp1;
+    real <lower = 0, upper=1> priorsp2;
     int <lower = 0> cat_lambda; // 1 or 0: characterizes whether we distinguish categories by different FOI
 }
 
