@@ -38,13 +38,19 @@ parameters_credible_intervals <- function(FOIfit,
   
   if(FOIfit$model$type %in% model.list('All models')){ 
     
-    if(FOIfit$model$background){
-      background = chains$bg
-      name= paste0('background ')
-      params <- add.quantiles.text(params,variable=background,
-                                   name = name,
+    if(FOIfit$model$se_sp){
+      
+      params <- add.quantiles.text(params,
+                                   variable=chains$se,
+                                   name = paste0('sensitivity '),
                                    quants= quants,
                                    quantilestext=quantilestext)
+      params <- add.quantiles.text(params,
+                                   variable=chains$sp,
+                                   name = paste0('specificity '),
+                                   quants= quants,
+                                   quantilestext=quantilestext)
+      
     }
     
     if(FOIfit$model$type  %in% model.list('Outbreak models')){

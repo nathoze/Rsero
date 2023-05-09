@@ -16,7 +16,7 @@
 ##' 
 ##' @examples
 ##' data <- simulate_SeroData( max_age = 50, epidemic_years = c(1976,1992), foi = c(0.2,0.3))
-##' model <- FOImodel(type='outbreak', background=1, K = 2)
+##' model <- FOImodel(type='outbreak', se_sp=1, K = 2)
 ##' Fit <- fit(model = model, data = data)
 ##' p <- plot(Fit)
 ##' p+ylim(0,1)

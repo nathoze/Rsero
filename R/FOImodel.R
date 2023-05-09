@@ -19,7 +19,7 @@
 ##' 
 ##' @param group_size integer. An additional parameter used in the independent_group models. The force of infection is averaged over \code{group_size} year period. By default \code{group_size} = 1, which is equivalent ot the independent model.
 ##' 
-##' @param background integer, equal to 0 or 1. If \code{background=1}  the model includes a background infection probability.
+##' @param se_sp integer, equal to 0 or 1. If \code{background=1}  the model includes an imperfect sensitivity and specificity of the assay.
 ##'  See the vignette \code{models} for details.  Default = 0. 
 ##' 
 ##' @param seroreversion integer, equal to 0 or 1. If \code{seroreversion=0} the model includes a rate of seroreversion (waning immunity). See the vignette \code{models} for details.  Default = 0. 
@@ -47,9 +47,13 @@
 ##' 
 ##' @param priorY2 Second parameter of the uniform prior distribution for the annual hazard of infection, used in the independent models.  Default = 10.
 ##' 
-##' @param priorbg1 First  parameter of the uniform prior distribution for the \code{pB} parameter (background probability of infection) when background = 1.  Default = 0.
+##' @param priorse1 First  parameter of the uniform prior distribution for the \code{se} parameter (sensitivity of the assay) when se_sp = 1. Default = 0.
 ##' 
-##' @param priorbg2 Second shape parameter of the beta distribution for the  \code{pB} parameter  (background probability of infection) when background = 1. Default = 1.
+##' @param priorse2 Second parameter of the uniform prior distribution for the \code{se} parameter (sensitivity of the assay) when se_sp = 1. Default = 1.
+##' 
+##' @param priorsp1 First  parameter of the uniform prior distribution for the \code{sp} parameter (specificity of the assay) when se_sp = 1. Default = 0.
+##' 
+##' @param priorsp2 Second parameter of the uniform prior distribution for the \code{sp} parameter (specificity of the assay) when se_sp = 1. Default = 1.
 ##' 
 ##' @param priorRho1 First parameter of the uniform prior distribution for rho, the seroreversion rate used when seroreversion=1. Default = 0.
 ##' 
@@ -93,7 +97,7 @@ FOImodel <- function(type = 'constant',
                      K = 1,
                      group_size=1,
                      seroreversion =0,
-                     background = 0, 
+                     se_sp = 0, 
                      prioralpha1 = 0,
                      prioralpha2 = 5,
                      priorbeta1 = 0,
@@ -104,8 +108,10 @@ FOImodel <- function(type = 'constant',
                      priorC2 = 10, # 100
                      priorY1 = 0, 
                      priorY2 = 10, 
-                     priorbg1 = 0,
-                     priorbg2 = 1,
+                     priorse1 = 0,
+                     priorse2 = 1,
+                     priorsp1 = 0,
+                     priorsp2 = 1,
                      priorRho1  =0,
                      priorRho2 = 10,
                      cat_lambda = 1,
@@ -118,8 +124,8 @@ FOImodel <- function(type = 'constant',
     print("Model is not defined.")
   }
   
-  if(background){
-    estimated_parameters <- estimated_parameters +1
+  if(se_sp){
+    estimated_parameters <- estimated_parameters +2
   }
   
   if(seroreversion){
@@ -170,8 +176,10 @@ FOImodel <- function(type = 'constant',
                  priorC2 = priorC2,
                  priorY1 = priorY1,
                  priorY2 = priorY2,
-                 priorbg1 = priorbg1,
-                 priorbg2 = priorbg2,
+                 priorse1 = priorse1,
+                 priorse2 = priorse2,   
+                 priorsp1 = priorsp1,
+                 priorsp2 = priorsp2,
                  priorRho1 = priorRho1,
                  priorRho2 = priorRho2)
   
@@ -181,7 +189,7 @@ FOImodel <- function(type = 'constant',
                 K = K,
                 group_size=group_size,
                 seroreversion=seroreversion,
-                background=background,
+                se_sp=se_sp,
                 cat_lambda = cat_lambda,
                 estimated_parameters = estimated_parameters,
                 priors = priors)
@@ -243,9 +251,11 @@ print.FOImodel <- function(x, ...){
       cat('\t T1: ',x$priors$priorT1 ,'\n')
       cat('\t T2: ',x$priors$priorT2 ,'\n')
     }
-    if(x$background){
-      cat('\t Background 1: ', x$priors$priorbg1, '\n')
-      cat('\t Background 2: ', x$priors$priorbg2, '\n')
+    if(x$se_sp){
+      cat('\t Sensitivity 1: ', x$priors$priorse1, '\n')
+      cat('\t Sensitivity 2: ', x$priors$priorse2, '\n')
+      cat('\t Specificity 1: ', x$priors$priorsp1, '\n')
+      cat('\t Specificity 2: ', x$priors$priorsp2, '\n')
     }
     if(x$seroreversion){
       cat('\t Seroreversion 1: ', x$priors$priorRho1, '\n')
@@ -268,7 +278,6 @@ print.FOImodel <- function(x, ...){
 #' @export
 model.list <-function(whichmodels){
   
-  
   out <- NA
   
   if(whichmodels == 'K models'){
@@ -290,7 +299,6 @@ model.list <-function(whichmodels){
   if (whichmodels == 'Outbreak models'){
     out <-  c('outbreak', 'constantoutbreak')
   } 
-  
   return(out)
 }
 

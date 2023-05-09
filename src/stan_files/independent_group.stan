@@ -17,7 +17,7 @@ data {
 
     int<lower = 0, upper=1> seroreversion; 
 
-    int<lower = 0, upper=1> background; 
+    int<lower = 0, upper=1> se_sp; 
 
     int <lower=1> categoryindex[N];  
 
@@ -45,9 +45,9 @@ data {
 
     real <lower = 0> priorY2;
 
-    real <lower = 0> priorbg1;
+  //  real <lower = 0> priorbg1;
 
-    real <lower = 0> priorbg2;
+  //  real <lower = 0> priorbg2;
 
     real <lower = 0> priorRho1;
 
@@ -63,7 +63,9 @@ data {
 parameters {
     real<lower =0> logitlambda[NGroups]; 
     real<lower = 0, upper = 1> rho;    
-    real<lower = 0, upper=1> bg2;
+       real<lower = 0, upper=1> se2;
+   real<lower = 0, upper=1> sp2;
+   // real<lower = 0, upper=1> bg2;
     real  Flambda2[maxNcategory,Ncategoryclass]; //14 08
 }
 
@@ -74,25 +76,25 @@ transformed parameters {
     real<lower=0> lambda[A];
     real<lower =0, upper=1> P1[A,NAgeGroups,Ncategory]; //14 08 
     real<lower =0, upper=1> P[A,NAgeGroups,Ncategory]; //14 08 
-    real<lower =0> bg;
+    real<lower =0, upper=1> se;
+    real<lower =0, upper=1> sp;
     real<lower =0> Flambda[Ncategory]; //14 08
-    real<lower = 0, upper=1> Like[N];  
+    real<lower = 0, upper=1> Likelihood[N];  
     real c; // 14/08
 
      for (j in 1:A) {
         // group size 
         lambda[j] =logitlambda[group_size_array[j]];
     }
-
-
-    if(background==0){
-        bg = 0;
+ 
+    if(se_sp==0){
+        se = 1;
+        sp = 1;
     }else{
-        bg=bg2;
+        se=se2;
+        sp=sp2;
     }
-
-    
-
+ 
     c=0;
     if(!cat_lambda){
         for(i in 1:Ncategory){
@@ -160,7 +162,8 @@ transformed parameters {
     }
 
    for(j in 1:N){
-        Like[j] =1-(1-bg)*P[age[j],age_group[j],categoryindex[j]];
+       // Like[j] =1-(1-bg)*P[age[j],age_group[j],categoryindex[j]];
+           Likelihood[j] =se-(se+sp-1)*P[age[j],age_group[j],categoryindex[j]]; 
     }
 
 }
@@ -175,8 +178,10 @@ model {
     }
  
 
-    bg2 ~uniform(priorbg1, priorbg2);   // category background infection. Size = Ncategory 
+  //  bg2 ~uniform(priorbg1, priorbg2);   // category background infection. Size = Ncategory 
     
+    se2 ~ uniform(priorse1, priorse2);   //  sensitivity 
+    sp2 ~ uniform(priorsp1, priorsp2);   // specificity
 
     for(I in 1:Ncategoryclass){
         for(i in 1:maxNcategory){      
@@ -187,6 +192,6 @@ model {
 
 
     for (j in 1:N) {  
-        target += bernoulli_lpmf( Y[j] | Like[j]);
+        target += bernoulli_lpmf( Y[j] | Likelihood[j]);
     }
 }

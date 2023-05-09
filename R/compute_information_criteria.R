@@ -33,7 +33,7 @@
 ##' 
 #' @examples
 #' data('one_peak_simulation')
-#' model <- FOImodel(type='outbreak', K=1, background=1)
+#' model <- FOImodel(type='outbreak', K=1, se_sp=1)
 #' F1  = fit(model = model, data = data )
 #' compute_information_criteria(FOIfit  = F1)
 #' 
@@ -45,15 +45,15 @@ compute_information_criteria <- function(FOIfit,...){
   estimated_parameters <- FOIfit$model$estimated_parameters
   chains <- rstan::extract(FOIfit$fit)
   FOIs <- chains$lambda
-  bg <- chains$bg 
+  se <- chains$se 
+  sp <- chains$sp
   
   M <- nrow(FOIs)
   N <- FOIfit$data$N
   A <- FOIfit$data$A 
   Ncategory <- FOIfit$data$Ncategory
   NAgeGroups <- FOIfit$data$NAgeGroups
-  
-  
+ 
   LogLikelihoods <- matrix(0, nrow = M, ncol = N) # as many elements as there are lambdas
   Y <- FOIfit$data$Y
   age <- FOIfit$data$age
@@ -68,18 +68,18 @@ compute_information_criteria <- function(FOIfit,...){
         L = log(1-lk[j])   
       }  else{
         L=log(lk[j])
-      }
-      
+      } 
       LogLikelihoods[i,j] <- L
     }
-  }
-  
+  } 
   
   # log-likelihood on the mean lambdas 
   
   # posterior mean
+ 
+  sensitivity=mean(se)
+  specificity=mean(sp)
   
-  pc=mean(bg)
   LogLikelihoodMean <- 0
   P <- (colMeans(chains$P))
   
@@ -92,12 +92,14 @@ compute_information_criteria <- function(FOIfit,...){
     p <- P[age,age_group, cat]
     
     if(Y[j] == TRUE){
-      LogLikelihoodMean <- LogLikelihoodMean + log(1-(1-pc)*p)
+      LogLikelihoodMean <- LogLikelihoodMean + log(sensitivity-p*(sensitivity+specificity-1) )
+      #LogLikelihoodMean <- LogLikelihoodMean + log(1-(1-pc)*p)
     }else{
-      LogLikelihoodMean <- LogLikelihoodMean + log((1-pc)*p)
+      #LogLikelihoodMean <- LogLikelihoodMean + log((1-pc)*p)
+      LogLikelihoodMean <- LogLikelihoodMean + log(1-sensitivity+p*(sensitivity+specificity-1) )
     }
   }
-  
+ 
   LP <- rowSums(LogLikelihoods)
   # Compute the AIC
   # Assumes the maximum likelihood is reached 

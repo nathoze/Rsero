@@ -102,8 +102,7 @@ plot_posterior<- function(FOIfit) {
           else{
             Title = paste0('Histogram for alpha, category ',k)
           }
-          
-          
+           
           distribution<-data.frame(alpha = chains$Flambda[,k]*chainsout$alpha[,i])
           gT <- ggplot(distribution, aes(alpha))+
             geom_histogram(bins = 12, fill = "red", col="red",alpha=.4) +
@@ -129,9 +128,7 @@ plot_posterior<- function(FOIfit) {
           plotindex <- plotindex+1
           plots[[plotindex]]  = gT
         }
-        
-        
-        
+         
         
         distribution<-data.frame(beta = chainsout$beta[,i])
         gT <- ggplot(distribution, aes(beta)) +
@@ -181,22 +178,24 @@ plot_posterior<- function(FOIfit) {
       plots[[plotindex]]  = gT      
     }
     
-    if(FOIfit$model$background){
-      bg = chainsout$bg
-      
-      Title = 'Histogram for background infection probability'
-      
-      distribution<-data.frame(bg = bg)
+    if(FOIfit$model$se_sp){
+       
+      Title = 'Histogram for sensitivity'
+      distribution<-data.frame(bg = chainsout$se)
       gT <- ggplot2::ggplot(distribution, aes(bg)) +
         geom_histogram(bins = 12, fill = "red", col="red",alpha=.4) +
         labs(title = Title, x='value', y='Count')
-      
       plotindex <- plotindex+1
       plots[[plotindex]]  = gT
       
+      Title = 'Histogram for specificity'
+      distribution<-data.frame(bg = chainsout$sp)
+      gT <- ggplot2::ggplot(distribution, aes(bg)) +
+        geom_histogram(bins = 12, fill = "red", col="red",alpha=.4) +
+        labs(title = Title, x='value', y='Count')
+      plotindex <- plotindex+1
+      plots[[plotindex]]  = gT
     }
-    
-    
     
     d= FOIfit$data$category.position.in.table
     
@@ -214,14 +213,9 @@ plot_posterior<- function(FOIfit) {
         plotindex <- plotindex+1
         plots[[plotindex]]  = gT
         
-        
       }
-      
     } 
-    
-    
   }
-  
   return(plots)
   
 }

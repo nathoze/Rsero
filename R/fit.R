@@ -127,7 +127,7 @@ fit <- function(model,
             group_size_length=group_size_length,
             cat_lambda=model$cat_lambda,
             seroreversion = model$seroreversion,
-            background = model$background)
+            se_sp = model$se_sp)
   
   newdata = append(data,pars)
   if(model$type=='independent'){
