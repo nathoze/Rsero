@@ -115,6 +115,7 @@ FOImodel <- function(type = 'constant',
                      priorRho1  =0,
                      priorRho2 = 10,
                      cat_lambda = 1,
+                     fixed_parameters = NULL,
                      ...) {
   
   
@@ -165,6 +166,43 @@ FOImodel <- function(type = 'constant',
   if(type %in% model.list('K models') & is.null(K) ){
     print("K not defined.")
   } 
+
+  
+  if(!is.null(fixed_parameters$rho)){
+    priorRho1 = 0.99*(-log(fixed_parameters$rho)) 
+    priorRho2 = 1.01*(-log(fixed_parameters$rho))
+  }
+  
+  if(!is.null(fixed_parameters$foi)){
+    priorC1 = 0.99*(-log(fixed_parameters$foi)) 
+    priorC2 = 1.01*(-log(fixed_parameters$foi)) 
+  }
+  
+  if(!is.null(fixed_parameters$Y)){
+    priorY1 = 0.99*(-log(fixed_parameters$Y)) 
+    priorY2 = 1.01*(-log(fixed_parameters$Y)) 
+  }
+  
+  if(!is.null(fixed_parameters$alpha)){
+    prioralpha1 = 0.99*fixed_parameters$alpha 
+    prioralpha2 = min(1,1.01*fixed_parameters$alpha)
+  }
+  
+  if(!is.null(fixed_parameters$beta)){
+    priorbeta1 = 0.99*fixed_parameters$beta
+    priorbeta2 = min(1,1.01*fixed_parameters$beta)
+  }
+  
+  if(!is.null(fixed_parameters$se)){
+    priorse1 = 0.99*fixed_parameters$se 
+    priorse2 = min(1,1.01*fixed_parameters$se)
+  }
+  
+  if(!is.null(fixed_parameters$sp)){
+    priorsp1 = 0.99*fixed_parameters$sp 
+    priorsp2 = min(1,1.01*fixed_parameters$sp)
+  }
+  
   
   priors <- list(prioralpha1 = prioralpha1,
                  prioralpha2 = prioralpha2,

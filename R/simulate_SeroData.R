@@ -22,7 +22,9 @@
 ##' 
 ##' @param foi numeric. The force of infection at the years defined in \code{epidemic_years}. It must be the same size as \code{epidemic_years}. Default = c(0.3,0.2,0.4).
 ##'
-##' @param pb numeric, between 0 and 1. Probability for an individual to be seropositive independently of the force of infection (background probability of infection).  Default = 0.
+##' @param se numeric, between 0 and 1. Sensitivity of the assay.  Default = 1.
+##' 
+##' @param sp numeric, between 0 and 1. Specificity of the assay.  Default = 1.
 ##' 
 ##' @param rho numeric, 0 or positive. Seroreversion rate.  Default = 0.
 ##' 
@@ -42,27 +44,27 @@
 ##' max_age = 50,
 ##' epidemic_years = c(1996,1988,1972),
 ##' foi = c(0.2,0.1,0.3),
-##' pb = 0)
+##' se = 1)
 ##' 
 ##' seroprevalence(data)
 ##' 
 ##' 
 ##' ## Example 2: 500 individuals sampled in 2019, in a population that experienced two epidemics, in 1962
 ##' ## and 2012.
-##' ## Sampled individuals have additionally a probability of being seropositive equal to pb = 0.1. 
+##' ## The assay has a sensitivity of 0.9. 
 ##' years =  seq(1962,2012)
 ##' alpha=c(0.25, 0.1)
 ##' T=c(1974, 2000)
 ##' beta=c(1,0.5)
 ##' FOI = alpha[1]*exp(-(years-T[1])^2/beta[1]^2) + alpha[2]*exp(-(years-T[2])^2/beta[2]^2)
-##' data1 <- simulate_SeroData( epidemic_years = years,foi=FOI, pb=0.1)
+##' data1 <- simulate_SeroData( epidemic_years = years,foi=FOI, se=0.9)
 ##' seroprevalence(data1)
 ##' 
 ##' ## Adding another survey, sampled in 2005, where ages are categorized in 5 year groups: 
 ##' data2 <- simulate_SeroData(age_class = 5,
 ##'  epidemic_years = years,
 ##'  foi=FOI,
-##'  pb=0.1,
+##'  se = 0.9,
 ##'  sampling_year = 2005)
 ##' data <- combine_surveys(data1,data2)
 ##' seroprevalence(data)
@@ -80,7 +82,8 @@ simulate_SeroData <- function(number_samples = 500,
                               location = NULL, 
                               sex = NULL, 
                               category = "Category 1",
-                              pb=  0,
+                              se = 1,
+                              sp = 1,
                               rho=0){
   
   if(length(epidemic_years)!= length(foi) ){
@@ -95,7 +98,7 @@ simulate_SeroData <- function(number_samples = 500,
   
   if(rho == 0){
     cumulative_FOI <- cumsumfromright(FOI)
-    infection_probability <- 1-(1-pb)*exp(-cumulative_FOI)
+    infection_probability <- se-(se+sp-1)*exp(-cumulative_FOI)
     
   } else{
     P=rep(0,1,max_age)
@@ -109,7 +112,7 @@ simulate_SeroData <- function(number_samples = 500,
       P[J]=x[1]
     }
     
-    infection_probability <- 1-(1-pb)*P#rev(P)
+    infection_probability <- se-(se+sp-1)*P#rev(P)
     
   }
   

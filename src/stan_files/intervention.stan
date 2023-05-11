@@ -68,7 +68,7 @@ parameters {
     real<lower = 0.00001>  foi[K]; 
     real<lower = 0, upper = 1> rho;    
  //   real<lower = 0, upper=1> bg2;
-    real<lower = 0, upper=1> se2;
+   real<lower = 0, upper=1> se2;
    real<lower = 0, upper=1> sp2;
    real  Flambda2[maxNcategory,Ncategoryclass]; //14 08
 

@@ -40,7 +40,8 @@ seroprevalence.fit<- function(FOIfit,
   data= FOIfit$data
   
   chains <- rstan::extract(FOIfit$fit)
-  bg = chains$bg # background infection probability
+  se = chains$se 
+  sp = chains$sp 
   A <- FOIfit$data$A
   latest_sampling_year <- max(FOIfit$data$sampling_year)
   years <- seq(1,A)
@@ -68,11 +69,12 @@ seroprevalence.fit<- function(FOIfit,
       M=dim(chains$P)[1] 
       Pinf=matrix(0, nrow = M, ncol=FOIfit$data$A)
       
-      m = matrix(rep(bg,1), nrow = M, ncol=FOIfit$data$A)      
-
+      se1 = matrix(rep(se,1), nrow = M, ncol=FOIfit$data$A)      
+     sp1 = matrix(rep(sp,1), nrow = M, ncol=FOIfit$data$A)      
+      
       # infection probability weighted on the categories      
       for(i in 1:length(p1$index)){
-        Pinf =  Pinf+  p1$prop[i]*( 1-(1-m)*chains$P[,,sorted.year$ix[Y],p1$index[i]] ) 
+        Pinf =  Pinf+  p1$prop[i]*( se1-(se1+sp1-1)*chains$P[,,sorted.year$ix[Y],p1$index[i]] ) 
       }
       
       par_out <- apply(Pinf, 2, function(x)c(mean(x), quantile(x, probs=c(0.025, 0.975))))

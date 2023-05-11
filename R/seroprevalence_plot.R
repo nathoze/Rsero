@@ -56,6 +56,8 @@ seroprevalence.plot<- function(serodata, age_class = 10, YLIM = 1, ...){
   
 }
 
+#' @export
+
 # get the seroprevalence (meanand 95%CI) for each age group
 sero.age.groups <- function(dat,age_class,YLIM){
   
