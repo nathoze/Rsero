@@ -63,7 +63,6 @@ compute_information_criteria <- function(FOIfit,...){
     
     lk  = chains$Like[i,]
     for (j in seq(1,N)){
-      
       if( Y[j] == FALSE){ # if the individual is seronegative
         L = log(1-lk[j])   
       }  else{
