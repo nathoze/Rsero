@@ -115,10 +115,8 @@ fit <- function(model,
   
   mdls <- model$stanname
   
-  
   group_size_array =ceiling(seq(1,data$A)/model$group_size)
   group_size_length = length(group_size_array)
-  
   
   pars =  c(model$priors,
             K = model$K,
@@ -127,7 +125,8 @@ fit <- function(model,
             group_size_length=group_size_length,
             cat_lambda=model$cat_lambda,
             seroreversion = model$seroreversion,
-            se_sp = model$se_sp)
+            se = model$se,
+            sp = model$sp)
   
   newdata = append(data,pars)
   if(model$type=='independent'){
@@ -158,18 +157,13 @@ fit <- function(model,
                        cores = cores,
                        open_progress = open_progress,
                        show_messages = show_messages)
-  
-  
+   
   out <-list(fit = F, data = data, model = model)
-  
   class(out) <- "FOIfit"
-  
   return(out)
   
 }
-
-
-
+ 
 ##' @rdname fit
 #' @export
 print.FOIfit <- function(x,...){
@@ -186,8 +180,7 @@ summary.FOIfit <- function(x,...){
   summary(x$data)
   summary(x$model)
 }
-
-
+ 
 #' @export
 proba_from_foi <- function(lambda){
   return(1-exp(-lambda))

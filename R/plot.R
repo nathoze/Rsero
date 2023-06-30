@@ -16,7 +16,7 @@
 ##' 
 ##' @examples
 ##' data <- simulate_SeroData( max_age = 50, epidemic_years = c(1976,1992), foi = c(0.2,0.3))
-##' model <- FOImodel(type='outbreak', se_sp=1, K = 2)
+##' model <- FOImodel(type='outbreak', K = 2)
 ##' Fit <- fit(model = model, data = data)
 ##' p <- plot(Fit)
 ##' p+ylim(0,1)
@@ -31,7 +31,8 @@ plot.FOIfit <- function(FOIfit,
                         mean_only = FALSE,
                         individual_samples = 0,
                         YLIM=1,
-                        maxYears = NULL,
+                        XLIM1 = NULL,
+                        XLIM2 = NULL,
                         ...){
   
   chains <- rstan::extract(FOIfit$fit)
@@ -42,10 +43,7 @@ plot.FOIfit <- function(FOIfit,
   for(cat in FOIfit$data$unique.categories){ 
     
     index.plot=index.plot+1
-    
-    
     w = which( FOIfit$data$category==cat, arr.ind = TRUE)[,1]
-    
     
     d = FOIfit$data$categoryindex[w]
     p1=proportions.index(d)
@@ -58,22 +56,31 @@ plot.FOIfit <- function(FOIfit,
       L =  L+  p1$prop[i]*chains$Flambda[, p1$index[i]]*L1 
     }
     
-    
     # compute mean and 95% credible interval  
     par_out <- apply(L, 2, function(x)c(mean(x), quantile(x, probs=c(0.025, 0.975))))
     latest_sampling_year <- max(FOIfit$data$sampling_year)
     
-    if(is.null(maxYears)  ){
-      maxYears =FOIfit$data$A
-    } 
-    if(maxYears >FOIfit$data$A ){
-      maxYears =FOIfit$data$A
-    } 
+    # if(is.null(maxYears)  ){
+    #   maxYears =FOIfit$data$A
+    # } 
+    # if(maxYears >FOIfit$data$A ){
+    #   maxYears =FOIfit$data$A
+    # } 
     
-    yrs <- latest_sampling_year-seq(1,maxYears)+1
+    if(is.null(XLIM1) ){
+      XLIM1 = latest_sampling_year-FOIfit$data$A+1
+    }
+    if(is.null(XLIM2) ){
+      XLIM2 = latest_sampling_year
+    }
+    
+    
+    
+    yrs <- latest_sampling_year-seq(1,FOIfit$data$A)+1
     par_out= par_out[ , seq(1,length(yrs))]
     par_out[which(par_out>YLIM)]=YLIM
     meanData <- data.frame(x = yrs, y = par_out[1, seq(1,length(yrs))])
+    
     p <- ggplot2::ggplot()
     
     if(!mean_only){
@@ -90,16 +97,14 @@ plot.FOIfit <- function(FOIfit,
         p <- p + ggplot2::geom_line(data = ind_foi, ggplot2::aes(x = x, y = y), size = 0.8, colour = "#bbbbbb", alpha = 0.6)
       }
     } 
-    
-    p <- p+theme_classic()
-    
-    p <- p+theme(axis.text.x = element_text(size=22),
+    p <- p+
+      theme_classic()+
+      theme(axis.text.x = element_text(size=22),
                  axis.text.y = element_text(size=22),
-                 text=element_text(size=16))
-    
-    p <- p + ggplot2::geom_line(data = meanData, ggplot2::aes(x = x, y = y), size = 1,color  ="#5e6b91",alpha=1)
-    
-    p <- p + ggplot2::xlab("Year") + ggplot2::ylab("Force of infection")+ylim(0,YLIM)
+                 text=element_text(size=16)) +
+      ggplot2::geom_line(data = meanData, ggplot2::aes(x = x, y = y), size = 1,color  ="#5e6b91",alpha=1) + 
+      ggplot2::xlab("Year") + 
+      ggplot2::ylab("Force of infection")+ylim(0,YLIM)+xlim(XLIM1,XLIM2)
     
     plots[[index.plot]] <- p 
     plots[[index.plot]]$category <- cat 

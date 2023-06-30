@@ -33,7 +33,7 @@
 ##' 
 #' @examples
 #' data('one_peak_simulation')
-#' model <- FOImodel(type='outbreak', K=1, se_sp=1)
+#' model <- FOImodel(type='outbreak', K=1)
 #' F1  = fit(model = model, data = data )
 #' compute_information_criteria(FOIfit  = F1)
 #' 
@@ -45,8 +45,9 @@ compute_information_criteria <- function(FOIfit,...){
   estimated_parameters <- FOIfit$model$estimated_parameters
   chains <- rstan::extract(FOIfit$fit)
   FOIs <- chains$lambda
-  se <- chains$se 
-  sp <- chains$sp
+  
+  sensitivity <- FOIfit$model$se 
+  specificity <- FOIfit$model$sp
   
   M <- nrow(FOIs)
   N <- FOIfit$data$N
@@ -76,9 +77,6 @@ compute_information_criteria <- function(FOIfit,...){
   
   # posterior mean
  
-  sensitivity=mean(se)
-  specificity=mean(sp)
-  
   LogLikelihoodMean <- 0
   P <- (colMeans(chains$P))
   
@@ -104,16 +102,13 @@ compute_information_criteria <- function(FOIfit,...){
   # Assumes the maximum likelihood is reached 
   AIC <- -2*max(LP) +2*estimated_parameters
   
-  
   # Compute the DIC
-  
+
   Dbar = -2*mean(LP)
   Dthetabar = -2*LogLikelihoodMean
   pD = Dbar-Dthetabar
   
   DIC = pD+Dbar 
-  
-  
   # Compute the WAIC
   #variance along the column. Each individual has its own variance measured over all sampled parameters 
   

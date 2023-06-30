@@ -23,31 +23,48 @@ seroprevalence.plot<- function(serodata, age_class = 10, YLIM = 1, ...){
   
   plots  <- NULL
   index.plot=0
-  
+  unique.categories= serodata$unique.categories
   for(sampling_year in sort(unique(serodata$sampling_year))){
-    for(cat in serodata$unique.categories){
-      
+    for(cat in unique.categories){
       index.plot <- index.plot+1
       
       w <- which(serodata$sampling_year ==  sampling_year & serodata$category==cat, arr.ind = TRUE)[,1]
-      #w <- as.matrix(which(serodata$sampling_year ==  sampling_year & serodata$category==cat, arr.ind = TRUE))[,1]
+      
+      if(length(unique.categories)==1){
+        title =  paste0("Sampling year: ", sampling_year)
+      }
+      if(length(unique.categories)>1){
+        title= paste0('Category: ',cat," Sampling year: ", sampling_year)
+        
+      }
       
       if(length(w)>0){
-        
         subdata <- subset(serodata,sub = w)
         histdata <- sero.age.groups(dat = subdata,age_class = age_class,YLIM=YLIM)
+       
+        # histdata =histdata[-which(is.na(histdata$mean)),]
         
-        g <- ggplot(histdata, aes(x=labels, y=mean)) + geom_point() + geom_segment(aes(x=labels,y=lower, xend= labels,yend=upper))
-        g <- g + theme_classic()
-        g <- g+theme(axis.text.x = element_text(size=12),
-                     axis.text.y = element_text(size=12),
-                     text=element_text(size=14))
-        g <- g+xlab('Age')+ylab('Proportion seropositive')+ylim(0,YLIM)
+          # Find the index of the last non-NA row
+         last_row_index <- tail(which(complete.cases(histdata)), 1)
+         if(length(last_row_index)>0){
+           histdata =histdata[1:last_row_index,]
+         }
+        
+        XLIM=max(subdata$age_at_sampling,na.rm = TRUE)
+        g <- ggplot(histdata, aes(x=labels, y=mean)) +
+          geom_point() + 
+          geom_segment(aes(x=labels,y=lower, xend= labels,yend=upper))+
+          theme_classic()+
+          theme(axis.text.x = element_text(size=12),
+                axis.text.y = element_text(size=12),
+                text=element_text(size=14))+
+          xlab('Age')+
+          ylab('Proportion seropositive')+
+          ylim(0,YLIM)+ ggtitle(title)
         
         plots[[index.plot]]= g
         plots[[index.plot]]$category  = cat
         
-        print(paste0('Category: ',cat))
       }
     }
     
@@ -57,7 +74,6 @@ seroprevalence.plot<- function(serodata, age_class = 10, YLIM = 1, ...){
 }
 
 #' @export
-
 # get the seroprevalence (meanand 95%CI) for each age group
 sero.age.groups <- function(dat,age_class,YLIM){
   
@@ -85,7 +101,6 @@ sero.age.groups <- function(dat,age_class,YLIM){
   
   G[which(G >YLIM)] =YLIM
   mean_age =  c( (age_categories[1:length(age_categories)-1] +age_categories[2:length(age_categories)])/2, age_categories[length(age_categories)] ) 
-  
   
   C <- (rbind((age_categories[1:length(age_categories)-1]), (age_categories[2:length(age_categories)]-1)))
   

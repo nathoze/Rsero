@@ -16,56 +16,48 @@ data {
     int <lower=0, upper=1> Y[N]; // Outcome
 
     int<lower = 0, upper=1> seroreversion; 
-
-    int<lower = 0, upper=1> se_sp; 
-
+ 
     int <lower=1> categoryindex[N];  
 
     int <lower=1> Ncategory;
 
-    int<lower= 1> Ncategoryclass; // 14/08
+    int<lower= 1> Ncategoryclass;  
 
-    int<lower=1> maxNcategory; // 14/08
+    int<lower=1> maxNcategory;  
 
     int<lower=1> MatrixCategory[Ncategory,Ncategoryclass];  
-  
+
     int <lower=0> age_at_sampling[N];  
 
     int <lower=0> sampling_year[N];  
-
-    int <lower=1> age_group[N] ;  
-  
+    
+    int <lower=1> age_group[N] ;    
+    
     int <lower=1> age_at_init[NAgeGroups]; 
-
+    
     int <lower=1> group_size_length; 
-
+    
     int <lower=1> group_size_array[group_size_length]; 
     
     real <lower = 0> priorY1;
-
+    
     real <lower = 0> priorY2;
-
-  //  real <lower = 0> priorbg1;
-
-  //  real <lower = 0> priorbg2;
-
+    
     real <lower = 0> priorRho1;
-
+    
     real <lower = 0> priorRho2;
-    real <lower = 0, upper=1> priorse1;
-    real <lower = 0, upper=1> priorse2;
-    real <lower = 0, upper=1> priorsp1;
-    real <lower = 0, upper=1> priorsp2;
+    
+    real<lower =0, upper=1> se;
+    
+    real<lower =0, upper=1> sp;
+    
     int <lower = 0> cat_lambda; // 1 or 0: characterizes whether we distinguish categories by different FOI
 }
 
 
 parameters {
     real<lower =0> logitlambda[NGroups]; 
-    real<lower = 0, upper = 1> rho;    
-       real<lower = 0, upper=1> se2;
-   real<lower = 0, upper=1> sp2;
-   // real<lower = 0, upper=1> bg2;
+    real<lower = 0, upper = 20> rho;    
     real  Flambda2[maxNcategory,Ncategoryclass]; //14 08
 }
 
@@ -74,25 +66,15 @@ transformed parameters {
     real x[A]; 
     real L;
     real<lower=0> lambda[A];
-    real<lower =0, upper=1> P1[A,NAgeGroups,Ncategory]; //14 08 
-    real<lower =0, upper=1> P[A,NAgeGroups,Ncategory]; //14 08 
-    real<lower =0, upper=1> se;
-    real<lower =0, upper=1> sp;
-    real<lower =0> Flambda[Ncategory]; //14 08
+    real<lower =0, upper=1> P1[A,NAgeGroups,Ncategory];  
+    real<lower =0, upper=1> P[A,NAgeGroups,Ncategory];  
+    real<lower =0> Flambda[Ncategory]; 
     real<lower = 0, upper=1> Likelihood[N];  
-    real c; // 14/08
+    real c; 
 
      for (j in 1:A) {
         // group size 
         lambda[j] =logitlambda[group_size_array[j]];
-    }
- 
-    if(se_sp==0){
-        se = 1;
-        sp = 1;
-    }else{
-        se=se2;
-        sp=sp2;
     }
  
     c=0;
@@ -111,10 +93,8 @@ transformed parameters {
         Flambda[i] =  exp(c);// exp(Flambda2[I,i]);
         }
     }
-  
-   
+     
     L=1;
-
 
     if(seroreversion==0){
         for(J in 1:NAgeGroups){
@@ -177,12 +157,6 @@ model {
         logitlambda[j] ~ uniform(priorY1,priorY2);
     }
  
-
-  //  bg2 ~uniform(priorbg1, priorbg2);   // category background infection. Size = Ncategory 
-    
-    se2 ~ uniform(priorse1, priorse2);   //  sensitivity 
-    sp2 ~ uniform(priorsp1, priorsp2);   // specificity
-
     for(I in 1:Ncategoryclass){
         for(i in 1:maxNcategory){      
             Flambda2[i,I] ~ normal(0,1.73) ;

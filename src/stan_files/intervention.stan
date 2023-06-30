@@ -17,8 +17,6 @@ data {
 
     int<lower = 0, upper=1> seroreversion; 
 
-    int<lower = 0, upper=1> se_sp; 
-
     int <lower=1> categoryindex[N]; // 14/08
 
     int <lower=1> Ncategory;  // 14/08
@@ -41,24 +39,21 @@ data {
     int <lower=1> K; // the number of peaks of epidemics
  
     real <lower = 0> priorT1;
-
+ 
     real <lower = 0> priorT2;
-
- //   real <lower = 0> priorbg1;
-
- //   real <lower = 0> priorbg2;
-
+  
     real <lower = 0> priorC1;
-
+   
     real <lower = 0> priorC2;
-
+   
     real <lower = 0> priorRho1;
-
+   
     real <lower = 0> priorRho2;
-    real <lower = 0, upper=1> priorse1;
-    real <lower = 0, upper=1> priorse2;
-    real <lower = 0, upper=1> priorsp1;
-    real <lower = 0, upper=1> priorsp2;
+   
+    real <lower = 0, upper=1> se;
+   
+    real <lower = 0, upper=1> sp;
+   
     int <lower = 0> cat_lambda; // 1 or 0: characterizes whether we distinguish categories by different FOI
 }
 
@@ -66,10 +61,7 @@ data {
 parameters {
     real  T[K];
     real<lower = 0.00001>  foi[K]; 
-    real<lower = 0, upper = 1> rho;    
- //   real<lower = 0, upper=1> bg2;
-   real<lower = 0, upper=1> se2;
-   real<lower = 0, upper=1> sp2;
+    real<lower = 0, upper = 20> rho;    
    real  Flambda2[maxNcategory,Ncategoryclass]; //14 08
 
  
@@ -82,11 +74,9 @@ transformed parameters {
     real<lower = 0.00001> lambda[A];
     real Time[K];
 
-    real<lower =0, upper=1> P1[A,NAgeGroups,Ncategory]; //14 08 
-    real<lower =0, upper=1> P[A,NAgeGroups,Ncategory]; //14 08 
-    real<lower =0, upper=1> se;
-    real<lower =0, upper=1> sp;
-    real<lower =0> Flambda[Ncategory]; //14 08
+    real<lower =0, upper=1> P1[A,NAgeGroups,Ncategory]; 
+    real<lower =0, upper=1> P[A,NAgeGroups,Ncategory];  
+    real<lower =0> Flambda[Ncategory];  
     real<lower = 0, upper=1> Likelihood[N];  
     real c; // 14/08
 
@@ -113,15 +103,7 @@ transformed parameters {
             }
         }
     } 
- 
-     
-    if(se_sp==0){
-        se = 1;
-        sp = 1;
-    }else{
-        se=se2;
-        sp=sp2;
-    }
+    
  
     c=0;
     if(!cat_lambda){
@@ -203,12 +185,7 @@ model {
         T[i] ~ uniform(priorT1, priorT2);
         foi[i] ~ uniform(priorC1, priorC2);
     }
-
- //   bg2  ~uniform(priorbg1, priorbg2);    
-    
-    se2 ~ uniform(priorse1, priorse2);   //  sensitivity 
-    sp2 ~ uniform(priorsp1, priorsp2);   // specificity
-
+ 
     for(I in 1:Ncategoryclass){
         for(i in 1:maxNcategory){      
             Flambda2[i,I] ~ normal(0,1.73) ;

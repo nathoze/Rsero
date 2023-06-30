@@ -40,66 +40,82 @@ seroprevalence.fit<- function(FOIfit,
   data= FOIfit$data
   
   chains <- rstan::extract(FOIfit$fit)
-  se = chains$se 
-  sp = chains$sp 
+  se = FOIfit$model$se 
+  sp = FOIfit$model$sp 
   A <- FOIfit$data$A
   latest_sampling_year <- max(FOIfit$data$sampling_year)
   years <- seq(1,A)
   
   index.plot=0
-  
+  unique.categories = data$unique.categories
   sorted.year = sort.int(unique(FOIfit$data$sampling_year),index.return = TRUE)
   Y=0
   for(sampling_year in sorted.year$x ){
     Y=Y+1
-    for(cat in data$unique.categories){ 
+    for(cat in unique.categories){ 
       
+      if(length(unique.categories)==1){
+        title =  paste0("Sampling year: ", sampling_year)
+      }
+      if(length(unique.categories)>1){
+        title= paste0('Category: ',cat," Sampling year: ", sampling_year)
+      }
       
       index.plot=index.plot+1
       age_group = data$age_group[which(data$sampling_year ==  sampling_year)][1]
       w = which(data$sampling_year ==  sampling_year & data$category==cat, arr.ind = TRUE)[,1]
       subdat = subset(data,sub = w)
       
-      
       # compute the proportion of seropositive
       P=chains$P[,,sorted.year$ix[Y], 1]
       d = data$categoryindex[w]
       p1=proportions.index(d)
-    
+      
       M=dim(chains$P)[1] 
       Pinf=matrix(0, nrow = M, ncol=FOIfit$data$A)
-      
-      se1 = matrix(rep(se,1), nrow = M, ncol=FOIfit$data$A)      
-     sp1 = matrix(rep(sp,1), nrow = M, ncol=FOIfit$data$A)      
-      
+  
       # infection probability weighted on the categories      
       for(i in 1:length(p1$index)){
-        Pinf =  Pinf+  p1$prop[i]*( se1-(se1+sp1-1)*chains$P[,,sorted.year$ix[Y],p1$index[i]] ) 
+        Pinf =  Pinf+  p1$prop[i]*( se-(se+sp-1)*chains$P[,,sorted.year$ix[Y],p1$index[i]] ) 
       }
       
       par_out <- apply(Pinf, 2, function(x)c(mean(x), quantile(x, probs=c(0.025, 0.975))))
       par_out[par_out>YLIM]= YLIM # set to the upper limits for plotting
-
+  
       
       # X axis
       years.plotted =  seq(latest_sampling_year-sampling_year+1, dim(chains$P)[2])
+    #  years.plotted = seq(1,max(subdat$age))
+      
       years.plotted.normal= years.plotted-min(years.plotted)+1
       meanFit <- data.frame(x = years.plotted.normal, y = par_out[1,years.plotted ])
-      
-      
+
       # create the envelope
       xpoly <- (c(years.plotted.normal, rev(years.plotted.normal)))
       ypoly <-  c(par_out[3,years.plotted ], rev(par_out[2,years.plotted ]))
       DataEnvelope = data.frame(x = xpoly, y = ypoly)
       
       # histogram  of data
-      histdata <- sero.age.groups(dat = subdat,age_class = age_class,YLIM=YLIM)
+      histdata <- sero.age.groups(dat = subdat,age_class = age_class,YLIM=YLIM) 
+      histdata$labels_text  <-  as.character(histdata$labels)
       
+      last_row_index <- tail(which(complete.cases(histdata)), 1)
+      if(length(last_row_index)>0){
+        histdata =histdata[1:last_row_index,]
+      }
+      
+      max.age= max(histdata$age)
+      
+     # histdata$labels = as.factor(as.numeric(as.character(histdata$labels)))
+    #  histdata$age =as.numeric(as.character(histdata$labels))
+      
+      DataEnvelope =  subset(DataEnvelope, x<=max.age)
+      meanFit = subset(meanFit, x<=max.age )
       
       # plot the mean and 95% credible interval of the seroprevalence
-      p <- ggplot2::ggplot()
-      p <- p + ggplot2::geom_polygon(data=DataEnvelope, ggplot2::aes(x, y), fill="#d7def3")
-      p <- p + ggplot2::geom_line(data = meanFit, ggplot2::aes(x = x, y = y), size = 1, color ='#5e6b91')
+      p <- ggplot2::ggplot() + 
+        ggplot2::geom_polygon(data=DataEnvelope, ggplot2::aes(x, y), fill="#d7def3") + 
+        ggplot2::geom_line(data = meanFit, ggplot2::aes(x = x, y = y), size = 1, color ='#5e6b91')
       
       # if plot individual runs of the chain
       if(individual_samples>0){
@@ -110,23 +126,19 @@ seroprevalence.fit<- function(FOIfit,
         }
       }
       
-      p <- p  +  scale_x_continuous(breaks=histdata$age,labels=levels(histdata$labels))
-      p <- p +  geom_point(data = histdata, aes(x=age, y=mean)) 
-      p <- p + geom_segment(data=histdata, aes(x=age,y=lower, xend= age, yend=upper))
-      
-      p <- p + ggplot2::xlab("Age (years)") + ggplot2::ylab("Proportion seropositive")
-      p <- p +theme_classic()
-      p <- p +theme(axis.text.x = element_text(size=12),
+      p <- p  +  scale_x_continuous(breaks=histdata$age,labels=levels(histdata$labels_text))+  
+        geom_point(data = histdata, aes(x=age, y=mean))  +
+        geom_segment(data=histdata, aes(x=age,y=lower, xend= age, yend=upper))+
+        ggplot2::xlab("Age (years)") + ggplot2::ylab("Proportion seropositive") + 
+        theme_classic() +
+        theme(axis.text.x = element_text(size=12),
                     axis.text.y = element_text(size=14),
-                    text=element_text(size=14))
-      p <-  p + ylim(0,YLIM)
+                    text=element_text(size=14))  + ylim(0,YLIM)+ggtitle(title)
       
       
       plots[[index.plot]] <- p 
       plots[[index.plot]]$category <- cat 
       plots[[index.plot]]$year <- sampling_year 
-      print(paste0('Category: ',cat))
-      print(paste0('Sampling year: ',sampling_year))
       
     }
   }
@@ -134,9 +146,7 @@ seroprevalence.fit<- function(FOIfit,
   
 }
 
-
 #' @export
-
 proportions.index <- function(d){
   b.x=c()
   b.y=c()

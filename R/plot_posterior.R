@@ -177,26 +177,7 @@ plot_posterior<- function(FOIfit) {
       plotindex <- plotindex+1
       plots[[plotindex]]  = gT      
     }
-    
-    if(FOIfit$model$se_sp){
-       
-      Title = 'Histogram for sensitivity'
-      distribution<-data.frame(bg = chainsout$se)
-      gT <- ggplot2::ggplot(distribution, aes(bg)) +
-        geom_histogram(bins = 12, fill = "red", col="red",alpha=.4) +
-        labs(title = Title, x='value', y='Count')
-      plotindex <- plotindex+1
-      plots[[plotindex]]  = gT
-      
-      Title = 'Histogram for specificity'
-      distribution<-data.frame(bg = chainsout$sp)
-      gT <- ggplot2::ggplot(distribution, aes(bg)) +
-        geom_histogram(bins = 12, fill = "red", col="red",alpha=.4) +
-        labs(title = Title, x='value', y='Count')
-      plotindex <- plotindex+1
-      plots[[plotindex]]  = gT
-    }
-    
+ 
     d= FOIfit$data$category.position.in.table
     
     if(FOIfit$model$cat_lambda & dim(d)[1]>0){ 

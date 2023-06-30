@@ -8,7 +8,6 @@ data {
     int <lower=0> age[N]; // Age   
     int <lower=0, upper=1> Y[N]; // Outcome
     int<lower = 0, upper=1> seroreversion; 
-    int<lower = 0, upper=1> se_sp; 
     int <lower=1> categoryindex[N]; 
     int<lower= 1> Ncategoryclass; 
     int <lower=1> Ncategory;  
@@ -25,12 +24,8 @@ data {
     real <lower = 0> priorbeta2;
     real priorT1;
     real <lower = 0> priorT2;
- //   real <lower = 0> priorbg1;
- //   real <lower = 0> priorbg2;
-    real <lower = 0, upper=1> priorse1;
-    real <lower = 0, upper=1> priorse2;
-    real <lower = 0, upper=1> priorsp1;
-    real <lower = 0, upper=1> priorsp2;
+    real<lower =0, upper=1> se;
+    real<lower =0, upper=1> sp;
     real <lower = 0> priorRho1;
     real <lower = 0> priorRho2;
     int <lower = 0> cat_lambda; // 1 or 0: characterizes whether we distinguish categories by different FOI
@@ -40,10 +35,9 @@ parameters {
     real  T[K];
     real<lower=0> alpha[K];
     real<lower=0> beta[K];
-    real<lower = 0, upper = 1> rho;    
-   real<lower = 0, upper=1> se2;
-   real<lower = 0, upper=1> sp2;
-    real  Flambda2[maxNcategory,Ncategoryclass]; //14 08
+    real<lower = 0, upper = 20> rho;    
+ 
+    real  Flambda2[maxNcategory,Ncategoryclass];  
 }
 
 transformed parameters {
@@ -52,22 +46,13 @@ transformed parameters {
     real L;
     real lambda[A];
     real S[K]; // Normalization constant
-    real<lower =0, upper=1> P1[A,NAgeGroups,Ncategory]; //14 08 
-    real<lower =0, upper=1> P[A,NAgeGroups,Ncategory]; //14 08 
-    real<lower =0, upper=1> se;
-    real<lower =0, upper=1> sp;
-    real<lower =0> Flambda[Ncategory]; //14 08
+    real<lower =0, upper=1> P1[A,NAgeGroups,Ncategory];  
+    real<lower =0, upper=1> P[A,NAgeGroups,Ncategory];  
+    real<lower =0> Flambda[Ncategory]; 
     real<lower = 0, upper=1> Likelihood[N];  
     real c; // 14/08
 
-     
-    if(se_sp==0){
-        se = 1;
-        sp = 1;
-    }else{
-        se=se2;
-        sp=sp2;
-    }
+
  
 
     for(i in 1:K){
@@ -164,10 +149,6 @@ model {
         beta[i] ~ uniform(priorbeta1, priorbeta2) ; 
     }
     rho  ~ uniform(priorRho1, priorRho2);
-
-//    bg2 ~ uniform(priorbg1, priorbg2);   // category background infection. Size = Ncategory 
-    se2 ~ uniform(priorse1, priorse2);   //  sensitivity 
-    sp2 ~ uniform(priorsp1, priorsp2);   // specificity
 
    for(I in 1:Ncategoryclass){
         for(i in 1:maxNcategory){      

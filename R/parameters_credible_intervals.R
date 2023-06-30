@@ -38,21 +38,6 @@ parameters_credible_intervals <- function(FOIfit,
   
   if(FOIfit$model$type %in% model.list('All models')){ 
     
-    if(FOIfit$model$se_sp){
-      
-      params <- add.quantiles.text(params,
-                                   variable=chains$se,
-                                   name = paste0('sensitivity '),
-                                   quants= quants,
-                                   quantilestext=quantilestext)
-      params <- add.quantiles.text(params,
-                                   variable=chains$sp,
-                                   name = paste0('specificity '),
-                                   quants= quants,
-                                   quantilestext=quantilestext)
-      
-    }
-    
     if(FOIfit$model$type  %in% model.list('Outbreak models')){
       
       C<- chains$T
@@ -97,13 +82,11 @@ parameters_credible_intervals <- function(FOIfit,
         
         
         params <- add.quantiles.text(params,
-                                     variable  = 100*(1-exp(-chainsout$alpha[,i])),
+                                     variable  = 1-exp(-chainsout$alpha[,i]),
                                      name = paste('Outbreak Prob. Inf. ',i),
                                      quants= quants,
                                      quantilestext=quantilestext )
-        
       }
-      
     }
     
     if(FOIfit$model$type %in% model.list('I models')){
@@ -114,7 +97,6 @@ parameters_credible_intervals <- function(FOIfit,
       
       for(i in 1:K){
         if (i>1){ 
-          
           params <- add.quantiles.text(params, variable  = Years[,i],
                                        name = paste('Year_',i),
                                        quants= quants,
@@ -136,19 +118,13 @@ parameters_credible_intervals <- function(FOIfit,
       }
     }
     
-    
     if(FOIfit$model$type=='constantoutbreak'){
-      
-      
-      
       LL <- 100*(1-exp(-chains$constant))
       params <- add.quantiles.text(params,
                                    variable  = LL,
                                    name = paste0('Annual Prob. Infection (in %)_',i),
                                    quants= quants,
                                    quantilestext=quantilestext )
-      
-      
       
     }
     if(FOIfit$model$type=='independent' | FOIfit$model$type=='independent_group'){
