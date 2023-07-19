@@ -114,6 +114,7 @@ transformed parameters {
         } 
     }
 
+/*
     if(seroreversion==1){
         for(J in 1:NAgeGroups){
             for(i in 1:Ncategory){        
@@ -128,6 +129,29 @@ transformed parameters {
             }
         }
     }
+ */
+   if(seroreversion==1){
+    for(J in 1:NAgeGroups){
+      for(i in 1:Ncategory){    
+        x[A] =1;
+        for(j in 1:A){
+         x[j] = exp(-Flambda[i]*lambda[1]) ;
+        }
+
+        for(j in 1:A){
+            x[j] = exp(-Flambda[i]*lambda[age_at_init[J]]) ;
+          if(j >1){
+            for(k in 2:j){
+              L=Flambda[i]*lambda[j-k+2];
+              x[j-k+2-1] = x[j-k+2]*exp(-(rho+L)) +rho/(L+rho)*(1- exp(-(rho+L)));
+            }
+          }         
+            P1[j,J,i]  = x[age_at_init[J]];
+ 
+        }
+      }
+    }
+  }
 
     for(J in 1:NAgeGroups){
         for(i in 1:Ncategory){        

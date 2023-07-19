@@ -31,7 +31,6 @@ data {
 
     int <lower=0> sampling_year[N]; 
 
-
     int <lower=1> age_group[N] ;  
   
     int <lower=1> age_at_init[NAgeGroups];  
@@ -63,7 +62,6 @@ parameters {
     real<lower = 0.00001>  foi[K]; 
     real<lower = 0, upper = 20> rho;    
    real  Flambda2[maxNcategory,Ncategoryclass]; //14 08
-
  
 }
 
@@ -79,7 +77,6 @@ transformed parameters {
     real<lower =0> Flambda[Ncategory];  
     real<lower = 0, upper=1> Likelihood[N];  
     real c; // 14/08
-
 
 
     Time[1] = 1;
@@ -103,7 +100,6 @@ transformed parameters {
             }
         }
     } 
-    
  
     c=0;
     if(!cat_lambda){
@@ -122,9 +118,7 @@ transformed parameters {
         }
     }
   
-  
 	L=1;
-
 
     if(seroreversion==0){
         for(J in 1:NAgeGroups){
@@ -142,7 +136,7 @@ transformed parameters {
             }
         } 
     }
-
+/*
     if(seroreversion==1){
         for(J in 1:NAgeGroups){
             for(i in 1:Ncategory){        
@@ -157,7 +151,30 @@ transformed parameters {
             }
         }
     }
+*/
+      if(seroreversion==1){
+    for(J in 1:NAgeGroups){
+      for(i in 1:Ncategory){    
+        x[A] =1;
+        for(j in 1:A){
+         x[j] = exp(-Flambda[i]*lambda[1]) ;
+        }
 
+        for(j in 1:A){
+            x[j] = exp(-Flambda[i]*lambda[age_at_init[J]]) ;
+          if(j >1){
+            for(k in 2:j){
+              L=Flambda[i]*lambda[j-k+2];
+              x[j-k+2-1] = x[j-k+2]*exp(-(rho+L)) +rho/(L+rho)*(1- exp(-(rho+L)));
+            }
+          }         
+            P1[j,J,i]  = x[age_at_init[J]];
+ 
+        }
+      }
+    }
+  }
+  
     for(J in 1:NAgeGroups){
         for(i in 1:Ncategory){        
             for(j in 1:A){
@@ -171,10 +188,8 @@ transformed parameters {
     }
 
    for(j in 1:N){
-     //   Like[j] =1-(1-bg)*P[age[j],age_group[j],categoryindex[j]];///q[age_group[j],category[j]] ;
            Likelihood[j] =se-(se+sp-1)*P[age[j],age_group[j],categoryindex[j]]; 
     }
-
 }
 
 model {

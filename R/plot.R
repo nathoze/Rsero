@@ -73,9 +73,7 @@ plot.FOIfit <- function(FOIfit,
     if(is.null(XLIM2) ){
       XLIM2 = latest_sampling_year
     }
-    
-    
-    
+     
     yrs <- latest_sampling_year-seq(1,FOIfit$data$A)+1
     par_out= par_out[ , seq(1,length(yrs))]
     par_out[which(par_out>YLIM)]=YLIM

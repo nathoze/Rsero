@@ -279,8 +279,7 @@ category.parameters <- function(category,N, reference.category){
     }
   }
   
-  
-  A=apply(category, 2, unique)
+    A=apply(category, 2, unique)
   if(typeof(A)=="character"){ # needed in the case there is only one type of category
     B=list()
     B[[1]]=A
@@ -352,11 +351,8 @@ category.parameters <- function(category,N, reference.category){
   
   index = which(apply(X = Exp, 1, FUN = L1))
   w=(apply(X = Exp, 1, FUN = L2))
-  
   col.index = w[w>0]
   
-  
-  # comment
   category.position.in.table= data.frame(predictor = character(),
                                          relative_to = character(),
                                          index = integer())
