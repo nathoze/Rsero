@@ -61,8 +61,8 @@ transformed parameters {
     real x[A]; 
     real L;
     real<lower=0> lambda[A];
-    real<lower =0, upper=1> P1[A,NAgeGroups,Ncategory]; //14 08 
-    real<lower =0, upper=1> P[A,NAgeGroups,Ncategory]; //14 08 
+    real<lower =0, upper=1> P1[A,NAgeGroups,Ncategory]; // Probability of being seronegative
+    real<lower =0, upper=1> P[A,NAgeGroups,Ncategory]; 
     real<lower =0> Flambda[Ncategory]; //14 08
     real<lower = 0, upper=1> Likelihood[N];  
     real c; // 14/08
@@ -133,7 +133,9 @@ transformed parameters {
         }
 
         for(j in 1:A){
-            x[j] = exp(-Flambda[i]*lambda[age_at_init[J]]) ;
+          //  x[j] = exp(-Flambda[i]*lambda[age_at_init[J]]) ;
+            L=Flambda[i]*lambda[age_at_init[J]];
+            x[j] = rho/(L+rho) +L/(L+rho)*exp(-L) ;
           if(j >1){
             for(k in 2:j){
               L=Flambda[i]*lambda[j-k+2];

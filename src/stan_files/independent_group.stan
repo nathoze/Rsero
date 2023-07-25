@@ -139,8 +139,10 @@ transformed parameters {
         }
 
         for(j in 1:A){
-            x[j] = exp(-Flambda[i]*lambda[age_at_init[J]]) ;
-          if(j >1){
+          //  x[j] = exp(-Flambda[i]*lambda[age_at_init[J]]) ;
+            L=Flambda[i]*lambda[age_at_init[J]];
+            x[j] = rho/(L+rho) +L/(L+rho)*exp(-L) ;
+                      if(j >1){
             for(k in 2:j){
               L=Flambda[i]*lambda[j-k+2];
               x[j-k+2-1] = x[j-k+2]*exp(-(rho+L)) +rho/(L+rho)*(1- exp(-(rho+L)));

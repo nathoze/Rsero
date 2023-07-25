@@ -126,6 +126,7 @@ seroprevalence.fit<- function(FOIfit,
       
       # p <- p  +  scale_x_continuous(breaks=histdata$age,labels=levels(histdata$labels_text))+  
       print(histdata)
+      print(histdata$labels_text)
       p <- p  +  scale_x_continuous(breaks=histdata$age,labels=histdata$labels_text)+  
         geom_point(data = histdata, aes(x=age, y=mean))  +
         geom_segment(data=histdata, aes(x=age,y=lower, xend= age, yend=upper))+
