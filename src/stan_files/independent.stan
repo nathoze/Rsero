@@ -42,8 +42,7 @@ data {
 
     real <lower = 0> priorY2;
  
-    real <lower = 0> priorRho1;
-    real <lower = 0> priorRho2;
+    real <lower = 0> priorRho;
     real<lower =0, upper=1> se;
     real<lower =0, upper=1> sp;
     int <lower = 0> cat_lambda; // 1 or 0: characterizes whether we distinguish categories by different FOI
@@ -182,7 +181,7 @@ model {
             Flambda2[i,I] ~ normal(0,1.73) ;
         }
     }
-    rho  ~ uniform(priorRho1, priorRho2);
+    rho  ~ uniform(priorRho);
 
 
     for (j in 1:N) {  

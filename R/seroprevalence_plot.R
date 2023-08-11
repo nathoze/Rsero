@@ -41,14 +41,14 @@ seroprevalence.plot<- function(serodata, age_class = 10, YLIM = 1, ...){
       if(length(w)>0){
         subdata <- subset(serodata,sub = w)
         histdata <- sero.age.groups(dat = subdata,age_class = age_class,YLIM=YLIM)
-       
+        
         # histdata =histdata[-which(is.na(histdata$mean)),]
         
-          # Find the index of the last non-NA row
-         last_row_index <- tail(which(complete.cases(histdata)), 1)
-         if(length(last_row_index)>0){
-           histdata =histdata[1:last_row_index,]
-         }
+        # Find the index of the last non-NA row
+        last_row_index <- tail(which(complete.cases(histdata)), 1)
+        if(length(last_row_index)>0){
+          histdata =histdata[1:last_row_index,]
+        }
         
         XLIM=max(subdata$age_at_sampling,na.rm = TRUE)
         g <- ggplot(histdata, aes(x=labels, y=mean)) +
@@ -74,7 +74,7 @@ seroprevalence.plot<- function(serodata, age_class = 10, YLIM = 1, ...){
 }
 
 #' @export
-# get the seroprevalence (meanand 95%CI) for each age group
+# get the seroprevalence (mean and 95%CI) for each age group
 sero.age.groups <- function(dat,age_class,YLIM){
   
   age_categories <- seq(from = 0, to = min(dat$A, max(dat$age)), by = age_class)
@@ -88,7 +88,6 @@ sero.age.groups <- function(dat,age_class,YLIM){
   
   G=matrix(NA,nrow =  dim(df)[1], ncol=3)
   
-  
   for(j in seq(1,length(S1))){
     if(S1[j]>3){
       B= binom::binom.confint(x=S2[j],n = S1[j],methods = "exact")
@@ -98,13 +97,12 @@ sero.age.groups <- function(dat,age_class,YLIM){
     }
   }
   
-  
   G[which(G >YLIM)] =YLIM
   mean_age =  c( (age_categories[1:length(age_categories)-1] +age_categories[2:length(age_categories)])/2, age_categories[length(age_categories)] ) 
   
   C <- (rbind((age_categories[1:length(age_categories)-1]), (age_categories[2:length(age_categories)]-1)))
   
-  if(sum(C[1, ]-C[2, ]) == 0 ){ # means that the age categories are each 1 year long
+  if(sum(C[1, ] - C[2, ]) == 0 ){ # means that the age categories are each 1 year long
     histo_label <- append(format(C[1, ]), paste(">=", tail(age_categories, n = 1), sep = ""))
   } else{
     histo_label <- append(apply(format(C), 2, paste, collapse = "-"), paste(">=", tail(age_categories, n = 1), sep = ""))
@@ -112,7 +110,7 @@ sero.age.groups <- function(dat,age_class,YLIM){
   
   
   histdata <- data.frame(age = mean_age,
-                         mean=G[,3],
+                         mean = G[,3],
                          lower = G[,1],
                          upper = G[, 2],
                          labels = factor(histo_label, levels=histo_label))

@@ -48,10 +48,8 @@
 ##' 
 ##' @param priorY2 Second parameter of the uniform prior distribution for the annual hazard of infection, used in the independent models.  Default = 10.
 ##' 
-##' @param priorRho1 First parameter of the uniform prior distribution for rho, the seroreversion rate used when seroreversion=1. Default = 0.
-##' 
-##' @param priorRho2  Second parameter of the uniform prior distribution for rho, the seroreversion rate used when seroreversion=1. Default = 10.
-##' 
+##' @param priorRho Parameter of the exponential prior distribution for rho, the seroreversion rate used when seroreversion=1. Default = 2.
+##' ##' 
 ##' @param ... Additional arguments (not used).
 ##'
 ##' @return A list with the class \code{FOImodel}, which contains the
@@ -88,7 +86,7 @@
 ##' @export
 FOImodel <- function(type = 'constant',
                      K = 1,
-                     group_size=1,
+                     group_size = 1,
                      seroreversion =0,
                      se = 1, 
                      sp = 1, 
@@ -97,13 +95,12 @@ FOImodel <- function(type = 'constant',
                      priorbeta1 = 0,
                      priorbeta2 = 1,
                      priorT1 = 0,  
-                     priorT2 = 70,
+                     priorT2 = 100,
                      priorC1 = 0, # 0
                      priorC2 = 10, # 100
                      priorY1 = 0, 
                      priorY2 = 10, 
-                     priorRho1  =0,
-                     priorRho2 = 10,
+                     priorRho = 2,
                      cat_lambda = 1,
                      fixed_parameters = NULL,
                      ...) {
@@ -152,12 +149,12 @@ FOImodel <- function(type = 'constant',
   if(type %in% model.list('K models') & is.null(K) ){
     print("K not defined.")
   } 
-
-  if(!is.null(fixed_parameters$rho)){
-    priorRho1 = 0.99*(-log(fixed_parameters$rho)) 
-    priorRho2 = 1.01*(-log(fixed_parameters$rho))
-  }
-  
+# 
+#   if(!is.null(fixed_parameters$rho)){
+#     priorRho1 = 0.99*(-log(fixed_parameters$rho)) 
+#     priorRho2 = 1.01*(-log(fixed_parameters$rho))
+#   }
+#   
   if(!is.null(fixed_parameters$foi)){
     priorC1 = 0.99*(-log(fixed_parameters$foi)) 
     priorC2 = 1.01*(-log(fixed_parameters$foi)) 
@@ -190,8 +187,7 @@ FOImodel <- function(type = 'constant',
                  priorC2 = priorC2,
                  priorY1 = priorY1,
                  priorY2 = priorY2,
-                 priorRho1 = priorRho1,
-                 priorRho2 = priorRho2)
+                 priorRho = priorRho)
   
   
   model <- list(type = type,
@@ -266,8 +262,7 @@ print.FOImodel <- function(x, ...){
     }
  
     if(x$seroreversion){
-      cat('\t Seroreversion 1: ', x$priors$priorRho1, '\n')
-      cat('\t Seroreversion 2: ', x$priors$priorRho2, '\n')
+      cat('\t Seroreversion: ', x$priors$priorRho, '\n')
     }
     
   }else{

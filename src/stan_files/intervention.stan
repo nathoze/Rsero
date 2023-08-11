@@ -45,10 +45,8 @@ data {
    
     real <lower = 0> priorC2;
    
-    real <lower = 0> priorRho1;
-   
-    real <lower = 0> priorRho2;
-   
+    real <lower = 0> priorRho;
+      
     real <lower = 0, upper=1> se;
    
     real <lower = 0, upper=1> sp;
@@ -209,7 +207,7 @@ model {
         }
     }
     
-    rho  ~ uniform(priorRho1, priorRho2);
+    rho  ~ uniform(priorRho);
 
     for(j in 1:N){
         target += bernoulli_lpmf( Y[j] | Likelihood[j]);

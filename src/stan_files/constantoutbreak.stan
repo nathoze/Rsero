@@ -54,10 +54,8 @@ data {
 
     real <lower = 0> priorT2;
     
-    real <lower = 0> priorRho1;
-    
-    real <lower = 0> priorRho2;
-    
+    real <lower = 0> priorRho;
+        
     real<lower =0, upper=1> se;
     
     real<lower =0, upper=1> sp;
@@ -210,7 +208,7 @@ model {
         alpha[i] ~ uniform(prioralpha1, prioralpha2);
         beta[i] ~ uniform(priorbeta1, priorbeta2) ; 
     }
-    rho  ~ uniform(priorRho1, priorRho2);
+    rho  ~ exp(priorRho);
     constant ~ uniform(priorC1, priorC2);
 
     for(I in 1:Ncategoryclass){
