@@ -61,8 +61,7 @@ parameters_credible_intervals <- function(FOIfit,
                                      variable=chainsout$T[,i],
                                      name = paste('T',i),
                                      quants= quants,
-                                     quantilestext=quantilestext )
-        
+                                     quantilestext=quantilestext)
         
         name <- paste('alpha',i)
         
@@ -71,15 +70,12 @@ parameters_credible_intervals <- function(FOIfit,
                                      name = name,
                                      quants= quants,
                                      quantilestext=quantilestext )
-        
-        
-        
+         
         params <- add.quantiles.text(params,
                                      variable  = chainsout$beta[,i],
                                      name = paste('beta',i),
                                      quants= quants,
                                      quantilestext=quantilestext )      
-        
         
         params <- add.quantiles.text(params,
                                      variable  = 1-exp(-chainsout$alpha[,i]),
@@ -103,13 +99,8 @@ parameters_credible_intervals <- function(FOIfit,
                                        quantilestext=quantilestext )
           
         }
-        # LL <- chains$foi[,i]
-        # params <- add.quantiles.text(params,
-        #                              variable  = LL,
-        #                              name = paste0('FOI_',i),
-        #                              quants= quants,
-        #                              quantilestext=quantilestext )
-        LL <- 100*(1-exp(-chains$foi[,i]))
+
+        LL <- 100*(1-exp(-chains$annual_foi[,i]))
         params <- add.quantiles.text(params,
                                      variable  = LL,
                                      name = paste0('Annual Prob. Infection (in %)_',i),
@@ -119,7 +110,7 @@ parameters_credible_intervals <- function(FOIfit,
     }
     
     if(FOIfit$model$type=='constantoutbreak'){
-      LL <- 100*(1-exp(-chains$constant))
+      LL <- 100*(1-exp(-chains$annual_foi))
       params <- add.quantiles.text(params,
                                    variable  = LL,
                                    name = paste0('Annual Prob. Infection (in %)_',i),

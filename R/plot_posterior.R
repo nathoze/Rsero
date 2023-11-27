@@ -25,7 +25,19 @@ plot_posterior<- function(FOIfit) {
   name <- FOIfit$model$type
   
   if(name %in% model.list('All models')){
-    if(name %in% model.list('I models')){
+    
+    if(name %in% model.list('Constant models')){# constant or constantoutbreak
+      
+      gT <- plot_histogram(distribution = data.frame(X= chains$annual_foi), 
+                           title = 'Histogram for Annual FOI',
+                           xlabel = "FOI",
+                           ylabel = 'Count') 
+      
+      plotindex <- plotindex+1
+      plots[[plotindex]]  = gT        
+    }
+    #  if(name %in% model.list('I models')){
+    if(name  == "intervention"){
       
       C<- chains$Time
       K=FOIfit$model$K
@@ -35,32 +47,33 @@ plot_posterior<- function(FOIfit) {
       
       Years  <- YearMax - C+1
       
-      
       for(i in 1:K){
-        
         if(name != 'constant'){
           chainsout$T[,i] <- Years[,i]
+          gT <- plot_histogram(distribution = data.frame(X= chainsout$T[,i] ), 
+                               title = paste('Histogram for Time',i),
+                               xlabel = "Year",
+                               ylabel = 'Count') 
           
-          distribution<-data.frame(Time = chainsout$T[,i])
-          gT <- ggplot(distribution, aes(Time)) +
-            geom_histogram(bins = 16, fill = "red", col="red",alpha=.4) +
-            labs(title = paste('Histogram for Time',i), x='Year', y='Count')
           plotindex <- plotindex+1
           plots[[plotindex]]  = gT
         }
       }
       
       for(i in 1:K){
-        distribution<-data.frame(X= chains$foi[,i])
-        gT <- ggplot(distribution, aes(X)) +
-          geom_histogram(bins = 12, fill = "red", col="red",alpha=.4) +
-          labs(title = paste('Histogram for FOI',i), x='FOI', y='Count')
+        gT <- plot_histogram(distribution = data.frame(X= chains$annual_foi[,i] ), 
+                             title = paste('Histogram for annual FOI',i),
+                             xlabel = "FOI",
+                             ylabel = 'Count') 
+        
+        
         plotindex <- plotindex+1
         plots[[plotindex]]  = gT        
       }
     }
     
-    if(name =='outbreak'){
+    #if(name =='outbreak'){
+    if(name %in% model.list('Outbreak models')){
       
       C<- chains$T
       S <- chains$S
@@ -77,21 +90,20 @@ plot_posterior<- function(FOIfit) {
       }
       
       for(i in 1:K){
-        
         if(FOIfit$model$cat_lambda){
           Ncat = FOIfit$data$Ncategory
         }else{
           Ncat = 1
         }
-        
         chainsout$T[,i] <- t(Years[i, ]) 
         chainsout$alpha[, i] <- t(chains$alpha)[Ranks[i,]] 
         chainsout$beta[, i] <- t(chains$beta)[Ranks[i,]]
         
-        distribution<-data.frame(Time = chainsout$T[,i])
-        gT <- ggplot(distribution, aes(Time)) +
-          geom_histogram(bins = 16, fill = "red", col="red",alpha=.4) +
-          labs(title = paste('Histogram for Time',i), x='Year', y='Count')
+        gT <- plot_histogram(distribution = data.frame(X= chainsout$T[,i] ), 
+                             title = paste('Histogram for Time',i),
+                             xlabel = "Year",
+                             ylabel = 'Count') 
+        
         plotindex <- plotindex+1
         plots[[plotindex]]  = gT
         
@@ -102,15 +114,15 @@ plot_posterior<- function(FOIfit) {
           else{
             Title = paste0('Histogram for alpha, category ',k)
           }
-           
-          distribution<-data.frame(alpha = chains$Flambda[,k]*chainsout$alpha[,i])
-          gT <- ggplot(distribution, aes(alpha))+
-            geom_histogram(bins = 12, fill = "red", col="red",alpha=.4) +
-            labs(title = paste(Title,i), x='Value', y='Count')
+          
+          gT <- plot_histogram(distribution = data.frame(X= chains$Flambda[,k]*chainsout$alpha[,i]), 
+                               title = paste(Title,i),
+                               xlabel = "Value",
+                               ylabel = 'Count') 
+          
           plotindex <- plotindex+1
           plots[[plotindex]]  = gT
         }
-        
         
         for(k in 1:Ncat){
           if(Ncat==1){
@@ -120,39 +132,23 @@ plot_posterior<- function(FOIfit) {
             Title = paste0('Histogram for total force of infection, category ',k)
           }
           
-          
-          distribution<-data.frame(FOI = 1-exp(-chains$Flambda[,k]*chainsout$alpha[,i]))
-          gT <- ggplot(distribution, aes(FOI))+
-            geom_histogram(bins = 12, fill = "red", col="red",alpha=.4) +
-            labs(title = paste(Title,i), x='Value', y='Count')
+          gT <- plot_histogram(distribution = data.frame(X= 1-exp(-chains$Flambda[,k]*chainsout$alpha[,i])), 
+                               title = paste(Title,i),
+                               xlabel = "Value",
+                               ylabel = 'Count') 
           plotindex <- plotindex+1
           plots[[plotindex]]  = gT
         }
-         
         
-        distribution<-data.frame(beta = chainsout$beta[,i])
-        gT <- ggplot(distribution, aes(beta)) +
-          geom_histogram(bins = 12, fill = "red", col="red",alpha=.4) +
-          labs(title = paste('Histogram for beta',i), x='Value', y='Count')
+        gT <- plot_histogram(distribution = data.frame(X = chainsout$beta[,i]), 
+                             title = paste('Histogram for beta',i),
+                             xlabel = "Value",
+                             ylabel = 'Count') 
+        
         plotindex <- plotindex+1
         plots[[plotindex]]  = gT
         
       }
-    }
-    
-    if(name =='constant'){
-      
-      #L = chains$lambda[,1]
-      L = chains$foi
-      
-      distribution <- data.frame(L=L) 
-      gT <- ggplot(distribution, aes(L))+
-        geom_histogram(bins = 12, fill = "red", col="red",alpha=.4)+
-        labs(title = 'Histogram for constant force of infection', x='Value', y='Count')
-      
-      plotindex <- plotindex+1
-      plots[[plotindex]]  = gT      
-      
     }
     
     if(name =='independent' | name=='independent_group'){
@@ -165,19 +161,19 @@ plot_posterior<- function(FOIfit) {
       #   params<- rbind(params,de)  
       # }
       # 
-      
-    }
+     }
     
     if(FOIfit$model$seroreversion){
-      distribution<-data.frame(rho = chainsout$rho)
-      gT <- ggplot2::ggplot(distribution, aes(rho)) +
-        geom_histogram(bins = 12, fill = "red", col="red",alpha=.4) +
-        labs(title = 'Histogram for Seroreversion', x='Value', y='Count')
       
+      gT <- plot_histogram(distribution = data.frame(X = chainsout$rho), 
+                           title = 'Histogram for Seroreversion',
+                           xlabel = "Value",
+                           ylabel = 'Count') 
+       
       plotindex <- plotindex+1
       plots[[plotindex]]  = gT      
     }
- 
+    
     d= FOIfit$data$category.position.in.table
     
     if(FOIfit$model$cat_lambda & dim(d)[1]>0){ 
@@ -185,11 +181,17 @@ plot_posterior<- function(FOIfit) {
         
         Title <- paste0('Histogram of FOI of category ', d[i,]$predictor, " relative to " ,  d[i,]$relative_to)
         
-        var=chains$Flambda[,d[i,]$index]
-        distribution<-data.frame(var = var)
-        gT <- ggplot2::ggplot(distribution, aes(var)) +
-          geom_histogram(bins = 16, fill = "red", col="red",alpha=.4) +
-          labs(title = Title, x='value', y='Count')
+        #   var=chains$Flambda[,d[i,]$index]
+        # distribution<-data.frame(X = var)
+        # gT <- ggplot2::ggplot(distribution, aes(X)) +
+        #   geom_histogram(bins = 16, fill = "red", col="red",alpha=.4) +
+        #   labs(title = Title, x='value', y='Count')
+        
+        gT <- plot_histogram(distribution = data.frame(X =chains$Flambda[,d[i,]$index]), 
+                             title = Title,
+                             xlabel = "Value",
+                             ylabel = 'Count') 
+        
         
         plotindex <- plotindex+1
         plots[[plotindex]]  = gT
@@ -199,4 +201,18 @@ plot_posterior<- function(FOIfit) {
   }
   return(plots)
   
+}
+
+plot_histogram <- function(distribution, title, xlabel,  ylabel='Count'){
+  
+  gT <- ggplot(distribution, aes(X)) +
+    geom_histogram(bins = 12, fill = "red", col="red",alpha=.4) +
+    labs(title = title, x=xlabel, y=ylabel)+
+    theme_bw()+
+    theme(axis.text.x = element_text(size=16),
+          axis.text.y = element_text(size=16),
+          text=element_text(size=16))  
+  
+  
+  return(gT)
 }

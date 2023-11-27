@@ -16,7 +16,6 @@ data {
     int <lower=0, upper=1> Y[N]; // Outcome
 
     int<lower = 0, upper=1> seroreversion; 
- 
 
     int <lower=1> categoryindex[N];
 
@@ -64,15 +63,13 @@ data {
 }
 
 
-
 parameters {
     real  T[K];
     real<lower=0> alpha[K];
     real<lower=0> beta[K];
     real<lower = 0, upper = 20> rho;    
-   real  Flambda2[maxNcategory,Ncategoryclass];  
-    real<lower = 0> constant;
- 
+    real  Flambda2[maxNcategory,Ncategoryclass];  
+    real<lower = 0> annual_foi; 
 }
 
 transformed parameters {
@@ -98,7 +95,7 @@ transformed parameters {
      for(j in 1:A){
         lambda[j] =0;
         for(i in 1:K){
-            lambda[j]  =  constant + lambda[j]  + alpha[i]/S[i]*exp(-((j-T[i])^2)/(beta[i])^2);
+            lambda[j]  =  annual_foi + lambda[j]  + alpha[i]/S[i]*exp(-((j-T[i])^2)/(beta[i])^2);
          }
     }
  
@@ -139,23 +136,6 @@ transformed parameters {
     }
 
   
-
-/*
-    if(seroreversion==1){
-        for(J in 1:NAgeGroups){
-            for(i in 1:Ncategory){        
-                for(j in 1:A){
-                    x[j] = 1; 
-                    for(k in 2:j){
-                        L=Flambda[i]*lambda[j-k+2];
-                        x[j-k+2-1] = x[j-k+2]*exp(-(rho+L)) +rho/(L+rho)*(1- exp(-(rho+L)));
-                    }
-                    P1[j,J,i]  = x[age_at_init[J]];
-                }
-            }
-        }
-    }
- */
    if(seroreversion==1){
     for(J in 1:NAgeGroups){
       for(i in 1:Ncategory){    
@@ -208,8 +188,8 @@ model {
         alpha[i] ~ uniform(prioralpha1, prioralpha2);
         beta[i] ~ uniform(priorbeta1, priorbeta2) ; 
     }
-    rho  ~ exp(priorRho);
-    constant ~ uniform(priorC1, priorC2);
+    rho  ~ exponential(priorRho);
+    annual_foi ~ uniform(priorC1, priorC2);
 
     for(I in 1:Ncategoryclass){
         for(i in 1:maxNcategory){      

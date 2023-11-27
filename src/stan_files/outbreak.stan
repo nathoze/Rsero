@@ -22,8 +22,8 @@ data {
     real <lower = 0> prioralpha2;
     real <lower = 0> priorbeta1;
     real <lower = 0> priorbeta2;
-    real priorT1;
-    real <lower = 0> priorT2;
+    real priorT1[K];
+    real <lower = 0> priorT2[K];
     real<lower =0, upper=1> se;
     real<lower =0, upper=1> sp;
     real <lower = 0> priorRho;
@@ -143,7 +143,6 @@ transformed parameters {
 
 
    for(j in 1:N){
-       // Likelihood[j] =1-(1-bg)*P[age[j],age_group[j],categoryindex[j]]; 
            Likelihood[j] =se-(se+sp-1)*P[age[j],age_group[j],categoryindex[j]]; 
      }
 }
@@ -156,7 +155,7 @@ model {
         alpha[i] ~ uniform(prioralpha1, prioralpha2);
         beta[i] ~ uniform(priorbeta1, priorbeta2) ; 
     }
-    rho  ~ exp(priorRho);
+    rho  ~ exponential(priorRho);
 
    for(I in 1:Ncategoryclass){
         for(i in 1:maxNcategory){      

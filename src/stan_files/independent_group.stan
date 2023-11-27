@@ -186,8 +186,7 @@ model {
             Flambda2[i,I] ~ normal(0,1.73) ;
         }
     }
-    rho  ~ exp(priorRho);
-
+    rho ~ exponential(priorRho);
 
     for (j in 1:N) {  
         target += bernoulli_lpmf( Y[j] | Likelihood[j]);

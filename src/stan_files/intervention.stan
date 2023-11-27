@@ -57,7 +57,7 @@ data {
  
 parameters {
     real  T[K];
-    real<lower = 0.00001>  foi[K]; 
+    real<lower = 0.00001>  annual_foi[K]; 
     real<lower = 0, upper = 20> rho;    
    real  Flambda2[maxNcategory,Ncategoryclass]; //14 08
  
@@ -81,7 +81,7 @@ transformed parameters {
 
     if(K==1){
     	for(j in 1:A){
-            lambda[j] = foi[K];
+            lambda[j] = annual_foi[K];
 		}
     } else{ 
         for(i in 2:K){
@@ -90,10 +90,10 @@ transformed parameters {
         for(j in 1:A){
             for(i in 1:K-1){
                 if (j>= Time[i] && j<Time[i+1] ){
-                   lambda[j] = foi[i];
+                   lambda[j] = annual_foi[i];
                 }
                 if(j>=Time[K]){
-                    lambda[j] = foi[K];
+                    lambda[j] = annual_foi[K];
                 }
             }
         }
@@ -134,22 +134,7 @@ transformed parameters {
             }
         } 
     }
-/*
-    if(seroreversion==1){
-        for(J in 1:NAgeGroups){
-            for(i in 1:Ncategory){        
-                for(j in 1:A){
-                    x[j] = 1; 
-                    for(k in 2:j){
-                        L=Flambda[i]*lambda[j-k+2];
-                        x[j-k+2-1] = x[j-k+2]*exp(-(rho+L)) +rho/(L+rho)*(1- exp(-(rho+L)));
-                    }
-                    P1[j,J,i]  = x[age_at_init[J]];
-                }
-            }
-        }
-    }
-*/
+ 
       if(seroreversion==1){
     for(J in 1:NAgeGroups){
       for(i in 1:Ncategory){    
@@ -198,7 +183,7 @@ model {
 
     for (i in 1:K){
         T[i] ~ uniform(priorT1, priorT2);
-        foi[i] ~ uniform(priorC1, priorC2);
+        annual_foi[i] ~ uniform(priorC1, priorC2);
     }
  
     for(I in 1:Ncategoryclass){
@@ -207,7 +192,7 @@ model {
         }
     }
     
-    rho  ~ uniform(priorRho);
+    rho  ~ exponential(priorRho);
 
     for(j in 1:N){
         target += bernoulli_lpmf( Y[j] | Likelihood[j]);

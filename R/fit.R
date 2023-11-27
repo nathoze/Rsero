@@ -139,31 +139,33 @@ fit <- function(model,
   if(model$cat_lambda){
     model$estimated_parameters <- model$estimated_parameters+data$Ncat.unique-1
   }
-  F <- rstan::sampling(stanmodels[[mdls]],
-                       data= newdata,
-                       iter = iter,
-                       chains = chains,
-                       warmup = warmup, 
-                       thin = thin,
-                       seed = seed,
-                       init = init,
-                       check_data = check_data,
-                       sample_file = sample_file,
-                       diagnostic_file = diagnostic_file,
-                       verbose = verbose,
-                       algorithm = algorithm,
-                       control = control,
-                       include = include,
-                       cores = cores,
-                       open_progress = open_progress,
-                       show_messages = show_messages)
-   
-  out <-list(fit = F, data = data, model = model)
+  print(mdls)
+  print(stanmodels[[mdls]])
+  fit.stan <- rstan::sampling(stanmodels[[mdls]],
+                              data= newdata,
+                              iter = iter,
+                              chains = chains,
+                              warmup = warmup, 
+                              thin = thin,
+                              seed = seed,
+                              init = init,
+                              check_data = check_data,
+                              sample_file = sample_file,
+                              diagnostic_file = diagnostic_file,
+                              verbose = verbose,
+                              algorithm = algorithm,
+                              control = control,
+                              include = include,
+                              cores = cores,
+                              open_progress = open_progress,
+                              show_messages = show_messages)
+  
+  out <-list(fit = fit.stan, data = data, model = model)
   class(out) <- "FOIfit"
   return(out)
   
 }
- 
+
 ##' @rdname fit
 #' @export
 print.FOIfit <- function(x,...){
@@ -180,7 +182,7 @@ summary.FOIfit <- function(x,...){
   summary(x$data)
   summary(x$model)
 }
- 
+
 #' @export
 proba_from_foi <- function(lambda){
   return(1-exp(-lambda))

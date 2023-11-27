@@ -30,7 +30,7 @@
 ##' 
 ##' @param prioralpha1 First parameter of the uniform prior distribution  of the parameter alpha, used as the intensity of the force of infection in the outbreak and intervention models. Default = 0.
 ##' 
-##' @param prioralpha2 Second parameter of the uniform prior distribution  of the parameter alpha, used as the http://127.0.0.1:20989/graphics/9635c79a-3005-45d1-b706-499f4c2d147c.pngintensity of the force of infection in the outbreak and intervention models.  Default = 5.
+##' @param prioralpha2 Second parameter of the uniform prior distribution  of the parameter alpha, used as the intensity of the force of infection in the outbreak and intervention models.  Default = 5.
 ##' 
 ##' @param priorbeta1  First parameter of the uniform prior distribution  of the parameter beta, used as the spread of the force of infection in the outbreak and intervention models. Default = 0.
 ##' 
@@ -72,13 +72,11 @@
 ##'
 ##' @examples
 ##' 
-##' ## A gaussian model, with one gaussian, and background infection
-##' model <- FOImodel(type='outbreak', background = 1, K = 1)
 ##' 
-##' ## A gaussian model, with two gaussians, background infection, and user-defined hyperparameters
-##' model <- FOImodel('outbreak', background=1, K = 2, prioralpha1 = 0, prioralpha2 = 1)
+##' ## A gaussian model, with two gaussians, and user-defined priors
+##' model <- FOImodel('outbreak',K = 2, prioralpha1 = 0, prioralpha2 = 1)
 ##'
-##' ## An intervention model, consisting in two constant phases, with seroreversion and user-defined hyperparameters
+##' ## An intervention model, consisting in two constant phases, with seroreversion and user-defined priors
 ##' model <- FOImodel('intervention', K=2, seroreversion=1, priorRho1=0.1)
 ##'
 ##' 
@@ -110,7 +108,6 @@ FOImodel <- function(type = 'constant',
   if (!(type %in% model.list('All models'))){
     print("Model is not defined.")
   }
-  
   
   if(seroreversion){
     estimated_parameters <- estimated_parameters +1
@@ -149,12 +146,12 @@ FOImodel <- function(type = 'constant',
   if(type %in% model.list('K models') & is.null(K) ){
     print("K not defined.")
   } 
-# 
-#   if(!is.null(fixed_parameters$rho)){
-#     priorRho1 = 0.99*(-log(fixed_parameters$rho)) 
-#     priorRho2 = 1.01*(-log(fixed_parameters$rho))
-#   }
-#   
+  # 
+  #   if(!is.null(fixed_parameters$rho)){
+  #     priorRho1 = 0.99*(-log(fixed_parameters$rho)) 
+  #     priorRho2 = 1.01*(-log(fixed_parameters$rho))
+  #   }
+  #   
   if(!is.null(fixed_parameters$foi)){
     priorC1 = 0.99*(-log(fixed_parameters$foi)) 
     priorC2 = 1.01*(-log(fixed_parameters$foi)) 
@@ -174,8 +171,6 @@ FOImodel <- function(type = 'constant',
     priorbeta1 = 0.99*fixed_parameters$beta
     priorbeta2 = min(1,1.01*fixed_parameters$beta)
   }
-  
-
   
   priors <- list(prioralpha1 = prioralpha1,
                  prioralpha2 = prioralpha2,
@@ -224,7 +219,6 @@ print.FOImodel <- function(x, ...){
     else{
       cat('\t Estimated parameters: ',x$estimated_parameters ,'\n')
     }
-    
     if(x$cat_lambda){
       cat('Model with categories for the force of infection \n')
     }
@@ -239,30 +233,27 @@ print.FOImodel <- function(x, ...){
     }
     cat('Priors: \n')
     if(x$type %in% model.list('Outbreak models')){
-      cat('\t alpha1: ',x$priors$prioralpha1 ,'\n')
-      cat('\t alpha2: ',x$priors$prioralpha2 ,'\n')
-      cat('\t beta1: ',x$priors$priorbeta1 ,'\n')
-      cat('\t beta2: ',x$priors$priorbeta2 ,'\n')
-      cat('\t T1: ',x$priors$priorT1 ,'\n')
-      cat('\t T2: ',x$priors$priorT2 ,'\n')
+      cat('\t alpha: Uniform(',x$priors$prioralpha1, ', ', x$priors$prioralpha2 ,')\n')
+      cat('\t beta: Uniform(',x$priors$priorbeta1, ', ', x$priors$priorbeta2 ,')\n')
+      cat('\t T: Uniform(',x$priors$priorT1, ', ', x$priors$priorT2 ,')\n')
     }
-     
-    if(x$type=='constant'){
-      cat('\t C1: ',x$priors$priorC1 ,'\n')
-      cat('\t C2: ',x$priors$priorC2 ,'\n')
+    
+    if(x$type%in% model.list('Constant models')){
+      cat('\t Annual FOI: Uniform(',x$priors$priorC1, ', ', x$priors$priorC2 ,')\n')
     }
     
     if(x$type=='independent' | x$type=='independent_group'){
-      cat('\t Y1: ',x$priors$priorY1 ,'\n')
-      cat('\t Y2: ',x$priors$priorY2 ,'\n')
+      cat('\t Y: Uniform(',x$priors$priorY1, ', ', x$priors$priorY2 ,')\n')
+      
     }
     if(x$type=='intervention'){
-      cat('\t T1: ',x$priors$priorT1 ,'\n')
-      cat('\t T2: ',x$priors$priorT2 ,'\n')
+      cat('\t T: Uniform(',x$priors$priorT1, ', ', x$priors$priorT2 ,')\n')
+      cat('\t Annual FOI: Uniform(',x$priors$priorC1, ', ', x$priors$priorC2 ,')\n')
     }
- 
+    
     if(x$seroreversion){
-      cat('\t Seroreversion: ', x$priors$priorRho, '\n')
+      #   cat('\t Seroreversion: ', x$priors$priorRho, '\n')
+      cat('\t rho: Exponential(',x$priors$priorRho,')\n')
     }
     
   }else{
@@ -296,7 +287,7 @@ model.list <-function(whichmodels){
   if (whichmodels == 'All models'){
     out <-  c('outbreak','independent','constant','intervention', 'constantoutbreak','independent_group')
   } 
-
+  
   if (whichmodels == 'Outbreak models'){
     out <-  c('outbreak', 'constantoutbreak')
   } 

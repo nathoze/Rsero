@@ -181,7 +181,7 @@ model {
             Flambda2[i,I] ~ normal(0,1.73) ;
         }
     }
-    rho  ~ uniform(priorRho);
+    rho  ~ exponential(priorRho);
 
 
     for (j in 1:N) {  
