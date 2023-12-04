@@ -18,10 +18,10 @@ data {
     int <lower=1> age_group[N] ;   
     int <lower=1> age_at_init[NAgeGroups]; 
     int <lower=1> K; // the number of peaks of epidemics
-    real <lower = 0> prioralpha1;
-    real <lower = 0> prioralpha2;
-    real <lower = 0> priorbeta1;
-    real <lower = 0> priorbeta2;
+    real <lower = 0> prioralpha1[K];
+    real <lower = 0> prioralpha2[K];
+    real <lower = 0> priorbeta1[K];
+    real <lower = 0> priorbeta2[K];
     real priorT1[K];
     real <lower = 0> priorT2[K];
     real<lower =0, upper=1> se;
@@ -151,9 +151,9 @@ model {
 
   //FOI by group
     for (i in 1:K){
-        T[i] ~ uniform(priorT1, priorT2);
-        alpha[i] ~ uniform(prioralpha1, prioralpha2);
-        beta[i] ~ uniform(priorbeta1, priorbeta2) ; 
+        T[i] ~ uniform(priorT1[i], priorT2[i]);
+        alpha[i] ~ uniform(prioralpha1[i], prioralpha2[i]);
+        beta[i] ~ uniform(priorbeta1[i], priorbeta2[i]) ; 
     }
     rho  ~ exponential(priorRho);
 

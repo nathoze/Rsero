@@ -1,61 +1,118 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <meta name="author" content="Nathanael Hoze" />
 
-<meta name="date" content="2019-10-25" />
+<meta name="date" content="2023-11-28" />
 
 <title>Using the models defined in the Rsero package</title>
 
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
 
 
-<style type="text/css">code{white-space: pre;}</style>
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
 <style type="text/css" data-origin="pandoc">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
 </style>
 <script>
 // apply pandoc div.sourceCode style to pre.sourceCode instead
@@ -64,13 +121,20 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -81,7 +145,188 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
 
 
 
@@ -93,137 +338,198 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<h1 class="title toc-ignore">Using the models defined in the Rsero package</h1>
+<h1 class="title toc-ignore">Using the models defined in the Rsero
+package</h1>
 <h4 class="author">Nathanael Hoze</h4>
-<h4 class="date">2019-10-25</h4>
+<h4 class="date">2023-11-28</h4>
 
 
 
-<p>This vignette presents the different models used in the <em>Rsero</em> package, their implementation, and the different uses of these models to fit the data. Models of the force of infection are used to explain the change of the profile of seropositivity with age, using as the main model assumption that an increase in seroprevalence is the result of the cumulated exposure to a pathogen during a lifetime. We included in this package various models of the force of infection, but also other factors affecting the serology such as cross-reactivity, travelling, waning-immunity (seroreversion) and differential risks of exposure.</p>
+<p>This vignette presents the different models used in the
+<em>Rsero</em> package, their implementation, and the different uses of
+these models to fit the data. Models of the force of infection are used
+to explain the change of the profile of seropositivity with age, using
+as the main model assumption that an increase in seroprevalence is the
+result of the cumulated exposure to a pathogen during a lifetime. We
+included in this package various models of the force of infection, but
+also other factors affecting the serology such as imperfect sensitivity
+and specificity, waning-immunity (seroreversion) and differential risks
+of exposure.</p>
 <div id="the-data" class="section level2">
 <h2>The data</h2>
 <p>We first load the package</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(Rsero)</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(Rsero)</span></code></pre></div>
 <p>The data must be in the following format</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data &lt;-<span class="st"> </span><span class="kw">simulate_SeroData</span>(<span class="dt">number_samples =</span> <span class="dv">5</span>)
-<span class="kw">print</span>(data)</code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">simulate_SeroData</span>(<span class="at">number_samples =</span> <span class="dv">5</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">print</span>(data)</span></code></pre></div>
 <pre><code>## &lt;SeroData object&gt;
 ## 5 serological samples  
 ## Max age: 70  
 ##   age age_at_sampling     Y sampling_year location sex   category
-## 1  30              30 FALSE          2019       NA All Category 1
-## 2  51              51  TRUE          2019       NA All Category 1
-## 3   8               8 FALSE          2019       NA All Category 1
-## 4  57              57 FALSE          2019       NA All Category 1
-## 5   3               3 FALSE          2019       NA All Category 1</code></pre>
+## 1  58              58  TRUE          2019       NA All Category 1
+## 2  12              12 FALSE          2019       NA All Category 1
+## 3  58              58 FALSE          2019       NA All Category 1
+## 4  55              55  TRUE          2019       NA All Category 1
+## 5  60              60 FALSE          2019       NA All Category 1</code></pre>
 </div>
 <div id="models-of-the-force-of-infection" class="section level2">
 <h2>Models of the force of infection</h2>
 <div id="the-basic-models" class="section level3">
 <h3>The basic models</h3>
-<p>We considered five models that define the force of infection at a given year:</p>
+<p>We considered five models that define the force of infection at a
+given year:</p>
 <ul>
-<li>Annual hazard of infection. This model corresponds to independent, yearly values of the force of infection.</li>
-<li>Outbreak model. The force of infection is defined as a sum of gaussians.</li>
+<li>Annual hazard of infection. This model corresponds to independent,
+yearly values of the force of infection.</li>
+<li>Outbreak model. The force of infection is defined as a sum of
+gaussians.</li>
 <li>Intervention model.</li>
 <li>Constant force of infection.</li>
 <li>Combination of constant and outbreak</li>
 </ul>
-<p>In the constant model a single parameter of the force of infection is evaluated.</p>
-<p>The intervention models consider successive constant phases. They take as an input the number of different constant phase <span class="math inline">\(K\)</span>, where <span class="math inline">\(K \geq 1\)</span>. The value <span class="math inline">\(K=1\)</span> corresponds to the constant model.</p>
-<p>In the case of the outbreak model, the force of infection at year <span class="math inline">\(i\)</span> is given as a sum of <span class="math inline">\(K\)</span> gaussians: <span class="math display">\[\lambda_i  = \sum_{j=1}^K\bar{\alpha}_{j} e^{-\frac{(i-T_j)^2}{\beta_j^2}}.\]</span> The <span class="math inline">\(T_j\)</span> are the time points where the force of infection is maximal and is equal to <span class="math inline">\(\bar{\alpha}_j\)</span>. The parameter <span class="math inline">\(\bar{\alpha}_j\)</span> is normalized so that <span class="math inline">\(\alpha_j=\bar{\alpha}_j \sum_i e^{-\frac{(i-T_j)^2}{\beta_j^2}}\)</span>. The width of the gaussians is quantified with the parameters <span class="math inline">\(\beta_j\)</span>. The width of the gaussian is actually a parameter that can quantify two things: the duration of the epidemics, or the uncertainty for the location of the peak of the epidemics. In the case where the <span class="math inline">\(T_j\)</span> are far apart, the gaussians are well separated and around <span class="math inline">\(T_j\)</span> the force of infection is given by a single gaussian.</p>
+<p>In the constant model a single parameter of the force of infection is
+evaluated.</p>
+<p>The intervention models consider successive constant phases. They
+take as an input the number of different constant phase <span class="math inline">\(K\)</span>, where <span class="math inline">\(K
+\geq 1\)</span>. The value <span class="math inline">\(K=1\)</span>
+corresponds to the constant model.</p>
+<p>In the case of the outbreak model, the force of infection at year
+<span class="math inline">\(i\)</span> is given as a sum of <span class="math inline">\(K\)</span> gaussians: <span class="math display">\[\lambda_i  = \sum_{j=1}^K\bar{\alpha}_{j}
+e^{-\frac{(i-T_j)^2}{\beta_j^2}}.\]</span> The <span class="math inline">\(T_j\)</span> are the time points where the force
+of infection is maximal and is equal to <span class="math inline">\(\bar{\alpha}_j\)</span>. The parameter <span class="math inline">\(\bar{\alpha}_j\)</span> is normalized so that
+<span class="math inline">\(\alpha_j=\bar{\alpha}_j \sum_i
+e^{-\frac{(i-T_j)^2}{\beta_j^2}}\)</span>. The width of the gaussians is
+quantified with the parameters <span class="math inline">\(\beta_j\)</span>. The width of the gaussian is
+actually a parameter that can quantify two things: the duration of the
+epidemics, or the uncertainty for the location of the peak of the
+epidemics. In the case where the <span class="math inline">\(T_j\)</span> are far apart, the gaussians are well
+separated and around <span class="math inline">\(T_j\)</span> the force
+of infection is given by a single gaussian.</p>
 </div>
 <div id="using-the-models" class="section level3">
 <h3>Using the models</h3>
 <p>The different models are defined using the following commands</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model &lt;-<span class="st"> </span><span class="kw">FOImodel</span>(<span class="dt">type =</span> <span class="st">&quot;constant&quot;</span>) <span class="co"># a constant model</span>
-model &lt;-<span class="st"> </span><span class="kw">FOImodel</span>(<span class="dt">type =</span> <span class="st">&quot;independent&quot;</span>) <span class="co"># independent annual force of infection</span>
-model &lt;-<span class="st"> </span><span class="kw">FOImodel</span>(<span class="dt">type =</span> <span class="st">&quot;intervention&quot;</span>, <span class="dt">K =</span> <span class="dv">2</span>) <span class="co"># intervention model: two constant phase </span>
-model &lt;-<span class="st"> </span><span class="kw">FOImodel</span>(<span class="dt">type =</span> <span class="st">&quot;outbreak&quot;</span>, <span class="dt">K =</span> <span class="dv">1</span>) <span class="co"># one outbreak</span>
-model &lt;-<span class="st"> </span><span class="kw">FOImodel</span>(<span class="dt">type =</span> <span class="st">&quot;constantoutbreak&quot;</span>, <span class="dt">K =</span> <span class="dv">2</span>) <span class="co"># two outbreaks and a constant annual force of infection</span>
-<span class="kw">print</span>(model)</code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">FOImodel</span>(<span class="at">type =</span> <span class="st">&quot;constant&quot;</span>) <span class="co"># a constant model</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">FOImodel</span>(<span class="at">type =</span> <span class="st">&quot;independent&quot;</span>) <span class="co"># independent annual force of infection</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">FOImodel</span>(<span class="at">type =</span> <span class="st">&quot;intervention&quot;</span>, <span class="at">K =</span> <span class="dv">2</span>) <span class="co"># intervention model: two constant phase </span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">FOImodel</span>(<span class="at">type =</span> <span class="st">&quot;outbreak&quot;</span>, <span class="at">K =</span> <span class="dv">1</span>) <span class="co"># one outbreak</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">FOImodel</span>(<span class="at">type =</span> <span class="st">&quot;constantoutbreak&quot;</span>, <span class="at">K =</span> <span class="dv">2</span>) <span class="co"># two outbreaks and a constant annual force of infection</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="fu">print</span>(model)</span></code></pre></div>
 <pre><code>## &lt;FOImodel object&gt;
 ## Model name:  constantoutbreak 
 ##   Estimated parameters:  7 
 ## Model with categories for the force of infection 
 ## Parameters: 
 ## Priors: 
-##   alpha1:  0 
-##   alpha2:  5 
-##   beta1:  0 
-##   beta2:  5 
-##   T1:  0 
-##   T2:  70</code></pre>
+##   alpha: Uniform( 0 ,  5 )
+##   beta: Uniform( 0 ,  1 )
+##   T: Uniform( 0 ,  100 )
+##   alpha: Uniform( 0 ,  5 )
+##   beta: Uniform( 0 ,  1 )
+##   T: Uniform( 0 ,  100 )
+##   Annual FOI: Uniform( 0 ,  10 )</code></pre>
+<p>Printing recapitulates the main information concerning the model. For
+instance, in the <code>&quot;constantoutbreak&quot;</code> model with
+<code>K=2</code>, a total of 7 parameters are estimated (1 for the
+constant annual force of infection and 3 for each outbreak). The prior
+distribution for the <code>alpha</code>, <code>beta</code> and
+<code>T</code> of each outbreak and for the annual FOI are also printed.
+Without additional input the defaults priors are used.</p>
 </div>
 </div>
 <div id="secondary-parameters-affecting-the-seroprevalence" class="section level2">
 <h2>Secondary parameters affecting the seroprevalence</h2>
 <div id="seroreversion" class="section level3">
 <h3>Seroreversion</h3>
-<p>In a first extension, we consider the possibility of seroreversion. An individual that was once infected is classified as seronegative at the time of survey. The method estimates a rate of seroreversion which can be seen as the inverse of the time of decline of seropositivity. We write such models by adding <code>seroreversion = 1</code> to the <code>FOIModel</code>definition. By default <code>seroreversion = 0</code>.</p>
+<p>Seroreversion is modeled as a rate of switching from a seropositive
+state to a seronegative state. In the <em>Rsero</em> package we
+implemented a combination of seroreversion with any epidemiological
+model.</p>
+<p>We note <span class="math inline">\(X_a(t)\)</span> the probability
+that an individual born a years before the survey was seropositive <span class="math inline">\(t\)</span> years before the survey. Starting at
+birth, where <span class="math inline">\(X_a(a) = 0\)</span> (i.e. we
+assume all individuals are born seronegative), and considering <span class="math inline">\(\lambda_y\)</span> the FOI on year <span class="math inline">\(y\)</span> and the seroreversion rate <span class="math inline">\(\rho\)</span>, the difference equation is <span class="math display">\[
+X_a(y-1) =X_a(y) e^{-(\lambda_y+\rho)}
++\frac{\lambda_y}{\lambda_y+\rho}(1-e^{-(\lambda_y+\rho)}).
+\]</span> The probability that the individual is seropositive in the
+survey is <span class="math inline">\(P=X_a(0)\)</span>. A parameter
+<code>seroreversion = 0</code> or <code>seroreversion = 1</code> can be
+defined in the <code>FOIModel</code>. By default
+<code>seroreversion = 0</code>.</p>
 </div>
-<div id="background-infection" class="section level3">
-<h3>Background infection</h3>
-<p>In a second extension, we consider the possibility that individuals are found seropositive although the pathogen did not circulate. This can happen when a circulating pathogen shows antigenic similarities with the pathogen of interest, and triggers a similar antibody response. Other possibilities are: non perfect specificity of the assay, travelling to regions of circulation… To call such background infection the parameter <code>background=1</code> must be added to the model definition. By default <code>background = 0</code>.</p>
+<div id="imperfect-sensitivity-and-specificity" class="section level3">
+<h3>Imperfect sensitivity and specificity</h3>
+<p>The models can account for uncertainty in the seroprevalence
+estimates resulting from imperfect sensitivity and specificity of the
+assays. We note <span class="math inline">\(se\)</span> and <span class="math inline">\(sp\)</span> the sensitivity and specificity of the
+assay, respectively. In the scenario of perfect sensitivity and
+specificity (<span class="math inline">\(se=sp=1\)</span>) the
+seroprevalence is the same as the proportion of the population infected
+by the pathogen. In the general case, if we denote this proportion <span class="math inline">\(Inf\)</span>, the probability for an individual to
+be observed as seropositive is <span class="math display">\[
+P=1-sp+Inf(se+sp-1) \]</span></p>
+<p>In the implementation of the package, the user can give specific
+values to the sensitivity and specificity for any transmission models
+and with or without seroreversion. These parameters are fixed and must
+be specified by the user along with the model of the force of infection.
+For example, if the sensitivity is 98% and the specificity 92%, the user
+provides these number along with the FOI model.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">FOImodel</span>(<span class="at">type =</span> <span class="st">&quot;outbreak&quot;</span>, <span class="at">K =</span> <span class="dv">1</span>, <span class="at">se =</span> <span class="fl">0.98</span>, <span class="at">sp =</span> <span class="fl">0.92</span>) <span class="co"># one outbreak</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">print</span>(model)</span></code></pre></div>
+<pre><code>## &lt;FOImodel object&gt;
+## Model name:  outbreak 
+##   Estimated parameters:  3 
+## Model with categories for the force of infection 
+## Parameters: 
+##   K:  1 
+##   Sensitivity:  0.98 
+##   Specificity:  0.92 
+## Priors: 
+##   alpha: Uniform( 0 ,  5 )
+##   beta: Uniform( 0 ,  1 )
+##   T: Uniform( 0 ,  100 )</code></pre>
+<p>By default <code>se = 1</code> and <code>sp = 1</code>, and the
+parameters se and sp must verify that <span class="math inline">\(se+sp-1\)</span>.</p>
 </div>
 </div>
 <div id="likelihood-from-the-annual-force-of-infection" class="section level2">
 <h2>Likelihood from the annual force of infection</h2>
-<p>The probability that an individual of age <span class="math inline">\(a_j\)</span> is infected depends on the history of the force of infection during his/her lifetime. It is therefore a function of the cumulative force of infection <span class="math inline">\(\lambda_S + \lambda_{S-1}+\dots+ \lambda_{S-a_j}\)</span>, where <span class="math inline">\(S\)</span> is the sampling year. More specifically, the contribution to the likelihood of a seropositive individual is <span class="math display">\[P_j = 1 - \exp\bigg(-\sum_{i = 0}^{a_j} \lambda_{S-i}\bigg).\]</span></p>
-<p>The contribution to the likelihood of a seronegative individual is <span class="math display">\[P_j =  \exp\bigg(-\sum_{i = 0}^{a_j} \lambda_{S-i} \bigg).\]</span></p>
-<div id="background-infection-1" class="section level3">
-<h3>Background infection</h3>
-<p>Background infection does not modify the formulas for the force of infection, but it changes the likelihood. With <span class="math inline">\(p_B\)</span> the probability of background infection, the contribution to the likelihood of a seropositive individual is <span class="math display">\[P_j = 1 - (1-p_B)\exp\bigg(-\sum_{i = 0}^{a_j} \lambda_{S-i}\bigg).\]</span></p>
-<p>The contribution to the likelihood of a seronegative individual is <span class="math display">\[P_j =  (1-p_B)\exp\bigg(-\sum_{i = 0}^{a_j}\lambda_{S-i} \bigg).\]</span></p>
+<p>The probability that an individual of age <span class="math inline">\(a_j\)</span> is infected depends on the history of
+the force of infection during his/her lifetime. It is therefore a
+function of the cumulative force of infection <span class="math inline">\(\lambda_S + \lambda_{S-1}+\dots+
+\lambda_{S-a_j}\)</span>, where <span class="math inline">\(S\)</span>
+is the sampling year. More specifically, the contribution to the
+likelihood of a seropositive individual is <span class="math display">\[P_j = 1 - \exp\bigg(-\sum_{i = 0}^{a_j}
+\lambda_{S-i}\bigg).\]</span></p>
+<p>The contribution to the likelihood of a seronegative individual is
+<span class="math display">\[P_j =  \exp\bigg(-\sum_{i = 0}^{a_j}
+\lambda_{S-i} \bigg).\]</span></p>
 </div>
-<div id="seroreversion-1" class="section level3">
-<h3>Seroreversion</h3>
-<p>We consider a generalization of the previous models. The probability for a 1 year old individual to be seronegative depends on the force of infection at the first year <span class="math inline">\(\lambda_1\)</span> and the rate of seroreversion <span class="math inline">\(\rho\)</span> <span class="math display">\[  X_{1} = e^{-(\lambda_1+\rho)} +  \frac{\rho}{\lambda_1+\rho}\bigg(1-e^{-(\lambda_1+\rho)} \bigg).
-\]</span> This probability comprises the possibility that this individual did not get infected, or got infected and seroreverted, and is thus classified as seronegative. By recursion, we obtain the probability that an individual of age <span class="math inline">\(i+1\)</span> is seronegative <span class="math display">\[
-  X_{i+1} =X_i e^{-(\lambda_i+\rho)} +  \frac{\rho}{\lambda_i+\rho}\bigg(1-e^{-(\lambda_i+\rho)} \bigg).
-\]</span> In the full model with seroreversion and cross-reactivity, the contribution to the likelihood of a seropositive individual of age <span class="math inline">\(a_j\)</span> is <span class="math display">\[P_j = 1 - (1-p_B)X_{a_j}.\]</span> The contribution to the likelihood of a seronegative individual is <span class="math display">\[P_j =  (1-p_B)X_{a_j}.\]</span></p>
-</div>
-</div>
-<div id="defining-a-model-with-the-package-rsero" class="section level2">
-<h2>Defining a model with the package <em>Rsero</em></h2>
-<p>In this section, we describe the definition of models and give examples. The package <em>Rsero</em> allows defining a variety of predefined models. To create a model, it is required to call the constructor <code>FOImodel</code>, and to give as inputs the type of model, and if needed, additional parameters and parameters of the prior distributions.</p>
-<p>As an example, let’s define a model with a peak force of infection and seroreversion:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(Rsero)
-model &lt;-<span class="st"> </span><span class="kw">FOImodel</span>(<span class="dt">type =</span> <span class="st">&quot;outbreak&quot;</span>, <span class="dt">K=</span><span class="dv">1</span>, <span class="dt">seroreversion =</span> <span class="dv">1</span>)
-<span class="kw">print</span>(model)</code></pre></div>
-<pre><code>## &lt;FOImodel object&gt;
-## Model name:  outbreak 
-##   Estimated parameters:  4 
-## Model with categories for the force of infection 
-## Parameters: 
-##   K:  1 
-## Priors: 
-##   alpha1:  0 
-##   alpha2:  5 
-##   beta1:  0 
-##   beta2:  5 
-##   T1:  0 
-##   T2:  70 
-##   Seroreversion 1:  0 
-##   Seroreversion 2:  10</code></pre>
-</div>
-<div id="defining-categories-in-the-model" class="section level2">
-<h2>Defining categories in the model</h2>
-<p>Models can be defined to include different risks of infection by category. Categories are defined in the data. Let’s look at an example dataset provided with the package of a serological survey of CHIKV in Vietnam. This survey was described in Quan et al., 2018 (<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5823466/" class="uri">https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5823466/</a>) and includes 546 individuals sampled in 4 different areas of the country.<br />
+<div id="setting-categories-in-the-serological-data" class="section level2">
+<h2>Setting categories in the serological data</h2>
+<p>Models can be defined to include different risks of infection by
+category. Categories are defined in the data. Let’s look at an example
+dataset provided with the package of a serological survey of CHIKV in
+Vietnam. This survey was described in Quan et al., 2018 (<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5823466/" class="uri">https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5823466/</a>)
+and includes 546 individuals sampled in 4 different areas of the
+country.<br />
 First, we load the dataset:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sero.dta =<span class="st">  </span><span class="kw">read.csv</span>(<span class="st">'../data-raw/CHIKVVietnam.csv'</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">sep=</span><span class="st">';'</span>)
-
-chikv_vietnam =<span class="st"> </span>Rsero::<span class="kw">SeroData</span>(<span class="dt">age_at_sampling =</span> <span class="kw">round</span>(<span class="kw">as.numeric</span>(sero.dta$age)), 
-               <span class="dt">Y =</span> <span class="kw">as.numeric</span>(sero.dta$Y)&gt;<span class="dv">9</span>,
-               <span class="dt">sampling_year =</span> <span class="kw">as.numeric</span>(sero.dta$sampling_year), 
-               <span class="dt">category =</span> <span class="kw">as.character</span>(sero.dta$Loc),
-               <span class="dt">location =</span> <span class="kw">as.character</span>(sero.dta$Loc))</code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>sero.data <span class="ot">=</span>  <span class="fu">read.csv</span>(<span class="st">&#39;../data-raw/CHIKVVietnam.csv&#39;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep=</span><span class="st">&#39;;&#39;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>chikv_vietnam <span class="ot">=</span> Rsero<span class="sc">::</span><span class="fu">SeroData</span>(<span class="at">age_at_sampling =</span> <span class="fu">round</span>(<span class="fu">as.numeric</span>(sero.data<span class="sc">$</span>age)), </span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>                                <span class="at">Y =</span> <span class="fu">as.numeric</span>(sero.data<span class="sc">$</span>Y)<span class="sc">&gt;</span><span class="dv">9</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>                                <span class="at">sampling_year =</span> <span class="fu">as.numeric</span>(sero.data<span class="sc">$</span>sampling_year), </span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>                                <span class="at">category =</span> <span class="fu">as.character</span>(sero.data<span class="sc">$</span>Loc),</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>                                <span class="at">location =</span> <span class="fu">as.character</span>(sero.data<span class="sc">$</span>Loc))</span></code></pre></div>
 <p>We could have loaded the dataset directly too</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"> <span class="kw">data</span>(<span class="st">&quot;chikv_vietnam&quot;</span>)</code></pre></div>
-<p>We defined categories corresponding to the different regions. This can be seen in the column <em>category</em> of the dataset <em>chikv_vietnam</em> that associates to each individual one of the four region:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(chikv_vietnam$unique.categories) <span class="co"># the different categories</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;chikv_vietnam&quot;</span>)</span></code></pre></div>
+<p>We defined categories corresponding to the different regions. This
+can be seen in the column <em>category</em> of the dataset
+<em>chikv_vietnam</em> that associates to each individual one of the
+four region:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">print</span>(chikv_vietnam<span class="sc">$</span>unique.categories) <span class="co"># the different categories</span></span></code></pre></div>
 <pre><code>## [1] &quot;An Giang&quot;    &quot;Ho Chi Minh&quot; &quot;Dak Lak&quot;     &quot;Hue&quot;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(<span class="kw">head</span>(chikv_vietnam$category))</code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">head</span>(chikv_vietnam<span class="sc">$</span>category))</span></code></pre></div>
 <pre><code>##      [,1]      
 ## [1,] &quot;An Giang&quot;
 ## [2,] &quot;An Giang&quot;
@@ -231,104 +537,122 @@ chikv_vietnam =<span class="st"> </span>Rsero::<span class="kw">SeroData</span>(
 ## [4,] &quot;An Giang&quot;
 ## [5,] &quot;An Giang&quot;
 ## [6,] &quot;An Giang&quot;</code></pre>
-<p>We define a model of the annual force of infection that accounts for different risks of infection in each region.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">modelI2Full  =<span class="kw">FOImodel</span>(<span class="dt">type=</span><span class="st">'intervention'</span>,
-                       <span class="dt">K=</span><span class="dv">2</span>,
-                       <span class="dt">background =</span> <span class="dv">1</span>,
-                       <span class="dt">cat_lambda =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<p>We defined an <em>intervention</em> model, to describe that we expect a drop of the force of infection at a certain point in time. The parameter <em>cat_lambda = TRUE</em> is used to set different relative values of the force of infection while keeping equal the timing of the drop in infection probability. Therefore, the fit is done simultaneously on the four regions.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">FOIfit.vietnam =<span class="st"> </span><span class="kw">fit</span>(<span class="dt">model =</span> modelI2full, <span class="dt">data=</span>chikv_vietnam)</code></pre></div>
+<p>We define a model of the annual force of infection that accounts for
+different risks of infection in each region.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>modelI2Full  <span class="ot">=</span><span class="fu">FOImodel</span>(<span class="at">type=</span><span class="st">&#39;intervention&#39;</span>,</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>                       <span class="at">K=</span><span class="dv">2</span>,</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>                       <span class="at">cat_lambda =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p>We defined an <em>intervention</em> model, to describe that we expect
+a drop of the force of infection at a certain point in time. The
+parameter <em>cat_lambda = TRUE</em> is used to set different relative
+values of the force of infection while keeping equal the timing of the
+drop in infection probability. Therefore, the fit is done simultaneously
+on the four regions.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>FOIfit.vietnam <span class="ot">=</span> <span class="fu">fit</span>(<span class="at">model =</span> modelI2full, <span class="at">data=</span>chikv_vietnam)</span></code></pre></div>
 </div>
 <div id="model-comparison" class="section level2">
 <h2>Model comparison</h2>
-<p>We implemented three different measures of model adequacy: The deviance information criterion (DIC), the Akaike information criterion (AIC), the Watanabe-Akaike information criterion (WAIC). for a detailed explanation of all three measures, see Gelman A, Hwang J, Vehtari A. Understanding predictive information criteria for Bayesian models. Statistics and computing. 2014 Nov 1;24(6):997-1016.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">compute_information_criteria</span>(FOIfit.vietnam)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">modelOutbreakBg =<span class="kw">FOImodel</span>(<span class="dt">type=</span><span class="st">'outbreak'</span>,
-                       <span class="dt">K=</span><span class="dv">1</span>,
-                       <span class="dt">background =</span> <span class="dv">1</span>)
-FOIfit.vietnam2 =<span class="st"> </span><span class="kw">fit</span>(<span class="dt">model =</span> modelOutbreakBg, <span class="dt">data=</span>chikv_vietnam)
-<span class="kw">compute_information_criteria</span>(FOIfit.vietnam2)</code></pre></div>
-<p>The DIC of the intervention model is lower than the DIC of the outbreak model. This indicates that the former is a more adequate description of the data. In general, DIC differences of more than 5 points with the lowest DIC indicate weak support for a model.</p>
+<p>Different measures of model adequacy were implemented: The deviance
+information criterion (DIC), the Akaike information criterion (AIC), the
+Watanabe-Akaike information criterion (WAIC). for a detailed explanation
+of all three measures, see Gelman A, Hwang J, Vehtari A. Understanding
+predictive information criteria for Bayesian models. Statistics and
+computing. 2014 Nov 1;24(6):997-1016.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">compute_information_criteria</span>(FOIfit.vietnam)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>modelOutbreak <span class="ot">=</span><span class="fu">FOImodel</span>(<span class="at">type=</span><span class="st">&#39;outbreak&#39;</span>,</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>                          <span class="at">K=</span><span class="dv">1</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>FOIfit.vietnam2 <span class="ot">=</span> <span class="fu">fit</span>(<span class="at">model =</span> modelOutbreak, <span class="at">data=</span>chikv_vietnam)</span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a><span class="fu">compute_information_criteria</span>(FOIfit.vietnam2)</span></code></pre></div>
+<p>The DIC of the intervention model is lower than the DIC of the
+outbreak model. This indicates that the former is a more adequate
+description of the data. In general, DIC differences of more than 5
+points with the lowest DIC indicate weak support for a model.</p>
 </div>
 <div id="priors" class="section level2">
 <h2>Priors</h2>
-<p>Flat priors were chosen for all parameters except the force of infection in the <em>independent</em> model and the relative risk of infection of the different categories. We give below the default values of the hyperparameters where the first and second parameters are respectively the lower and upper boundary of the uniform distributions.</p>
-<div id="default-values-of-the-hyperparameters" class="section level3">
-<h3>Default values of the hyperparameters</h3>
+<p>Flat priors were chosen for all parameters except the force of
+infection in the <em>independent</em> model and the relative risk of
+infection of the different categories. We give below the default values
+of the distribution parameters. For the uniform distributions, the first
+and second parameters are respectively the lower and upper
+boundaries.</p>
+<div id="default-prior-distributions" class="section level3">
+<h3>Default prior distributions</h3>
 <div id="for-the-constant-model" class="section level4">
 <h4>For the constant model</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">priorC1 =<span class="st"> </span><span class="dv">0</span>
-priorC2 =<span class="st"> </span><span class="dv">10</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>priorC1 <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>priorC2 <span class="ot">=</span> <span class="dv">10</span></span></code></pre></div>
 </div>
 <div id="for-the-intervention-model" class="section level4">
 <h4>For the intervention model</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">priorC1 =<span class="st"> </span><span class="dv">0</span>
-priorC2 =<span class="st"> </span><span class="dv">10</span>
-priorT1 =<span class="st"> </span><span class="dv">0</span>
-priorT2 =<span class="st"> </span><span class="dv">70</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>priorC1 <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>priorC2 <span class="ot">=</span> <span class="dv">10</span></span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a>priorT1 <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a>priorT2 <span class="ot">=</span> <span class="dv">100</span></span></code></pre></div>
 </div>
 <div id="for-the-outbreak-model" class="section level4">
 <h4>For the outbreak model</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">prioralpha1 =<span class="st"> </span><span class="dv">0</span>
-prioralpha2 =<span class="st"> </span><span class="dv">5</span>
-priorbeta1 =<span class="st"> </span><span class="dv">0</span>
-priorbeta2 =<span class="st"> </span><span class="dv">5</span>
-priorT1 =<span class="st"> </span><span class="dv">0</span>
-priorT2 =<span class="st"> </span><span class="dv">70</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>prioralpha1 <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>prioralpha2 <span class="ot">=</span> <span class="dv">5</span></span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>priorbeta1 <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a>priorbeta2 <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a>priorT1 <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a>priorT2 <span class="ot">=</span> <span class="dv">100</span></span></code></pre></div>
 </div>
 <div id="for-the-constantoutbreak-model" class="section level4">
 <h4>For the constant+outbreak model</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">prioralpha1 =<span class="st"> </span><span class="dv">0</span>
-prioralpha2 =<span class="st"> </span><span class="dv">5</span>
-priorbeta1 =<span class="st"> </span><span class="dv">0</span>
-priorbeta2 =<span class="st"> </span><span class="dv">5</span>
-priorT1 =<span class="st"> </span><span class="dv">0</span>
-priorT2 =<span class="st"> </span><span class="dv">70</span>
-priorC1 =<span class="st"> </span><span class="dv">0</span>
-priorC2 =<span class="st"> </span><span class="dv">10</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>prioralpha1 <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>prioralpha2 <span class="ot">=</span> <span class="dv">5</span></span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a>priorbeta1 <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a>priorbeta2 <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>priorT1 <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a>priorT2 <span class="ot">=</span> <span class="dv">100</span></span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a>priorC1 <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a>priorC2 <span class="ot">=</span> <span class="dv">10</span></span></code></pre></div>
 </div>
 <div id="for-the-independent-model" class="section level4">
 <h4>For the independent model</h4>
-<p>The the <em>independent</em> model, the prior distribution for the logit of each annual probability of infection is drawn with a normal distribution <span class="math inline">\(\mathcal{N}(priorY1, priorY2)\)</span> with default hyperparameters</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">priorY1 =<span class="st"> </span><span class="dv">0</span>
-priorY2 =<span class="st"> </span><span class="dv">100</span></code></pre></div>
+<p>The the <em>independent</em> model, the prior distribution of each
+annual probability of infection is drawn with a uniform distribution
+<span class="math inline">\(U(priorY1, priorY2)\)</span> with default
+values</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>priorY1 <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>priorY2 <span class="ot">=</span> <span class="dv">10</span></span></code></pre></div>
 </div>
 <div id="in-the-case-of-seroreversion" class="section level4">
 <h4>In the case of seroreversion</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">priorRho1 =<span class="st"> </span><span class="dv">0</span>
-priorRho2 =<span class="st"> </span><span class="dv">10</span></code></pre></div>
-</div>
-<div id="in-the-case-of-background-infection" class="section level4">
-<h4>In the case of background infection</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">priorbg1 =<span class="st"> </span><span class="dv">0</span>
-priorbg2 =<span class="st"> </span><span class="dv">1</span></code></pre></div>
+<p>An exponential distribution was implemented <span class="math inline">\(\rho \sim Exp(2)\)</span></p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>priorRho <span class="ot">=</span> <span class="dv">2</span></span></code></pre></div>
 </div>
 </div>
-<div id="setting-the-prior-hyperparameters-examples" class="section level3">
-<h3>Setting the prior hyperparameters: examples</h3>
-<p>By defining specific prior distributions it is possible to set predefined parameters for the models.</p>
-<p>For instance, if we want the background probability of infection to be close to be a known value <span class="math inline">\(p_B=0.2\)</span>, we can define <span class="math inline">\(priorbg1 = 0.19\)</span>, <span class="math inline">\(priorbg2 = 0.21\)</span>.</p>
-<p>We define here a model of outbreak model with a rate of seroreversion <span class="math inline">\(\rho = 0.01\)</span>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model &lt;-<span class="st"> </span><span class="kw">FOImodel</span>(<span class="dt">type =</span> <span class="st">&quot;outbreak&quot;</span>, <span class="dt">K =</span> <span class="dv">2</span>, <span class="dt">seroreversion =</span> <span class="dv">1</span>, <span class="dt">priorRho1 =</span> <span class="fl">0.009</span>, <span class="dt">priorRho2 =</span> <span class="fl">0.011</span>)
-<span class="kw">print</span>(model)</code></pre></div>
+<div id="specifying-the-parameters-of-the-prior-distributions-example" class="section level3">
+<h3>Specifying the parameters of the prior distributions: example</h3>
+<p>In the case of the <code>&quot;outbreak&quot;</code> and the
+<code>&quot;constantoutbreak&quot;</code> models, when <code>K&gt;1</code> each
+outbreak can be defined by a specific set of prior distributions.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">FOImodel</span>(<span class="at">type =</span> <span class="st">&quot;outbreak&quot;</span>, <span class="at">K =</span> <span class="dv">2</span>, </span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>                  <span class="at">prioralpha1 =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>), <span class="at">prioralpha2=</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">1</span>), </span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>                  <span class="at">priorT1 =</span> <span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">40</span>), <span class="at">priorT2=</span> <span class="fu">c</span>(<span class="dv">30</span>, <span class="dv">70</span>))</span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a><span class="fu">print</span>(model)</span></code></pre></div>
 <pre><code>## &lt;FOImodel object&gt;
 ## Model name:  outbreak 
-##   Estimated parameters:  7 
+##   Estimated parameters:  6 
 ## Model with categories for the force of infection 
 ## Parameters: 
 ##   K:  2 
 ## Priors: 
-##   alpha1:  0 
-##   alpha2:  5 
-##   beta1:  0 
-##   beta2:  5 
-##   T1:  0 
-##   T2:  70 
-##   Seroreversion 1:  0.009 
-##   Seroreversion 2:  0.011</code></pre>
+##   alpha: Uniform( 0 ,  5 )
+##   beta: Uniform( 0 ,  1 )
+##   T: Uniform( 10 ,  30 )
+##   alpha: Uniform( 0 ,  1 )
+##   beta: Uniform( 0 ,  1 )
+##   T: Uniform( 40 ,  70 )</code></pre>
 </div>
 </div>
 
+
+
+<!-- code folding -->
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

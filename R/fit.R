@@ -168,9 +168,11 @@ fit <- function(model,
 
 ##' @rdname fit
 #' @export
-print.FOIfit <- function(x,...){
+print.FOIfit <- function(x,
+                         digits_summary = 2,
+                         ...){
   cat("<FOIfit object>\n")
-  print(x$fit)
+  print(x$fit,digits_summary = digits_summary)
   print(x$data)
   print(x$model)
 }

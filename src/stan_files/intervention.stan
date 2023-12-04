@@ -37,9 +37,9 @@ data {
   
     int <lower=1> K; // the number of peaks of epidemics
  
-    real <lower = 0> priorT1;
+    real <lower = 0> priorT1[K];
  
-    real <lower = 0> priorT2;
+    real <lower = 0> priorT2[K];
   
     real <lower = 0> priorC1;
    
@@ -182,7 +182,7 @@ model {
   //FOI by group
 
     for (i in 1:K){
-        T[i] ~ uniform(priorT1, priorT2);
+        T[i] ~ uniform(priorT1[i], priorT2[i]);
         annual_foi[i] ~ uniform(priorC1, priorC2);
     }
  

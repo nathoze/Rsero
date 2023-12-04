@@ -50,27 +50,22 @@ data {
 
 
 parameters {
-    real<lower =0> logitlambda[NGroups]; 
+    real<lower =0> lambda[NGroups]; 
     real<lower = 0, upper = 20> rho;    
-        real  Flambda2[maxNcategory,Ncategoryclass]; //14 08
+    real  Flambda2[maxNcategory,Ncategoryclass]; //14 08
 }
 
 
 transformed parameters {
     real x[A]; 
     real L;
-    real<lower=0> lambda[A];
     real<lower =0, upper=1> P1[A,NAgeGroups,Ncategory]; // Probability of being seronegative
     real<lower =0, upper=1> P[A,NAgeGroups,Ncategory]; 
     real<lower =0> Flambda[Ncategory]; //14 08
     real<lower = 0, upper=1> Likelihood[N];  
     real c; // 14/08
 
-    for (j in 1:A) {
-       //  lambda[j] = inv_logit(logitlambda[j]);
-        lambda[j] =logitlambda[j];
-    
-    }
+
 
     c=0;
     if(!cat_lambda){
@@ -173,7 +168,7 @@ model {
   //FOI by group
  
     for (j in 1:NGroups) {    
-        logitlambda[j] ~ uniform(priorY1,priorY2);
+        lambda[j] ~ uniform(priorY1,priorY2);
     }
 
     for(I in 1:Ncategoryclass){

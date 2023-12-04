@@ -142,10 +142,65 @@ FOImodel <- function(type = 'constant',
     estimated_parameters <- estimated_parameters + K*2-1 
   } 
   
-  # check the necessary parameters are correclty in the inputs
+  # check the necessary parameters are correctly in the input
   if(type %in% model.list('K models') & is.null(K) ){
     print("K not defined.")
   } 
+  if(type %in% model.list('K models')){
+    if(length(priorT1) != length(priorT2)){
+      print("priorT1 and priorT2 must have the same length.")
+    }
+    if(length(priorT1) == 1 ){
+      priorT1 = as.array(rep(priorT1,K))
+    }
+    if(length(priorT2) == 1){
+      priorT2 = as.array(rep(priorT2,K))
+    }
+    if(length(priorT1) != K ){
+      print("priorT1 must be of length 1 or K.")
+    }
+    if(length(priorT2) != K){
+      print("priorT2 must be of length 1 or K.")
+    }
+  } 
+  if(type %in% model.list('Outbreak models')){
+    if(length(prioralpha1) != length(prioralpha2)){
+      print("prioralpha1 and prioralpha2 must have the same length.")
+    }
+    if(length(prioralpha1) == 1 ){
+      prioralpha1 = as.array(rep(prioralpha1,K))
+    }
+    if(length(prioralpha2) == 1){
+      prioralpha2 = as.array(rep(prioralpha2,K))
+    }
+    if(length(prioralpha1) != K ){
+      print("prioralpha1 must be of length 1 or K.")
+    }
+    if(length(prioralpha2) != K){
+      print("prioralpha2 must be of length 1 or K.")
+    }
+    
+    
+    if(length(priorbeta1) != length(priorbeta2)){
+      print("priorbeta1 and priorbeta2 must have the same length.")
+    }
+    if(length(priorbeta1) == 1 ){
+      priorbeta1 = as.array(rep(priorbeta1,K))
+    }
+    if(length(priorbeta2) == 1){
+      priorbeta2 = as.array(rep(priorbeta2,K))
+    }
+    if(length(priorbeta1) != K ){
+      print("priorbeta1 must be of length 1 or K.")
+    }
+    if(length(priorbeta2) != K){
+      print("priorbeta2 must be of length 1 or K.")
+    }
+    
+  } 
+  
+  
+  
   # 
   #   if(!is.null(fixed_parameters$rho)){
   #     priorRho1 = 0.99*(-log(fixed_parameters$rho)) 
@@ -233,9 +288,11 @@ print.FOImodel <- function(x, ...){
     }
     cat('Priors: \n')
     if(x$type %in% model.list('Outbreak models')){
-      cat('\t alpha: Uniform(',x$priors$prioralpha1, ', ', x$priors$prioralpha2 ,')\n')
-      cat('\t beta: Uniform(',x$priors$priorbeta1, ', ', x$priors$priorbeta2 ,')\n')
-      cat('\t T: Uniform(',x$priors$priorT1, ', ', x$priors$priorT2 ,')\n')
+      for(i in 1:x$K){
+        cat('\t alpha: Uniform(',x$priors$prioralpha1[i], ', ', x$priors$prioralpha2[i] ,')\n')
+        cat('\t beta: Uniform(',x$priors$priorbeta1[i], ', ', x$priors$priorbeta2[i],')\n')
+        cat('\t T: Uniform(',x$priors$priorT1[i], ', ', x$priors$priorT2[i],')\n')
+      }
     }
     
     if(x$type%in% model.list('Constant models')){
@@ -247,7 +304,9 @@ print.FOImodel <- function(x, ...){
       
     }
     if(x$type=='intervention'){
-      cat('\t T: Uniform(',x$priors$priorT1, ', ', x$priors$priorT2 ,')\n')
+      for(i in 1:x$K){
+        cat('\t T: Uniform(',x$priors$priorT1[i], ', ', x$priors$priorT2[i],')\n')
+      }
       cat('\t Annual FOI: Uniform(',x$priors$priorC1, ', ', x$priors$priorC2 ,')\n')
     }
     
