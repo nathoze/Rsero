@@ -92,7 +92,7 @@ FOImodel <- function(type = 'constant',
                      prioralpha2 = 5,
                      priorbeta1 = 0,
                      priorbeta2 = 1,
-                     priorT1 = 0,  
+                     priorT1 = 1,  
                      priorT2 = 100,
                      priorC1 = 0, # 0
                      priorC2 = 10, # 100
@@ -146,7 +146,7 @@ FOImodel <- function(type = 'constant',
   if(type %in% model.list('K models') & is.null(K) ){
     print("K not defined.")
   } 
-  if(type %in% model.list('K models')){
+  if(type %in% model.list('K models') | type=="constant" ){
     if(length(priorT1) != length(priorT2)){
       print("priorT1 and priorT2 must have the same length.")
     }
@@ -198,9 +198,7 @@ FOImodel <- function(type = 'constant',
     }
     
   } 
-  
-  
-  
+ 
   # 
   #   if(!is.null(fixed_parameters$rho)){
   #     priorRho1 = 0.99*(-log(fixed_parameters$rho)) 
