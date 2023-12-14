@@ -36,9 +36,8 @@ plot_posterior<- function(FOIfit) {
       plotindex <- plotindex+1
       plots[[plotindex]]  = gT        
     }
-    #  if(name %in% model.list('I models')){
-    if(name  == "intervention"){
-      
+    if(name %in% model.list('I models')){
+
       C<- chains$Time
       K=FOIfit$model$K
       

@@ -10,39 +10,39 @@
 ##'   \item 'constant': Constant force of infection
 ##'   \item 'outbreak': Series of outbreak modeled with gaussians 
 ##'   \item 'independent': Annual independent values of the force of infection
-##'   \item 'intervention': Piecewise constant force of infection. The number of phases with a constant level is given by the variable \code{K}
+##'   \item 'piecewise': Piecewise constant force of infection. The number of phases with a constant level is given by the variable \code{K}
 ##'   \item 'constantoutbreak': A combination of \code{K} outbreaks with a constant yearly force of infection
 ##'   \item 'independent_group': Similar to the independent model, but with piecewise constant values of the force annual force of infection in time periods of length \code{group_size} years.
 ##' }
 ##' 
-##' @param K integer. An additional parameter used in the outbreak, constantoutbreak and intervention stan models. This parameter is the number of Gaussians used in the model.  Default = 1.
+##' @param K integer. An additional parameter used in the outbreak, constantoutbreak and intervention stan models. This parameter is the number of Gaussians used in the model. Default = 1.
 ##' 
 ##' @param group_size integer. An additional parameter used in the independent_group models. The force of infection is averaged over \code{group_size} year period. By default \code{group_size} = 1, which is equivalent ot the independent model.
 ##' 
-##' @param se numeric, between 0 and 1. If \code{se=1}  the assay has a perfect sensitivity.  Default = 1. 
+##' @param se numeric, between 0 and 1. If \code{se=1} the assay has a perfect sensitivity. Default = 1. 
 ##' 
-##' @param sp numeric, between 0 and 1. If \code{sp=1}  the assay has a perfect specificity.  Default = 1. 
+##' @param sp numeric, between 0 and 1. If \code{sp=1} the assay has a perfect specificity. Default = 1. 
 ##' 
-##' @param seroreversion integer, equal to 0 or 1. If \code{seroreversion=0} the model includes a rate of seroreversion (waning immunity). See the vignette \code{models} for details.  Default = 0. 
+##' @param seroreversion integer, equal to 0 or 1. If \code{seroreversion=0} the model includes a rate of seroreversion (waning immunity). See the vignette \code{models} for details. Default = 0. 
 ##' 
-##' @param cat_lambda integer, equal to 0 or 1.  If \code{cat_lambda=1} the force of infection varies accross the different categories defined in an objet \code{SeroData}.
+##' @param cat_lambda integer, equal to 0 or 1. If \code{cat_lambda=1} the force of infection varies accross the different categories defined in an objet \code{SeroData}.
 ##'   See the vignette \code{models} for details. Default = 1. 
 ##' 
-##' @param prioralpha1 First parameter of the uniform prior distribution  of the parameter alpha, used as the intensity of the force of infection in the outbreak and intervention models. Default = 0.
+##' @param prioralpha1 First parameter of the uniform prior distribution  of the parameter alpha, used as the intensity of the force of infection in the outbreak models. Default = 0.
 ##' 
-##' @param prioralpha2 Second parameter of the uniform prior distribution  of the parameter alpha, used as the intensity of the force of infection in the outbreak and intervention models.  Default = 5.
+##' @param prioralpha2 Second parameter of the uniform prior distribution  of the parameter alpha, used as the intensity of the force of infection in the outbreak models.  Default = 5.
 ##' 
-##' @param priorbeta1  First parameter of the uniform prior distribution  of the parameter beta, used as the spread of the force of infection in the outbreak and intervention models. Default = 0.
+##' @param priorbeta1  First parameter of the uniform prior distribution  of the parameter beta, used as the spread of the force of infection in the outbreak models. Default = 0.
 ##' 
-##' @param priorbeta2  Second parameter of the uniform prior distribution  of the parameter beta, used as the spread of the force of infection in the outbreak and intervention models. Default = 1.
+##' @param priorbeta2  Second parameter of the uniform prior distribution  of the parameter beta, used as the spread of the force of infection in the outbreak models. Default = 1.
 ##' 
-##' @param priorT1 First parameter for the uniform distribution for the T parameter, used as the time of infection in the outbreak and intervention models. T is defined as the number of years between the survey and the outbreak. Default = 0. 
+##' @param priorT1 First parameter for the uniform distribution for the T parameter, used as the time of infection in the outbreak and piecewise constant models. T is defined as the number of years between the survey and the outbreak. Default = 0. 
 ##' 
-##' @param priorT2 Second parameter for the uniform distribution for the T parameter, used as the time of infection in the outbreak and intervention models. Default = 70.
+##' @param priorT2 Second parameter for the uniform distribution for the T parameter, used as the time of infection in the outbreak and piecewise constant models. Default = 70.
 ##' 
-##' @param priorC1  First parameter of the uniform prior distribution for the constant force of infection, used in the constant and intervention models. Default = 0. 
+##' @param priorC1  First parameter of the uniform prior distribution for the constant force of infection, used in the constant and piecewise constant models. Default = 0. 
 ##' 
-##' @param priorC2  Second parameter of the uniform prior distribution for the constant force of infection, used in the constant and intervention models. Default = 10. 
+##' @param priorC2  Second parameter of the uniform prior distribution for the constant force of infection, used in the constant and piecewise constant models. Default = 10. 
 ##' 
 ##' @param priorY1 First parameter of the uniform prior distribution for the annual hazard of infection, used in the independent models. Default = 0. 
 ##' 
@@ -65,7 +65,7 @@
 ##' 
 ##' \item priors: a list with the priors.
 ##' 
-##' \item K: the input parameter used in the outbreak and intervention models, if given.
+##' \item K: the input parameter used in the outbreak and piecewise models, if given.
 ##' 
 ##' }
 ##'
@@ -76,8 +76,8 @@
 ##' ## A gaussian model, with two gaussians, and user-defined priors
 ##' model <- FOImodel('outbreak',K = 2, prioralpha1 = 0, prioralpha2 = 1)
 ##'
-##' ## An intervention model, consisting in two constant phases, with seroreversion and user-defined priors
-##' model <- FOImodel('intervention', K=2, seroreversion=1, priorRho1=0.1)
+##' ## A piecewise model, consisting in two constant phases, with seroreversion and user-defined priors
+##' model <- FOImodel('piecewise', K=2, seroreversion=1, priorRho1=0.1)
 ##'
 ##' 
 ##'
@@ -116,9 +116,14 @@ FOImodel <- function(type = 'constant',
     estimated_parameters <- estimated_parameters +1
   }
   
-  if(type %in% model.list(whichmodels = 'All models')){
+  if(type  == 'intervention' | type == 'piecewise'){
     stanname= 'intervention'
   }
+  
+  if(type  == 'constant'){
+    stanname = 'constant'
+  }
+  
   if(type=='outbreak'){
     stanname= 'outbreak'
   }
@@ -141,12 +146,14 @@ FOImodel <- function(type = 'constant',
   if(type  %in% model.list(whichmodels = 'I models') ){
     estimated_parameters <- estimated_parameters + K*2-1 
   } 
-  
+  if(type == 'constant'){
+    estimated_parameters <- estimated_parameters + 1
+  } 
   # check the necessary parameters are correctly in the input
   if(type %in% model.list('K models') & is.null(K) ){
     print("K not defined.")
   } 
-  if(type %in% model.list('K models') | type=="constant" ){
+  if(type %in% model.list('K models')  ){
     if(length(priorT1) != length(priorT2)){
       print("priorT1 and priorT2 must have the same length.")
     }
@@ -277,7 +284,7 @@ print.FOImodel <- function(x, ...){
     }
     cat('Parameters: \n')
     
-    if(x$type  %in% c('intervention','outbreak') ){
+    if(x$type  %in% c('intervention', 'piecewise','outbreak') ){
       cat('\t K: ',x$K ,'\n')
     }
     if(x$se <1 | x$sp < 1){
@@ -301,7 +308,7 @@ print.FOImodel <- function(x, ...){
       cat('\t Y: Uniform(',x$priors$priorY1, ', ', x$priors$priorY2 ,')\n')
       
     }
-    if(x$type=='intervention'){
+    if(x$type %in% model.list('I models')){  
       for(i in 1:x$K){
         cat('\t T: Uniform(',x$priors$priorT1[i], ', ', x$priors$priorT2[i],')\n')
       }
@@ -332,17 +339,18 @@ model.list <-function(whichmodels){
   out <- NA
   
   if(whichmodels == 'K models'){
-    out <- c('outbreak','intervention','constantoutbreak')
+    out <- c('outbreak','intervention','constantoutbreak','piecewise')
   }
   if(whichmodels == 'I models'){
-    out <- c('intervention','constant')
+    #out <- c('intervention','constant')
+    out <- c('intervention', 'piecewise')
   } 
   if(whichmodels == 'Constant models'){
     out <- c('constantoutbreak','constant')
   } 
   
   if (whichmodels == 'All models'){
-    out <-  c('outbreak','independent','constant','intervention', 'constantoutbreak','independent_group')
+    out <-  c('outbreak','independent','constant','intervention', 'constantoutbreak','independent_group','piecewise')
   } 
   
   if (whichmodels == 'Outbreak models'){

@@ -11,60 +11,66 @@ data {
   
   int <lower=0> N; //the number of individuals
   
-  int <lower=0> age[N]; // Age
+  int <lower=0> age[N]; 
   
   int <lower=0, upper=1> Y[N]; // Outcome
   
   int<lower = 0, upper=1> seroreversion; 
   
-  int <lower=1> categoryindex[N];  
+  int <lower=1> categoryindex[N]; 
   
-  int <lower=1> Ncategory;
+  int <lower=1> Ncategory;  
   
-  int<lower= 1> Ncategoryclass; // 14/08
+  int<lower= 1> Ncategoryclass; 
   
-  int<lower=1> maxNcategory; // 14/08
+  int<lower=1> maxNcategory; 
   
-  int<lower=1> MatrixCategory[Ncategory,Ncategoryclass];  
+  int<lower=1> MatrixCategory[Ncategory,Ncategoryclass];
   
   int <lower=0> age_at_sampling[N];  
   
-  int <lower=0> sampling_year[N];  
+  int <lower=0> sampling_year[N]; 
   
   int <lower=1> age_group[N] ;  
   
-  int <lower=1> age_at_init[NAgeGroups]; 
+  int <lower=1> age_at_init[NAgeGroups];  
+    
+  real <lower = 0> priorC1;
   
-  //  int <lower=1, upper=NGroups> ind_by_age[A]; // 
-  
-  real <lower = 0> priorY1;
-  
-  real <lower = 0> priorY2;
+  real <lower = 0> priorC2;
   
   real <lower = 0> priorRho;
-  real<lower =0, upper=1> se;
-  real<lower =0, upper=1> sp;
+  
+  real <lower = 0, upper=1> se;
+  
+  real <lower = 0, upper=1> sp;
+  
   int <lower = 0> cat_lambda; // 1 or 0: characterizes whether we distinguish categories by different FOI
 }
 
 
 parameters {
-  real<lower =0> lambda[NGroups]; 
+  real<lower = 0.00001>  annual_foi; 
   real<lower = 0, upper = 20> rho;    
-  real  Flambda2[maxNcategory,Ncategoryclass]; //14 08
+  real  Flambda2[maxNcategory,Ncategoryclass]; 
+  
 }
 
-
 transformed parameters {
+  
   real x[A]; 
-  real L;
-  real<lower =0, upper=1> P1[A,NAgeGroups,Ncategory]; // Probability of being seronegative
-  real<lower =0, upper=1> P[A,NAgeGroups,Ncategory]; 
-  real<lower =0> Flambda[Ncategory]; //14 08
+  real <lower=0>  L;
+  real<lower = 0.00001> lambda[A];
+  
+  real<lower =0, upper=1> P1[A,NAgeGroups,Ncategory]; 
+  real<lower =0, upper=1> P[A,NAgeGroups,Ncategory];  
+  real<lower =0> Flambda[Ncategory];  
   real<lower = 0, upper=1> Likelihood[N];  
-  real c; // 14/08
-  
-  
+  real c; 
+      
+  for(j in 1:A){
+    lambda[j] = annual_foi;
+  }
   
   c=0;
   if(!cat_lambda){
@@ -83,13 +89,13 @@ transformed parameters {
     }
   }
   
-  L=1; 
+  L=1;
+  
   if(seroreversion==0){
     for(J in 1:NAgeGroups){
       for(i in 1:Ncategory){      
         P1[1,J,i] = exp(-Flambda[i]*lambda[1]) ;
         for(j in 1:A-1){
-          
           x[j]=1;         
           if(j<age_at_init[J]){
             P1[j+1,J,i] = exp(-Flambda[i]*lambda[j]) ;    
@@ -101,22 +107,7 @@ transformed parameters {
       }
     } 
   }
-  /*
-  if(seroreversion==1){
-  for(J in 1:NAgeGroups){
-  for(i in 1:Ncategory){        
-  for(j in 1:A){
-  x[j] = 1; 
-  for(k in 2:j){
-  L=Flambda[i]*lambda[j-k+2];
-  x[j-k+2-1] = x[j-k+2]*exp(-(rho+L)) +rho/(L+rho)*(1- exp(-(rho+L)));
-  }
-  P1[j,J,i]  = x[age_at_init[J]];
-  }
-  }
-  }
-  }
-  */
+  
   if(seroreversion==1){
     for(J in 1:NAgeGroups){
       for(i in 1:Ncategory){    
@@ -126,7 +117,7 @@ transformed parameters {
         }
         
         for(j in 1:A){
-          //  x[j] = exp(-Flambda[i]*lambda[age_at_init[J]]) ;
+          // x[j] = exp(-Flambda[i]*lambda[age_at_init[J]]) ;
           L=Flambda[i]*lambda[age_at_init[J]];
           x[j] = rho/(L+rho) +L/(L+rho)*exp(-L) ;
           if(j >1){
@@ -155,25 +146,26 @@ transformed parameters {
   }
   
   for(j in 1:N){
-    // Like[j] =1-(1-bg)*P[age[j],age_group[j],categoryindex[j]];
     Likelihood[j] =se-(se+sp-1)*P[age[j],age_group[j],categoryindex[j]]; 
   }
 }
 
 model {
+  
   //FOI by group
-  for (j in 1:NGroups) {    
-    lambda[j] ~ uniform(priorY1,priorY2);
-  }
+  
+    annual_foi ~ uniform(priorC1, priorC2);
   
   for(I in 1:Ncategoryclass){
     for(i in 1:maxNcategory){      
       Flambda2[i,I] ~ normal(0,1.73) ;
     }
   }
+  
   rho  ~ exponential(priorRho);
   
-  for (j in 1:N) {  
+  for(j in 1:N){
     target += bernoulli_lpmf( Y[j] | Likelihood[j]);
   }
+  
 }
