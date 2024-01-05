@@ -89,7 +89,7 @@ sero.age.groups <- function(dat,age_class,YLIM){
   G=matrix(NA,nrow =  dim(df)[1], ncol=3)
   
   for(j in seq(1,length(S1))){
-    if(S1[j]>3){
+    if(S1[j]>1){
       B= binom::binom.confint(x=S2[j],n = S1[j],methods = "exact")
       G[j,1]=B$lower
       G[j,2]=B$upper
