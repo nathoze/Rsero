@@ -54,14 +54,13 @@ compute_information_criteria <- function(FOIfit,...){
   A <- FOIfit$data$A 
   Ncategory <- FOIfit$data$Ncategory
   NAgeGroups <- FOIfit$data$NAgeGroups
- 
+  
   LogLikelihoods <- matrix(0, nrow = M, ncol = N) # as many elements as there are lambdas
   Y <- FOIfit$data$Y
   age <- FOIfit$data$age
   category <- FOIfit$data$categoryindex
   
   for (i in seq(1,M)){
-    
     lk  = chains$Like[i,]
     for (j in seq(1,N)){
       if( Y[j] == FALSE){ # if the individual is seronegative
@@ -76,7 +75,7 @@ compute_information_criteria <- function(FOIfit,...){
   # log-likelihood on the mean lambdas 
   
   # posterior mean
- 
+  
   LogLikelihoodMean <- 0
   P <- (colMeans(chains$P))
   
@@ -90,20 +89,17 @@ compute_information_criteria <- function(FOIfit,...){
     
     if(Y[j] == TRUE){
       LogLikelihoodMean <- LogLikelihoodMean + log(sensitivity-p*(sensitivity+specificity-1) )
-      #LogLikelihoodMean <- LogLikelihoodMean + log(1-(1-pc)*p)
     }else{
-      #LogLikelihoodMean <- LogLikelihoodMean + log((1-pc)*p)
       LogLikelihoodMean <- LogLikelihoodMean + log(1-sensitivity+p*(sensitivity+specificity-1) )
     }
   }
- 
+  
   LP <- rowSums(LogLikelihoods)
   # Compute the AIC
   # Assumes the maximum likelihood is reached 
   AIC <- -2*max(LP) +2*estimated_parameters
   
   # Compute the DIC
-
   Dbar = -2*mean(LP)
   Dthetabar = -2*LogLikelihoodMean
   pD = Dbar-Dthetabar
@@ -116,7 +112,6 @@ compute_information_criteria <- function(FOIfit,...){
   pwaic = sum(V)
   lpd = sum(log( colSums(exp(LogLikelihoods))/M))
   WAIC <- -2*(lpd-pwaic)
-  
   
   information_criteria <- list(AIC = AIC,
                                DIC = DIC,

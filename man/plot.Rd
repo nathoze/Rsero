@@ -4,11 +4,18 @@
 \alias{plot.FOIfit}
 \title{Plot the force of infection}
 \usage{
-plot.FOIfit(x, mean_only = FALSE, individual_samples = 0, YLIM = 1,
-  maxYears = NULL, ...)
+\method{plot}{FOIfit}(
+  FOIfit,
+  mean_only = FALSE,
+  individual_samples = 0,
+  YLIM = 1,
+  XLIM1 = NULL,
+  XLIM2 = NULL,
+  ...
+)
 }
 \arguments{
-\item{x}{The \code{FOIfit} object to be plotted.}
+\item{FOIfit}{The \code{FOIfit} object to be plotted.}
 
 \item{mean_only}{Boolean. If \code{FALSE}, plot the mean force of infection as well as an envelope of the 95\% credible interval. Default =  \code{FALSE}.}
 
@@ -24,10 +31,11 @@ Plot the mean and credible interval of the yearly force of infection, given an o
 }
 \examples{
 data <- simulate_SeroData( max_age = 50, epidemic_years = c(1976,1992), foi = c(0.2,0.3))
-model <- FOImodel(type='outbreak', background=1, K = 2)
+model <- FOImodel(type='outbreak', K = 2)
 Fit <- fit(model = model, data = data)
 p <- plot(Fit)
 p+ylim(0,1)
+p[[1]]$category # the name of the category plotted 
 
 
 }

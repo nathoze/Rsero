@@ -49,11 +49,9 @@ transformed parameters {
   real<lower =0, upper=1> P[A,NAgeGroups,Ncategory];  
   real<lower =0> Flambda[Ncategory]; 
   real<lower = 0, upper=1> Likelihood[N];  
-  real c; // 14/08
+  real c; 
   
-  
-  
-  
+
   for(i in 1:K){
     S[i] =0;
     for(j in 1:A){

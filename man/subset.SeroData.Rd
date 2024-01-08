@@ -4,8 +4,7 @@
 \alias{subset.SeroData}
 \title{Creates a subset of a serological survey}
 \usage{
-\method{subset}{SeroData}(data, sub = seq(1, data$N), loc = NULL,
-  category = NULL)
+\method{subset}{SeroData}(data, sub = seq(1, data$N), loc = NULL, category = NULL)
 }
 \arguments{
 \item{sub}{Used in the \code{subset} function. A list of the indices of the individuals to be considered in the new \code{SeroData} object.}
@@ -43,7 +42,7 @@ following items:
 }
 }
 \description{
-This function create a serological survey of the class \code{SeroData}.
+This function creates a serological survey of the class \code{SeroData}.
 }
 \examples{
 

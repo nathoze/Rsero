@@ -40,13 +40,13 @@ This function returns the Aikake Information Criterion (AIC), the Deviance Infor
 }
 \examples{
 data('one_peak_simulation')
-model <- FOImodel(type='outbreak', K=1, background=1)
+model <- FOImodel(type='outbreak', K=1)
 F1  = fit(model = model, data = data )
 compute_information_criteria(FOIfit  = F1)
 
 }
 \references{
-See Gelman et al. Stat Comput (2014) 24:997-1016
+See Gelman et al., Understanding predictive information criteria for Bayesian models. Stat Comput (2014) 24:997-1016, 
 DOI 10.1007/s11222-013-9416-2
 }
 \author{

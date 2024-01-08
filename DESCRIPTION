@@ -25,11 +25,10 @@ LinkingTo:
 	BH (>= 1.65.0.1), 
 	Rcpp (>= 0.12.13), 
 	RcppEigen (>= 0.3.3.3.0)
-RoxygenNote: 6.1.1
+RoxygenNote: 7.2.3
 Suggests: 
 	knitr,
     rmarkdown,
     testthat
 VignetteBuilder: knitr
 URL: https://github.com/nathoze/Rsero
-

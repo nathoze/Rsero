@@ -1,64 +1,35 @@
 data {
   int <lower=0> A; //the number of age classes
-  
-  int <lower=1> NAgeGroups ;  
-  
+  int <lower=1> NAgeGroups ;    
   int <lower=1> class1[A,NAgeGroups]; //lower boundary for the age class corresponding to the indexed age
-  
   int <lower=1> class2[A,NAgeGroups]; //upper boundary for the age class corresponding to the indexed age
-  
-  int <lower=0> NGroups; //the number of foi groups
-  
+  int <lower=0> NGroups; //the number of foi groups 
   int <lower=0> N; //the number of individuals
-  
   int <lower=0> age[N]; // Age 
-  
-  int <lower=0, upper=1> Y[N]; // Outcome
-  
-  int<lower = 0, upper=1> seroreversion; 
-  
-  int <lower=1> categoryindex[N];
-  
-  int <lower=1> Ncategory;  
-  
+  int <lower=0, upper=1> Y[N]; // Outcome  
+  int<lower = 0, upper=1> seroreversion;   
+  int <lower=1> categoryindex[N];  
+  int <lower=1> Ncategory;    
   int<lower= 1> Ncategoryclass; 
-  
-  int<lower=1> maxNcategory; 
-  
+  int<lower=1> maxNcategory;   
   int<lower=1> MatrixCategory[Ncategory,Ncategoryclass];
-  
-  int <lower=0> age_at_sampling[N]; 
-  
+  int <lower=0> age_at_sampling[N];   
   int <lower=0> sampling_year[N];  
-  
-  int <lower=1> age_group[N] ; 
-  
+  int <lower=1> age_group[N] ;   
   int <lower=1> age_at_init[NAgeGroups]; 
-  
   int <lower=1> K; // the number of peaks of epidemics
-  
   real <lower = 0> prioralpha1[K];
-  
   real <lower = 0> prioralpha2[K];
-  
   real <lower = 0> priorbeta1[K];
-  
   real <lower = 0> priorbeta2[K];
-  
   real <lower = 0> priorC1;
-  
   real <lower = 0> priorC2;
   
-  real priorT1[K];
-  
+  real priorT1[K];  
   real <lower = 0> priorT2[K];
-  
-  real <lower = 0> priorRho;
-  
-  real<lower =0, upper=1> se;
-  
-  real<lower =0, upper=1> sp;
-  
+  real <lower = 0> priorRho;  
+  real<lower = 0, upper=1> se;  
+  real<lower = 0, upper=1> sp;
   int <lower = 0> cat_lambda; // 1 or 0: characterizes whether we distinguish categories by different FOI
 }
 
@@ -79,9 +50,9 @@ transformed parameters {
   real lambda[A];
   real S[K]; // Normalization constant
   
-  real<lower =0, upper=1> P1[A,NAgeGroups,Ncategory]; //14 08 
-  real<lower =0, upper=1> P[A,NAgeGroups,Ncategory]; //14 08 
-  real<lower =0> Flambda[Ncategory]; //14 08
+  real<lower =0, upper=1> P1[A,NAgeGroups,Ncategory]; 
+  real<lower =0, upper=1> P[A,NAgeGroups,Ncategory]; 
+  real<lower =0> Flambda[Ncategory];
   real<lower = 0, upper=1> Likelihood[N];  
   real c; 
   

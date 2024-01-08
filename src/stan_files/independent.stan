@@ -1,46 +1,24 @@
 data {
   int <lower=0> A; //the number of age classes
-  
   int <lower=1> NAgeGroups ;  
-  
   int <lower=1> class1[A,NAgeGroups]; //lower boundary for the age class corresponding to the indexed age
-  
-  int <lower=1> class2[A,NAgeGroups]; //upper boundary for the age class corresponding to the indexed age
-  
+  int <lower=1> class2[A,NAgeGroups]; //upper boundary for the age class corresponding to the indexed age  
   int <lower=0> NGroups; //the number of foi groups
-  
   int <lower=0> N; //the number of individuals
-  
-  int <lower=0> age[N]; // Age
-  
+  int <lower=0> age[N]; // Age  
   int <lower=0, upper=1> Y[N]; // Outcome
-  
   int<lower = 0, upper=1> seroreversion; 
-  
   int <lower=1> categoryindex[N];  
-  
   int <lower=1> Ncategory;
-  
-  int<lower= 1> Ncategoryclass; // 14/08
-  
-  int<lower=1> maxNcategory; // 14/08
-  
-  int<lower=1> MatrixCategory[Ncategory,Ncategoryclass];  
-  
+  int<lower= 1> Ncategoryclass;  
+  int<lower=1> maxNcategory;  
+  int<lower=1> MatrixCategory[Ncategory,Ncategoryclass];    
   int <lower=0> age_at_sampling[N];  
-  
   int <lower=0> sampling_year[N];  
-  
   int <lower=1> age_group[N] ;  
-  
   int <lower=1> age_at_init[NAgeGroups]; 
-  
-  //  int <lower=1, upper=NGroups> ind_by_age[A]; // 
-  
-  real <lower = 0> priorY1;
-  
-  real <lower = 0> priorY2;
-  
+  real <lower = 0> priorY1;  
+  real <lower = 0> priorY2;  
   real <lower = 0> priorRho;
   real<lower =0, upper=1> se;
   real<lower =0, upper=1> sp;
@@ -62,9 +40,7 @@ transformed parameters {
   real<lower =0, upper=1> P[A,NAgeGroups,Ncategory]; 
   real<lower =0> Flambda[Ncategory]; //14 08
   real<lower = 0, upper=1> Likelihood[N];  
-  real c; // 14/08
-  
-  
+  real c; 
   
   c=0;
   if(!cat_lambda){
@@ -101,22 +77,7 @@ transformed parameters {
       }
     } 
   }
-  /*
-  if(seroreversion==1){
-  for(J in 1:NAgeGroups){
-  for(i in 1:Ncategory){        
-  for(j in 1:A){
-  x[j] = 1; 
-  for(k in 2:j){
-  L=Flambda[i]*lambda[j-k+2];
-  x[j-k+2-1] = x[j-k+2]*exp(-(rho+L)) +rho/(L+rho)*(1- exp(-(rho+L)));
-  }
-  P1[j,J,i]  = x[age_at_init[J]];
-  }
-  }
-  }
-  }
-  */
+
   if(seroreversion==1){
     for(J in 1:NAgeGroups){
       for(i in 1:Ncategory){    

@@ -15,7 +15,7 @@
 ##'   \item 'independent_group': Similar to the independent model, but with piecewise constant values of the force annual force of infection in time periods of length \code{group_size} years.
 ##' }
 ##' 
-##' @param K integer. An additional parameter used in the outbreak, constantoutbreak and intervention stan models. This parameter is the number of Gaussians used in the model. Default = 1.
+##' @param K integer. An additional parameter used in the outbreak, constantoutbreak and piecewise stan models. In the case of the outbreaks, this parameter is the number of Gaussians used. In the case of the piecewise constant model it is the number of constant phases. Default = 1.
 ##' 
 ##' @param group_size integer. An additional parameter used in the independent_group models. The force of infection is averaged over \code{group_size} year period. By default \code{group_size} = 1, which is equivalent ot the independent model.
 ##' 
@@ -36,9 +36,9 @@
 ##' 
 ##' @param priorbeta2  Second parameter of the uniform prior distribution  of the parameter beta, used as the spread of the force of infection in the outbreak models. Default = 1.
 ##' 
-##' @param priorT1 First parameter for the uniform distribution for the T parameter, used as the time of infection in the outbreak and piecewise constant models. T is defined as the number of years between the survey and the outbreak. Default = 0. 
+##' @param priorT1 First parameter for the uniform distribution for the T parameter. The time of the outbreak is defined as the number of years before the survey (outbreak and constant outbreak models). It is the time interval for the change of FOI in the piecewise constant model. Default = 1. 
 ##' 
-##' @param priorT2 Second parameter for the uniform distribution for the T parameter, used as the time of infection in the outbreak and piecewise constant models. Default = 70.
+##' @param priorT2 Second parameter for the uniform distribution for the T parameter. Default = 100.
 ##' 
 ##' @param priorC1  First parameter of the uniform prior distribution for the constant force of infection, used in the constant and piecewise constant models. Default = 0. 
 ##' 
@@ -187,7 +187,6 @@ FOImodel <- function(type = 'constant',
       print("prioralpha2 must be of length 1 or K.")
     }
     
-    
     if(length(priorbeta1) != length(priorbeta2)){
       print("priorbeta1 and priorbeta2 must have the same length.")
     }
@@ -243,7 +242,6 @@ FOImodel <- function(type = 'constant',
                  priorY1 = priorY1,
                  priorY2 = priorY2,
                  priorRho = priorRho)
-  
   
   model <- list(type = type,
                 stanname = stanname,

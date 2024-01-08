@@ -12,7 +12,8 @@ parameters_credible_intervals(FOIfit, quants = c(0.025, 0.5, 0.975))
 \item{quants}{Numeric. Contains the list of the estimated quantiles given between 0 and 1. Default parameters are the 2.5\%, 50 \% and 97.5 \% quantiles given by \code{quants = c(0.025,0.5,0.975)}.}
 }
 \value{
-A dataframe containing the input quantiles and the mean of the posterior distributions.
+A dataframe containing the 2.5%, 50% and 97.5% quantiles and the mean of the posterior distributions. If several categories are specified, the force of infection is given for the reference category and the relative force of infection is given for the other categories.
+In the case of an outbreak model (outbreak or outbreak+constant), the total force of infection is given by alpha, and the probability of infection by "Outbreak Prob. Inf.". For models with constant phases, the annual probability of infection is given.
 }
 \description{
 Determines the mean and quantiles of the parameters estimated in the fit. By default, it returns the mean, the median and 95 \% credible interval of the parameters.

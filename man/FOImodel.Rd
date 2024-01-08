@@ -5,11 +5,28 @@
 \alias{print.FOImodel}
 \title{Model of the force of infection}
 \usage{
-FOImodel(type = "constant", K = 1, seroreversion = 0, background = 0,
-  prioralpha1 = 0, prioralpha2 = 5, priorbeta1 = 0, priorbeta2 = 5,
-  priorT1 = 0, priorT2 = 70, priorC1 = 0, priorC2 = 10, priorY1 = 0,
-  priorY2 = 100, priorbg1 = 0, priorbg2 = 1, priorRho1 = 0,
-  priorRho2 = 10, cat_bg = 0, cat_lambda = 0, ...)
+FOImodel(
+  type = "constant",
+  K = 1,
+  group_size = 1,
+  seroreversion = 0,
+  se = 1,
+  sp = 1,
+  prioralpha1 = 0,
+  prioralpha2 = 5,
+  priorbeta1 = 0,
+  priorbeta2 = 1,
+  priorT1 = 1,
+  priorT2 = 100,
+  priorC1 = 0,
+  priorC2 = 10,
+  priorY1 = 0,
+  priorY2 = 10,
+  priorRho = 2,
+  cat_lambda = 1,
+  fixed_parameters = NULL,
+  ...
+)
 
 \method{print}{FOImodel}(x, ...)
 }
@@ -18,54 +35,51 @@ FOImodel(type = "constant", K = 1, seroreversion = 0, background = 0,
 \itemize{
   \item 'constant': Constant force of infection
   \item 'outbreak': Series of outbreak modeled with gaussians 
-  \item 'independent': Yearly independent values of the force of infection
-  \item 'intervention': Piecewise constant force of infection. The number of phases with a constant level is given by the variable \code{K}
+  \item 'independent': Annual independent values of the force of infection
+  \item 'piecewise': Piecewise constant force of infection. The number of phases with a constant level is given by the variable \code{K}
   \item 'constantoutbreak': A combination of \code{K} outbreaks with a constant yearly force of infection
+  \item 'independent_group': Similar to the independent model, but with piecewise constant values of the force annual force of infection in time periods of length \code{group_size} years.
 }}
 
-\item{K}{integer. An additional parameter used in the outbreak, constantoutbreak and intervention stan models. This parameter is the number of Gaussians used in the model.  Default = \code{NULL}.}
+\item{K}{integer. An additional parameter used in the outbreak, constantoutbreak and piecewise stan models. In the case of the outbreaks, this parameter is the number of Gaussians used. In the case of the piecewise constant model it is the number of constant phases. Default = 1.}
 
-\item{seroreversion}{integer, equal to 0 or 1. If \code{seroreversion=0} the model includes a rate of seroreversion (waning immunity). See the vignette \code{models} for details.  Default = 0.}
+\item{group_size}{integer. An additional parameter used in the independent_group models. The force of infection is averaged over \code{group_size} year period. By default \code{group_size} = 1, which is equivalent ot the independent model.}
 
-\item{background}{integer, equal to 0 or 1. If \code{background=1}  the model includes a background infection probability. See the vignette \code{models} for details.  Default = 0.}
+\item{seroreversion}{integer, equal to 0 or 1. If \code{seroreversion=0} the model includes a rate of seroreversion (waning immunity). See the vignette \code{models} for details. Default = 0.}
 
-\item{prioralpha1}{First parameter of the uniform prior distribution  of the parameter alpha, used as the intensity of the force of infection in the outbreak and intervention models. Default = 0.}
+\item{se}{numeric, between 0 and 1. If \code{se=1} the assay has a perfect sensitivity. Default = 1.}
 
-\item{prioralpha2}{Second parameter of the uniform prior distribution  of the parameter alpha, used as the intensity of the force of infection in the outbreak and intervention models.  Default = 5.}
+\item{sp}{numeric, between 0 and 1. If \code{sp=1} the assay has a perfect specificity. Default = 1.}
 
-\item{priorbeta1}{First parameter of the uniform prior distribution  of the parameter beta, used as the spread of the force of infection in the outbreak and intervention models. Default = 0.}
+\item{prioralpha1}{First parameter of the uniform prior distribution  of the parameter alpha, used as the intensity of the force of infection in the outbreak models. Default = 0.}
 
-\item{priorbeta2}{Second parameter of the uniform prior distribution  of the parameter beta, used as the spread of the force of infection in the outbreak and intervention models. Default = 1.}
+\item{prioralpha2}{Second parameter of the uniform prior distribution  of the parameter alpha, used as the intensity of the force of infection in the outbreak models.  Default = 5.}
 
-\item{priorT1}{First parameter for the uniform distribution for the T parameter, used as the time of infection in the outbreak and intervention models. T is defined as the number of years between the survey and the outbreak. Default = 0.}
+\item{priorbeta1}{First parameter of the uniform prior distribution  of the parameter beta, used as the spread of the force of infection in the outbreak models. Default = 0.}
 
-\item{priorT2}{Second parameter for the uniform distribution for the T parameter, used as the time of infection in the outbreak and intervention models. Default = 70.}
+\item{priorbeta2}{Second parameter of the uniform prior distribution  of the parameter beta, used as the spread of the force of infection in the outbreak models. Default = 1.}
 
-\item{priorC1}{First parameter of the uniform prior distribution for the constant force of infection, used in the constant and intervention models. Default = 0.}
+\item{priorT1}{First parameter for the uniform distribution for the T parameter. The time of the outbreak is defined as the number of years before the survey (outbreak and constant outbreak models). It is the time interval for the change of FOI in the piecewise constant model. Default = 1.}
 
-\item{priorC2}{Second parameter of the uniform prior distribution for the constant force of infection, used in the constant and intervention models. Default = 10.}
+\item{priorT2}{Second parameter for the uniform distribution for the T parameter. Default = 100.}
 
-\item{priorY1}{Mean of the normal distribution for the logit of the annual hazard of infection, used in the independent models. Default = 0.}
+\item{priorC1}{First parameter of the uniform prior distribution for the constant force of infection, used in the constant and piecewise constant models. Default = 0.}
 
-\item{priorY2}{Standard-deviation of the normal distribution for the logit of the annual hazard of infection, used in the independent models.  Default = 100.}
+\item{priorC2}{Second parameter of the uniform prior distribution for the constant force of infection, used in the constant and piecewise constant models. Default = 10.}
 
-\item{priorbg1}{First  parameter of the uniform prior distribution for the \code{pB} parameter (background probability of infection) when background = 1.  Default = 0.}
+\item{priorY1}{First parameter of the uniform prior distribution for the annual hazard of infection, used in the independent models. Default = 0.}
 
-\item{priorbg2}{Second shape parameter of the beta distribution for the  \code{pB} parameter  (background probability of infection) when background = 1. Default = 1.}
+\item{priorY2}{Second parameter of the uniform prior distribution for the annual hazard of infection, used in the independent models.  Default = 10.}
 
-\item{priorRho1}{First parameter of the uniform prior distribution for rho, the seroreversion rate used when seroreversion=1. Default = 0.}
+\item{priorRho}{Parameter of the exponential prior distribution for rho, the seroreversion rate used when seroreversion=1. Default = 2.
+##'}
 
-\item{priorRho2}{Second parameter of the uniform prior distribution for rho, the seroreversion rate used when seroreversion=1. Default = 10.}
-
-\item{cat_bg}{integer, equal to 0 or 1. If \code{cat_bg=1} a specific value of the background infection probability \code{pB} is attributed to each category (see \code{SeroData}). See the vignette \code{models} for details. Default = 0.}
-
-\item{cat_lambda}{integer, equal to 0 or 1.  If \code{cat_lambda=1} the force of infection varies accross the different categories defined in an objet \code{SeroData}.  See the vignette \code{models} for details. Default = 0.}
+\item{cat_lambda}{integer, equal to 0 or 1. If \code{cat_lambda=1} the force of infection varies accross the different categories defined in an objet \code{SeroData}.
+See the vignette \code{models} for details. Default = 1.}
 
 \item{...}{Additional arguments (not used).}
 
 \item{x}{A object of the class \code{FOImodel}.}
-
-\item{cat_lambda}{integer, equal to 0 or 1.  If \code{cat_lambda=1} the force of infection varies accross the different categories defined in an objet \code{SeroData}.  See the vignette \code{models} for details. Default = 0.}
 }
 \value{
 A list with the class \code{FOImodel}, which contains the
@@ -81,24 +95,22 @@ following items:
 
 \item priors: a list with the priors.
 
-\item K: the input parameter used in the outbreak and intervention models, if given.
+\item K: the input parameter used in the outbreak and piecewise models, if given.
 
 }
 }
 \description{
-This function creates an object of the class \code{FOImodel}. Inputs are the type of the model (required), additional parameters if required by the model, and parameters for the prior distributions. The models to be given as an input are predefined. 
+This function creates an object of the class \code{FOImodel}. Inputs are the type of the model (required), additional parameters if required by the model, and hyperparameters for the prior distributions (optional). The models to be given as an input are predefined. 
  More details are given in the vignette  \code{models}.
 }
 \examples{
 
-## A gaussian model, with one gaussian, and background infection
-model <- FOImodel(type='outbreak', background = 1, K = 1)
 
-## A gaussian model, with two gaussians, background infection, and user-defined hyperparameters
-model <- FOImodel('outbreak', background=1, K = 2, prioralpha1 = 0, prioralpha2 = 1)
+## A gaussian model, with two gaussians, and user-defined priors
+model <- FOImodel('outbreak',K = 2, prioralpha1 = 0, prioralpha2 = 1)
 
-## An intervention model, consisting in two constant phases, with seroreversion and user-defined hyperparameters
-model <- FOImodel('intervention', K=2, seroreversion=1, priorRho1=0.1)
+## A piecewise model, consisting in two constant phases, with seroreversion and user-defined priors
+model <- FOImodel('piecewise', K=2, seroreversion=1, priorRho1=0.1)
 
 
 

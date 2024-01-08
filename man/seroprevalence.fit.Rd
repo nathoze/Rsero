@@ -4,19 +4,24 @@
 \alias{seroprevalence.fit}
 \title{Plot the fit of the seroprevalence vs. age}
 \usage{
-seroprevalence.fit(FOIfit, individual_samples = 0, age_cats = 10,
-  YLIM = 1, ...)
+seroprevalence.fit(
+  FOIfit,
+  individual_samples = 0,
+  age_class = 10,
+  YLIM = 1,
+  ...
+)
 }
 \arguments{
 \item{FOIfit}{The \code{FOIfit} object to be plotted.}
 
 \item{individual_samples}{Integer. Number of individual samples to be plotted additionally to the mean and the credible interval of the force of infection. The \code{indivual_samples} samples are randomly chosen in the chains. Default = 0.}
 
-\item{age_cats}{Integer. Length of the age groups (in years). Used if \code{show_data = TRUE}. Default = 10.}
+\item{age_class}{Integer. Length of the age groups (in years). Used if \code{show_data = TRUE}. Default = 10.}
 
 \item{YLIM}{Upper limit of the y-axis. Default = 1. The lower limit is set to 0.}
 
-\item{show_data}{Boolean. If \code{TRUE}, shows the fraction of seropositive as well. By default, ages are associated in groups of \code{age_cats} years.  Default = \code{TRUE}.}
+\item{show_data}{Boolean. If \code{TRUE}, shows the fraction of seropositive as well. By default, ages are associated in groups of \code{age_class} years.  Default = \code{TRUE}.}
 }
 \value{
 A list of \code{ggplot2} objects.

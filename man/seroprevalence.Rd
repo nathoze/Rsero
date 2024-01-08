@@ -4,13 +4,13 @@
 \alias{seroprevalence}
 \title{Compute the seroprevalence}
 \usage{
-seroprevalence(data)
+seroprevalence(serodata)
 }
 \arguments{
-\item{data}{An object of the class \code{SeroData}.}
+\item{serodata}{An object of the class \code{SeroData}.}
 }
 \value{
-The mean and 95% confidence interval of the seroprevalence
+The mean and 95 \%  confidence interval of the seroprevalence
 }
 \description{
 Compute the seroprevalence using an object of the class \code{SeroData}. If multiple \code{category} are defined, it will also compute the seroprevalence for each category.
@@ -18,9 +18,8 @@ Compute the seroprevalence using an object of the class \code{SeroData}. If mult
 \examples{
 
 ## A very simple example of a serological survey with three individuals: 
-data = SeroData(age_at_sampling = c(10,32,24), Y=c(0,1,1), max_age = 50, age_cats = 1, sampling_year = 2017)
-seroprevalence(data = data)
-
+data = SeroData(age_at_sampling = c(10,32,24), Y=c(0,1,1), max_age = 50, age_class = 1, sampling_year = 2017)
+seroprevalence(serodata = data)
 
 }
 \author{

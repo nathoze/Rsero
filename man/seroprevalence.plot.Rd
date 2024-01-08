@@ -4,26 +4,25 @@
 \alias{seroprevalence.plot}
 \title{Plot the seroprevalence by age}
 \usage{
-seroprevalence.plot(data, age_cats = 10, YLIM = 1, ...)
+seroprevalence.plot(serodata, age_class = 10, YLIM = 1, ...)
 }
 \arguments{
-\item{data}{An object of the class \code{SeroData}.}
+\item{serodata}{An object of the class \code{SeroData}.}
 
-\item{age_cats}{Integer. The length in years of the age classes. Default = 10.}
+\item{age_class}{Integer. The length in years of the age classes. Default = 10.}
 
 \item{YLIM}{Upper limit of the y-axis. Default = 1. The lower limit is set to 0.}
 }
 \value{
-The mean and 95% confidence interval of the seroprevalence
+a list with plots of the seroprevalence for each category, or one plot if only one category is defined.
 }
 \description{
-Plot the seroprevalence by age-class. DESCRIBE CONF INTERVAL AND CATEGORIOES
+Plot the mean and 95 \%  confidence interval of the seroprevalence by age-class. Accepts as an input a \code{SeroData} object. If multiple \code{category} are defined, it will also compute the seroprevalence for each category.
 }
 \examples{
 
 dat  = data("one_peak_simulation")
-seroprevalence.plot(data = dat)
-
+seroprevalence.plot(serodata = dat)
 
 }
 \author{
