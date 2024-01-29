@@ -202,15 +202,8 @@ FOImodel <- function(type = 'constant',
     if(length(priorbeta2) != K){
       print("priorbeta2 must be of length 1 or K.")
     }
-    
   } 
- 
-  # 
-  #   if(!is.null(fixed_parameters$rho)){
-  #     priorRho1 = 0.99*(-log(fixed_parameters$rho)) 
-  #     priorRho2 = 1.01*(-log(fixed_parameters$rho))
-  #   }
-  #   
+  
   if(!is.null(fixed_parameters$foi)){
     priorC1 = 0.99*(-log(fixed_parameters$foi)) 
     priorC2 = 1.01*(-log(fixed_parameters$foi)) 

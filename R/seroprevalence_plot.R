@@ -35,7 +35,6 @@ seroprevalence.plot<- function(serodata, age_class = 10, YLIM = 1, ...){
       }
       if(length(unique.categories)>1){
         title= paste0('Category: ',cat," Sampling year: ", sampling_year)
-        
       }
       
       if(length(w)>0){
@@ -77,7 +76,14 @@ seroprevalence.plot<- function(serodata, age_class = 10, YLIM = 1, ...){
 # get the seroprevalence (mean and 95%CI) for each age group
 sero.age.groups <- function(dat,age_class,YLIM){
   
-  age_categories <- seq(from = 0, to = min(dat$A, max(dat$age)), by = age_class)
+  #  age_categories <- seq(from = 0, to = min(dat$A, max(dat$age)), by = age_class)
+  
+  if(age_class>= max(dat$age_at_sampling)){
+    age_categories <- seq(from = 0, to =  max(dat$age_at_sampling), by = age_class)
+  }else{
+    age_categories <- seq(from = 0, to =  max(dat$age_at_sampling), by = max(dat$age_at_sampling))
+  }
+
   age_bin <- sapply(dat$age, function(x) tail(which(x-age_categories >= 0), 1L)) # find the closest element
   S <- as.integer(as.logical(dat$Y)) 
   S1 <- sapply(1:length(age_categories), function(x) length(which(age_bin==x)) )

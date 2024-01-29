@@ -12,7 +12,7 @@
 
 <meta name="author" content="Nathanael Hoze" />
 
-<meta name="date" content="2023-11-28" />
+<meta name="date" content="2024-01-29" />
 
 <title>Using the models defined in the Rsero package</title>
 
@@ -341,7 +341,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h1 class="title toc-ignore">Using the models defined in the Rsero
 package</h1>
 <h4 class="author">Nathanael Hoze</h4>
-<h4 class="date">2023-11-28</h4>
+<h4 class="date">2024-01-29</h4>
 
 
 
@@ -366,11 +366,11 @@ of exposure.</p>
 ## 5 serological samples  
 ## Max age: 70  
 ##   age age_at_sampling     Y sampling_year location sex   category
-## 1  58              58  TRUE          2019       NA All Category 1
-## 2  12              12 FALSE          2019       NA All Category 1
-## 3  58              58 FALSE          2019       NA All Category 1
-## 4  55              55  TRUE          2019       NA All Category 1
-## 5  60              60 FALSE          2019       NA All Category 1</code></pre>
+## 1  57              57  TRUE          2019       NA All Category 1
+## 2  57              57 FALSE          2019       NA All Category 1
+## 3  55              55 FALSE          2019       NA All Category 1
+## 4  49              49  TRUE          2019       NA All Category 1
+## 5  61              61 FALSE          2019       NA All Category 1</code></pre>
 </div>
 <div id="models-of-the-force-of-infection" class="section level2">
 <h2>Models of the force of infection</h2>
@@ -383,16 +383,16 @@ given year:</p>
 yearly values of the force of infection.</li>
 <li>Outbreak model. The force of infection is defined as a sum of
 gaussians.</li>
-<li>Intervention model.</li>
+<li>Piecewise constant model.</li>
 <li>Constant force of infection.</li>
 <li>Combination of constant and outbreak</li>
 </ul>
 <p>In the constant model a single parameter of the force of infection is
 evaluated.</p>
-<p>The intervention models consider successive constant phases. They
-take as an input the number of different constant phase <span class="math inline">\(K\)</span>, where <span class="math inline">\(K
-\geq 1\)</span>. The value <span class="math inline">\(K=1\)</span>
-corresponds to the constant model.</p>
+<p>The <span class="math inline">\(piecewise\)</span> models consider
+successive constant phases. They take as an input the number <span class="math inline">\(K\)</span> of different constant phases, where
+<span class="math inline">\(K \geq 1\)</span>. The value <span class="math inline">\(K=1\)</span> corresponds to the constant
+model.</p>
 <p>In the case of the outbreak model, the force of infection at year
 <span class="math inline">\(i\)</span> is given as a sum of <span class="math inline">\(K\)</span> gaussians: <span class="math display">\[\lambda_i  = \sum_{j=1}^K\bar{\alpha}_{j}
 e^{-\frac{(i-T_j)^2}{\beta_j^2}}.\]</span> The <span class="math inline">\(T_j\)</span> are the time points where the force
@@ -411,7 +411,7 @@ of infection is given by a single gaussian.</p>
 <p>The different models are defined using the following commands</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">FOImodel</span>(<span class="at">type =</span> <span class="st">&quot;constant&quot;</span>) <span class="co"># a constant model</span></span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">FOImodel</span>(<span class="at">type =</span> <span class="st">&quot;independent&quot;</span>) <span class="co"># independent annual force of infection</span></span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">FOImodel</span>(<span class="at">type =</span> <span class="st">&quot;intervention&quot;</span>, <span class="at">K =</span> <span class="dv">2</span>) <span class="co"># intervention model: two constant phase </span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">FOImodel</span>(<span class="at">type =</span> <span class="st">&quot;piecewise&quot;</span>, <span class="at">K =</span> <span class="dv">2</span>) <span class="co"># Two constant phase </span></span>
 <span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">FOImodel</span>(<span class="at">type =</span> <span class="st">&quot;outbreak&quot;</span>, <span class="at">K =</span> <span class="dv">1</span>) <span class="co"># one outbreak</span></span>
 <span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">FOImodel</span>(<span class="at">type =</span> <span class="st">&quot;constantoutbreak&quot;</span>, <span class="at">K =</span> <span class="dv">2</span>) <span class="co"># two outbreaks and a constant annual force of infection</span></span>
 <span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="fu">print</span>(model)</span></code></pre></div>
@@ -423,10 +423,10 @@ of infection is given by a single gaussian.</p>
 ## Priors: 
 ##   alpha: Uniform( 0 ,  5 )
 ##   beta: Uniform( 0 ,  1 )
-##   T: Uniform( 0 ,  100 )
+##   T: Uniform( 1 ,  100 )
 ##   alpha: Uniform( 0 ,  5 )
 ##   beta: Uniform( 0 ,  1 )
-##   T: Uniform( 0 ,  100 )
+##   T: Uniform( 1 ,  100 )
 ##   Annual FOI: Uniform( 0 ,  10 )</code></pre>
 <p>Printing recapitulates the main information concerning the model. For
 instance, in the <code>&quot;constantoutbreak&quot;</code> model with
@@ -487,7 +487,7 @@ provides these number along with the FOI model.</p>
 ## Priors: 
 ##   alpha: Uniform( 0 ,  5 )
 ##   beta: Uniform( 0 ,  1 )
-##   T: Uniform( 0 ,  100 )</code></pre>
+##   T: Uniform( 1 ,  100 )</code></pre>
 <p>By default <code>se = 1</code> and <code>sp = 1</code>, and the
 parameters se and sp must verify that <span class="math inline">\(se+sp-1\)</span>.</p>
 </div>
@@ -519,8 +519,7 @@ First, we load the dataset:</p>
 <span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>chikv_vietnam <span class="ot">=</span> Rsero<span class="sc">::</span><span class="fu">SeroData</span>(<span class="at">age_at_sampling =</span> <span class="fu">round</span>(<span class="fu">as.numeric</span>(sero.data<span class="sc">$</span>age)), </span>
 <span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>                                <span class="at">Y =</span> <span class="fu">as.numeric</span>(sero.data<span class="sc">$</span>Y)<span class="sc">&gt;</span><span class="dv">9</span>,</span>
 <span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>                                <span class="at">sampling_year =</span> <span class="fu">as.numeric</span>(sero.data<span class="sc">$</span>sampling_year), </span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>                                <span class="at">category =</span> <span class="fu">as.character</span>(sero.data<span class="sc">$</span>Loc),</span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>                                <span class="at">location =</span> <span class="fu">as.character</span>(sero.data<span class="sc">$</span>Loc))</span></code></pre></div>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>                                <span class="at">category =</span> <span class="fu">as.character</span>(sero.data<span class="sc">$</span>Loc))</span></code></pre></div>
 <p>We could have loaded the dataset directly too</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;chikv_vietnam&quot;</span>)</span></code></pre></div>
 <p>We defined categories corresponding to the different regions. This
@@ -539,16 +538,38 @@ four region:</p>
 ## [6,] &quot;An Giang&quot;</code></pre>
 <p>We define a model of the annual force of infection that accounts for
 different risks of infection in each region.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>modelI2Full  <span class="ot">=</span><span class="fu">FOImodel</span>(<span class="at">type=</span><span class="st">&#39;intervention&#39;</span>,</span>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>modelI2Full  <span class="ot">=</span><span class="fu">FOImodel</span>(<span class="at">type=</span><span class="st">&#39;piecewise&#39;</span>,</span>
 <span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>                       <span class="at">K=</span><span class="dv">2</span>,</span>
 <span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>                       <span class="at">cat_lambda =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
-<p>We defined an <em>intervention</em> model, to describe that we expect
-a drop of the force of infection at a certain point in time. The
-parameter <em>cat_lambda = TRUE</em> is used to set different relative
-values of the force of infection while keeping equal the timing of the
-drop in infection probability. Therefore, the fit is done simultaneously
-on the four regions.</p>
+<p>We defined an <em>piecewise</em> model, to describe that we expect a
+drop of the force of infection at a certain point in time. The parameter
+<em>cat_lambda = TRUE</em> is used to set different relative values of
+the force of infection while keeping equal the timing of the drop in
+infection probability. Therefore, the fit is done simultaneously on the
+four regions.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>FOIfit.vietnam <span class="ot">=</span> <span class="fu">fit</span>(<span class="at">model =</span> modelI2full, <span class="at">data=</span>chikv_vietnam)</span></code></pre></div>
+<p>An arbitrary number of categories can be defined. In the following
+example we define three different categories (sex, location,
+occupation).</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>foi <span class="ot">=</span><span class="fl">0.01</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>ns  <span class="ot">=</span> <span class="dv">600</span></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>sex.list  <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&#39;male&#39;</span>, <span class="st">&#39;female&#39;</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>location.list <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&#39;Region 1&#39;</span>, <span class="st">&#39;Region 2&#39;</span>, <span class="st">&quot;Region 3&quot;</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>occupation.list <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;HCW&quot;</span>,<span class="st">&quot;OTHER&quot;</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>sex <span class="ot">&lt;-</span> <span class="fu">sample</span>(sex.list,ns, <span class="at">replace=</span> <span class="cn">TRUE</span>)</span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>location <span class="ot">&lt;-</span> <span class="fu">sample</span>(location.list,ns, <span class="at">replace=</span> <span class="cn">TRUE</span>)</span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>occupation <span class="ot">&lt;-</span> <span class="fu">sample</span>(occupation.list, ns, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a>factor <span class="ot">=</span> <span class="dv">1</span><span class="sc">*</span>(sex<span class="sc">==</span><span class="st">&#39;males&#39;</span>) <span class="sc">+</span> <span class="fl">0.5</span><span class="sc">*</span>(sex<span class="sc">==</span><span class="st">&#39;females&#39;</span>)</span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a>factor <span class="ot">=</span>factor<span class="sc">*</span>( <span class="dv">1</span><span class="sc">*</span>(location<span class="sc">==</span><span class="st">&quot;Region 1&quot;</span>) <span class="sc">+</span> <span class="fl">0.5</span><span class="sc">*</span>(location<span class="sc">==</span><span class="st">&quot;Region 2&quot;</span>) <span class="sc">+</span> <span class="dv">3</span><span class="sc">*</span>(location<span class="sc">==</span><span class="st">&quot;Region 3&quot;</span>))</span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a>factor <span class="ot">=</span>factor<span class="sc">*</span>( <span class="dv">1</span><span class="sc">*</span>(occupation<span class="sc">==</span><span class="st">&quot;HCW&quot;</span>) <span class="sc">+</span> <span class="fl">1.1</span><span class="sc">*</span>(occupation<span class="sc">!=</span><span class="st">&quot;HCW&quot;</span>) )</span>
+<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a></span>
+<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a>ages <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">runif</span>(<span class="at">n=</span><span class="fu">length</span>(sex))<span class="sc">*</span><span class="dv">70</span>)<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a></span>
+<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a>data_tmp <span class="ot">=</span> <span class="fu">SeroData</span>(<span class="at">age_at_sampling =</span>  ages ,</span>
+<span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a>                    <span class="at">Y =</span>  <span class="fu">runif</span>(<span class="at">n=</span>ns) <span class="sc">&lt;</span> <span class="dv">1</span><span class="sc">-</span><span class="fu">exp</span>(<span class="sc">-</span>foi<span class="sc">*</span>factor<span class="sc">*</span>ages), </span>
+<span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a>                    <span class="at">sampling_year =</span> <span class="dv">2023</span>,</span>
+<span id="cb16-19"><a href="#cb16-19" tabindex="-1"></a>                    <span class="at">category =</span> <span class="fu">cbind</span>(sex, location, occupation))</span></code></pre></div>
 </div>
 <div id="model-comparison" class="section level2">
 <h2>Model comparison</h2>
@@ -558,12 +579,12 @@ Watanabe-Akaike information criterion (WAIC). for a detailed explanation
 of all three measures, see Gelman A, Hwang J, Vehtari A. Understanding
 predictive information criteria for Bayesian models. Statistics and
 computing. 2014 Nov 1;24(6):997-1016.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">compute_information_criteria</span>(FOIfit.vietnam)</span></code></pre></div>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>modelOutbreak <span class="ot">=</span><span class="fu">FOImodel</span>(<span class="at">type=</span><span class="st">&#39;outbreak&#39;</span>,</span>
-<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>                          <span class="at">K=</span><span class="dv">1</span>)</span>
-<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>FOIfit.vietnam2 <span class="ot">=</span> <span class="fu">fit</span>(<span class="at">model =</span> modelOutbreak, <span class="at">data=</span>chikv_vietnam)</span>
-<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a><span class="fu">compute_information_criteria</span>(FOIfit.vietnam2)</span></code></pre></div>
-<p>The DIC of the intervention model is lower than the DIC of the
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">compute_information_criteria</span>(FOIfit.vietnam)</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>modelOutbreak <span class="ot">=</span><span class="fu">FOImodel</span>(<span class="at">type=</span><span class="st">&#39;outbreak&#39;</span>,</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>                          <span class="at">K=</span><span class="dv">1</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>FOIfit.vietnam2 <span class="ot">=</span> <span class="fu">fit</span>(<span class="at">model =</span> modelOutbreak, <span class="at">data=</span>chikv_vietnam)</span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a><span class="fu">compute_information_criteria</span>(FOIfit.vietnam2)</span></code></pre></div>
+<p>The DIC of the piecewise constant model is lower than the DIC of the
 outbreak model. This indicates that the former is a more adequate
 description of the data. In general, DIC differences of more than 5
 points with the lowest DIC indicate weak support for a model.</p>
@@ -580,35 +601,35 @@ boundaries.</p>
 <h3>Default prior distributions</h3>
 <div id="for-the-constant-model" class="section level4">
 <h4>For the constant model</h4>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>priorC1 <span class="ot">=</span> <span class="dv">0</span></span>
-<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>priorC2 <span class="ot">=</span> <span class="dv">10</span></span></code></pre></div>
-</div>
-<div id="for-the-intervention-model" class="section level4">
-<h4>For the intervention model</h4>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>priorC1 <span class="ot">=</span> <span class="dv">0</span></span>
-<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>priorC2 <span class="ot">=</span> <span class="dv">10</span></span>
-<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a>priorT1 <span class="ot">=</span> <span class="dv">0</span></span>
-<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a>priorT2 <span class="ot">=</span> <span class="dv">100</span></span></code></pre></div>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>priorC2 <span class="ot">=</span> <span class="dv">10</span></span></code></pre></div>
+</div>
+<div id="for-the-piecewise-model" class="section level4">
+<h4>For the piecewise model</h4>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>priorC1 <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>priorC2 <span class="ot">=</span> <span class="dv">10</span></span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>priorT1 <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a>priorT2 <span class="ot">=</span> <span class="dv">100</span></span></code></pre></div>
 </div>
 <div id="for-the-outbreak-model" class="section level4">
 <h4>For the outbreak model</h4>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>prioralpha1 <span class="ot">=</span> <span class="dv">0</span></span>
-<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>prioralpha2 <span class="ot">=</span> <span class="dv">5</span></span>
-<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>priorbeta1 <span class="ot">=</span> <span class="dv">0</span></span>
-<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a>priorbeta2 <span class="ot">=</span> <span class="dv">1</span></span>
-<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a>priorT1 <span class="ot">=</span> <span class="dv">0</span></span>
-<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a>priorT2 <span class="ot">=</span> <span class="dv">100</span></span></code></pre></div>
-</div>
-<div id="for-the-constantoutbreak-model" class="section level4">
-<h4>For the constant+outbreak model</h4>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>prioralpha1 <span class="ot">=</span> <span class="dv">0</span></span>
 <span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>prioralpha2 <span class="ot">=</span> <span class="dv">5</span></span>
 <span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a>priorbeta1 <span class="ot">=</span> <span class="dv">0</span></span>
 <span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a>priorbeta2 <span class="ot">=</span> <span class="dv">1</span></span>
-<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>priorT1 <span class="ot">=</span> <span class="dv">0</span></span>
-<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a>priorT2 <span class="ot">=</span> <span class="dv">100</span></span>
-<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a>priorC1 <span class="ot">=</span> <span class="dv">0</span></span>
-<span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a>priorC2 <span class="ot">=</span> <span class="dv">10</span></span></code></pre></div>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>priorT1 <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a>priorT2 <span class="ot">=</span> <span class="dv">100</span></span></code></pre></div>
+</div>
+<div id="for-the-constantoutbreak-model" class="section level4">
+<h4>For the constant+outbreak model</h4>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>prioralpha1 <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>prioralpha2 <span class="ot">=</span> <span class="dv">5</span></span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>priorbeta1 <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a>priorbeta2 <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a>priorT1 <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a>priorT2 <span class="ot">=</span> <span class="dv">100</span></span>
+<span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a>priorC1 <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb22-8"><a href="#cb22-8" tabindex="-1"></a>priorC2 <span class="ot">=</span> <span class="dv">10</span></span></code></pre></div>
 </div>
 <div id="for-the-independent-model" class="section level4">
 <h4>For the independent model</h4>
@@ -616,24 +637,28 @@ boundaries.</p>
 annual probability of infection is drawn with a uniform distribution
 <span class="math inline">\(U(priorY1, priorY2)\)</span> with default
 values</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>priorY1 <span class="ot">=</span> <span class="dv">0</span></span>
-<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>priorY2 <span class="ot">=</span> <span class="dv">10</span></span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>priorY1 <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>priorY2 <span class="ot">=</span> <span class="dv">10</span></span></code></pre></div>
 </div>
 <div id="in-the-case-of-seroreversion" class="section level4">
 <h4>In the case of seroreversion</h4>
 <p>An exponential distribution was implemented <span class="math inline">\(\rho \sim Exp(2)\)</span></p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>priorRho <span class="ot">=</span> <span class="dv">2</span></span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>priorRho <span class="ot">=</span> <span class="dv">2</span></span></code></pre></div>
 </div>
 </div>
 <div id="specifying-the-parameters-of-the-prior-distributions-example" class="section level3">
 <h3>Specifying the parameters of the prior distributions: example</h3>
 <p>In the case of the <code>&quot;outbreak&quot;</code> and the
-<code>&quot;constantoutbreak&quot;</code> models, when <code>K&gt;1</code> each
-outbreak can be defined by a specific set of prior distributions.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">FOImodel</span>(<span class="at">type =</span> <span class="st">&quot;outbreak&quot;</span>, <span class="at">K =</span> <span class="dv">2</span>, </span>
-<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>                  <span class="at">prioralpha1 =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>), <span class="at">prioralpha2=</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">1</span>), </span>
-<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>                  <span class="at">priorT1 =</span> <span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">40</span>), <span class="at">priorT2=</span> <span class="fu">c</span>(<span class="dv">30</span>, <span class="dv">70</span>))</span>
-<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a><span class="fu">print</span>(model)</span></code></pre></div>
+<code>&quot;constantoutbreak&quot;</code> models each outbreak can be defined by a
+specific set of prior distributions. Here we set <code>K=2</code>. For
+the first outbreak, the prior for <code>T</code> is uniform(10,30), the
+prior for alpha is uniform(0,5). For the second outbreak, the prior for
+<code>T</code> is uniform(40,70), the prior for alpha is
+uniform(0,1).</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">FOImodel</span>(<span class="at">type =</span> <span class="st">&quot;outbreak&quot;</span>, <span class="at">K =</span> <span class="dv">2</span>, </span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a>                  <span class="at">prioralpha1 =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>), <span class="at">prioralpha2=</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">1</span>), </span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a>                  <span class="at">priorT1 =</span> <span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">40</span>), <span class="at">priorT2=</span> <span class="fu">c</span>(<span class="dv">30</span>, <span class="dv">70</span>))</span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a><span class="fu">print</span>(model)</span></code></pre></div>
 <pre><code>## &lt;FOImodel object&gt;
 ## Model name:  outbreak 
 ##   Estimated parameters:  6 

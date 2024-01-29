@@ -34,13 +34,13 @@ We considered five models that define the force of infection at a given year:
 
 * Annual hazard of infection. This model corresponds to independent, yearly values of the force of infection. 
 * Outbreak model. The force of infection is defined as a sum of gaussians.
-* Intervention model. 
+* Piecewise constant model. 
 * Constant force of infection. 
 * Combination of constant and outbreak
 
 In the constant model a single parameter of the force of infection is evaluated. 
 
-The intervention models consider successive constant phases. They take as an input the number of different constant phase $K$, where $K \geq 1$. The value $K=1$ corresponds to the constant model. 
+The $piecewise$ models consider successive constant phases. They take as an input the number $K$ of different constant phases, where $K \geq 1$. The value $K=1$ corresponds to the constant model. 
 
 In the case of the outbreak model, the force of infection at year $i$ is given as a sum of $K$ gaussians: 
 $$\lambda_i  = \sum_{j=1}^K\bar{\alpha}_{j} e^{-\frac{(i-T_j)^2}{\beta_j^2}}.$$
@@ -54,7 +54,7 @@ The different models are defined using the following commands
 ```{r modelUse, echo=TRUE}
 model <- FOImodel(type = "constant") # a constant model
 model <- FOImodel(type = "independent") # independent annual force of infection
-model <- FOImodel(type = "intervention", K = 2) # intervention model: two constant phase 
+model <- FOImodel(type = "piecewise", K = 2) # Two constant phase 
 model <- FOImodel(type = "outbreak", K = 1) # one outbreak
 model <- FOImodel(type = "constantoutbreak", K = 2) # two outbreaks and a constant annual force of infection
 print(model)
@@ -112,9 +112,7 @@ sero.data =  read.csv('../data-raw/CHIKVVietnam.csv', header = TRUE, sep=';')
 chikv_vietnam = Rsero::SeroData(age_at_sampling = round(as.numeric(sero.data$age)), 
                                 Y = as.numeric(sero.data$Y)>9,
                                 sampling_year = as.numeric(sero.data$sampling_year), 
-                                category = as.character(sero.data$Loc),
-                                location = as.character(sero.data$Loc))
-
+                                category = as.character(sero.data$Loc))
 ```
 We could have loaded the dataset directly too
 ```{r vietnam2, echo=TRUE, warning=FALSE}
@@ -128,18 +126,42 @@ print(head(chikv_vietnam$category))
 ```
 We define a model of the annual force of infection that accounts for different risks of infection in each region.
 ```{r vietnam4, echo=TRUE, warning=FALSE}
-modelI2Full  =FOImodel(type='intervention',
+modelI2Full  =FOImodel(type='piecewise',
                        K=2,
                        cat_lambda = TRUE)
 ```
 
-We defined an *intervention* model, to describe that we expect a drop of the force of infection at a certain point in time. The parameter *cat_lambda = TRUE* is used to set different relative values of the force of infection while keeping equal the timing of the drop in infection probability. 
+We defined an *piecewise* model, to describe that we expect a drop of the force of infection at a certain point in time. The parameter *cat_lambda = TRUE* is used to set different relative values of the force of infection while keeping equal the timing of the drop in infection probability. 
 Therefore, the fit is done simultaneously on the four regions. 
 
 ```{r vietnam5, echo=TRUE, warning=FALSE, eval=FALSE}
 FOIfit.vietnam = fit(model = modelI2full, data=chikv_vietnam)
 ```
 
+An arbitrary number of categories can be defined. In the following example we define three different categories (sex, location, occupation). 
+
+```{r 3categories, echo=TRUE, warning=FALSE, eval=FALSE}
+foi =0.01
+ns  = 600
+sex.list  = c('male', 'female')
+location.list = c('Region 1', 'Region 2', "Region 3")
+occupation.list = c("HCW","OTHER")
+sex <- sample(sex.list,ns, replace= TRUE)
+location <- sample(location.list,ns, replace= TRUE)
+occupation <- sample(occupation.list, ns, replace = TRUE)
+
+factor = 1*(sex=='males') + 0.5*(sex=='females')
+factor =factor*( 1*(location=="Region 1") + 0.5*(location=="Region 2") + 3*(location=="Region 3"))
+factor =factor*( 1*(occupation=="HCW") + 1.1*(occupation!="HCW") )
+
+ages = round(runif(n=length(sex))*70)+1
+
+data_tmp = SeroData(age_at_sampling =  ages ,
+                    Y =  runif(n=ns) < 1-exp(-foi*factor*ages), 
+                    sampling_year = 2023,
+                    category = cbind(sex, location, occupation))
+```
+ 
 ## Model comparison
 
 Different measures of model adequacy were implemented: The deviance information criterion (DIC), the Akaike information criterion (AIC), the  Watanabe-Akaike information criterion (WAIC). 
@@ -154,7 +176,7 @@ modelOutbreak =FOImodel(type='outbreak',
 FOIfit.vietnam2 = fit(model = modelOutbreak, data=chikv_vietnam)
 compute_information_criteria(FOIfit.vietnam2)
 ```
-The DIC of the intervention model is lower than the DIC of the outbreak model. This indicates that the former is a more adequate description of the data. In general, DIC differences of more than 5 points with the lowest DIC indicate weak support for a model.
+The DIC of the piecewise constant model is lower than the DIC of the outbreak model. This indicates that the former is a more adequate description of the data. In general, DIC differences of more than 5 points with the lowest DIC indicate weak support for a model.
 
 
 
@@ -169,11 +191,11 @@ Flat priors were chosen for all parameters except the force of infection in the 
 priorC1 = 0
 priorC2 = 10
 ```
-#### For the intervention model
+#### For the piecewise model
 ```{r prior2, echo=TRUE, warning=FALSE, eval=FALSE}
 priorC1 = 0
 priorC2 = 10
-priorT1 = 0
+priorT1 = 1
 priorT2 = 100
 ```
 #### For the outbreak model
@@ -182,7 +204,7 @@ prioralpha1 = 0
 prioralpha2 = 5
 priorbeta1 = 0
 priorbeta2 = 1
-priorT1 = 0
+priorT1 = 1
 priorT2 = 100
 ```
 #### For the constant+outbreak model
@@ -212,7 +234,8 @@ priorRho = 2
 
 ### Specifying the parameters of the prior distributions: example   
 
-In the case of the `"outbreak"` and the `"constantoutbreak"` models, when `K>1` each outbreak can be defined by a specific set of prior distributions.
+In the case of the `"outbreak"` and the `"constantoutbreak"` models each outbreak can be defined by a specific set of prior distributions. Here we set `K=2`. For the first outbreak, the prior for `T` is uniform(10,30), the prior for alpha is uniform(0,5). For the second outbreak, the prior for `T` is uniform(40,70), the prior for alpha is uniform(0,1).
+
 ```{r modeloutbreaks, echo=TRUE}
 model <- FOImodel(type = "outbreak", K = 2, 
                   prioralpha1 = c(0,0), prioralpha2= c(5, 1), 
