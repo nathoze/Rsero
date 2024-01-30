@@ -55,10 +55,12 @@ seroprevalence.fit<- function(FOIfit,
     for(cat in unique.categories){ 
       
       if(length(unique.categories)==1){
-        title =  paste0("Sampling year: ", sampling_year)
+      #  title =  paste0("Sampling year: ", sampling_year)
+        title =  ""
       }
       if(length(unique.categories)>1){
-        title= paste0('Category: ',cat," Sampling year: ", sampling_year)
+       # title= paste0('Category: ',cat," Sampling year: ", sampling_year)
+        title= paste0('Category: ',cat)
       }
       
       index.plot=index.plot+1
@@ -94,46 +96,45 @@ seroprevalence.fit<- function(FOIfit,
       
       # histogram  of data
       histdata <- sero.age.groups(dat = subdat,age_class = age_class,YLIM=YLIM) 
-      histdata$labels_text  <-  as.character(histdata$labels)
+      histdata$labels_text <- as.character(histdata$labels)
       
       last_row_index <- tail(which(complete.cases(histdata)), 1)
       if(length(last_row_index)>0){
-        histdata =histdata[1:last_row_index,]
+        histdata = histdata[1:last_row_index,]
       }
       
       max.age= max(histdata$age)
-      
-      # histdata$labels = as.factor(as.numeric(as.character(histdata$labels)))
-      #  histdata$age =as.numeric(as.character(histdata$labels))
-      
+    
       DataEnvelope =  subset(DataEnvelope, x<=max.age)
       meanFit = subset(meanFit, x<=max.age )
       
       # plot the mean and 95% credible interval of the seroprevalence
       p <- ggplot2::ggplot() + 
         ggplot2::geom_polygon(data=DataEnvelope, ggplot2::aes(x, y), fill="#d7def3") + 
-        ggplot2::geom_line(data = meanFit, ggplot2::aes(x = x, y = y), size = 1, color ='#5e6b91')
+        ggplot2::geom_line(data = meanFit, ggplot2::aes(x = x, y = y), linewidth = 1, color ='#5e6b91')
       
       # if plot individual runs of the chain
       if(individual_samples>0){
         Index_samples <- sample(nrow(Pinf), individual_samples)
         for (i in Index_samples){
           ind_foi <-  data.frame(x = years.plotted.normal,y = Pinf[i, years.plotted])
-          p <- p + ggplot2::geom_line(data = ind_foi, ggplot2::aes(x = x, y = y), size = 0.8, colour = "#bbbbbb", alpha = 0.6)
+          p <- p + ggplot2::geom_line(data = ind_foi, ggplot2::aes(x = x, y = y), linewidth = 0.8, colour = "#bbbbbb", alpha = 0.6)
         }
       }
+
       
-      # p <- p  +  scale_x_continuous(breaks=histdata$age,labels=levels(histdata$labels_text))+  
-      #   print(histdata)
-      #   print(histdata$labels_text)
-      p <- p  +  scale_x_continuous(breaks=histdata$age,labels=histdata$labels_text)+  
+      p <- p  +
+        scale_x_continuous(breaks=histdata$age,labels=histdata$labels_text)+  
         geom_point(data = histdata, aes(x=age, y=mean))  +
         geom_segment(data=histdata, aes(x=age,y=lower, xend= age, yend=upper))+
-        ggplot2::xlab("Age (years)") + ggplot2::ylab("Seroprevalence") + 
+        ggplot2::xlab("Age (years)") + 
+        ggplot2::ylab("Seroprevalence") + 
         theme_classic() +
         theme(axis.text.x = element_text(angle = 45, size=14,vjust = 0.5),
               axis.text.y = element_text(size=14),
-              text=element_text(size=14))  + ylim(0,YLIM)+ggtitle(title)
+              text=element_text(size=14)) +
+        ylim(0,YLIM)+
+        ggtitle(title)
       
       
       plots[[index.plot]] <- p 

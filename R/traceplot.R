@@ -23,11 +23,11 @@
 ##'   foi = c(0.2,0.3))
 ##' model <- FOImodel('outbreak', K = 2)
 ##' F1 <- fit(model = model, data = data)
-##' traceplot(F1)
+##' traceplot.Rsero(F1)
 ##' 
 ##' @export
 ##' 
-traceplot <- function(FOIfit,
+traceplot.Rsero <- function(FOIfit,
                       pars = NULL, include = TRUE, unconstrain = FALSE, 
                       inc_warmup = FALSE, window = NULL, nrow = NULL, ncol = NULL,...){
   

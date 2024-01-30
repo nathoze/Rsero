@@ -78,7 +78,7 @@ sero.age.groups <- function(dat,age_class,YLIM){
   
   #  age_categories <- seq(from = 0, to = min(dat$A, max(dat$age)), by = age_class)
   
-  if(age_class>= max(dat$age_at_sampling)){
+  if(age_class<= max(dat$age_at_sampling)){
     age_categories <- seq(from = 0, to =  max(dat$age_at_sampling), by = age_class)
   }else{
     age_categories <- seq(from = 0, to =  max(dat$age_at_sampling), by = max(dat$age_at_sampling))

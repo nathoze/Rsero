@@ -38,16 +38,14 @@ devtools::install_github("nathoze/Rsero")
 (This step requires that the package *devtools* is installed). 
 Installation may take a few minutes due to the compilation of the stan files that encode the serocatalytic models. 
 
-MCMC simulations are done using the package rstan, that requires Rtools 3.3 on Windows computers. Rtools 3.3 can be found here https://cran.r-project.org/bin/windows/Rtools/
+MCMC simulations are done using the package rstan, that requires Rtools 3.3 on Windows computers. Rtools 4.3 can be found here https://cran.r-project.org/bin/windows/Rtools/
 
-On Windows 10, you might want to try the command
+On Windows 10, you may have to install the  package wit this command
 ```{r devtoolinstallWindows10, eval=FALSE}
 devtools::install_github("nathoze/Rsero", INSTALL_opts = "--no-multiarch")
 ```
 
 ## More details
-
-
 
 More details on the functions can be found in the documentation. The serocatalytic models are described in details in the vignette *models*. This vignette includes several examples and shows the different features of the packages.
 

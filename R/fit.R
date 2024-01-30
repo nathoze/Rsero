@@ -139,8 +139,6 @@ fit <- function(model,
   if(model$cat_lambda){
     model$estimated_parameters <- model$estimated_parameters+data$Ncat.unique-1
   }
-  print(mdls)
-  print(stanmodels[[mdls]])
   fit.stan <- rstan::sampling(stanmodels[[mdls]],
                               data= newdata,
                               iter = iter,

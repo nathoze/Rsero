@@ -1,7 +1,6 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-Rsero: Estimate the annual force of infection using serological data
-====================================================================
+# Rsero: Estimate the annual force of infection using serological data
 
 Rsero is an R package dedicated to the implementation of serocatalytic
 models that are used to estimate the force of infection from
@@ -21,8 +20,7 @@ analyze serological surveys, use a variety of serocatalytic models, run
 MCMC algorithm to estimate the parameters of the force of infection, and
 analyse the results.
 
-Installation
-------------
+## Installation
 
 To install the package, type
 
@@ -35,25 +33,23 @@ Installation may take a few minutes due to the compilation of the stan
 files that encode the serocatalytic models.
 
 MCMC simulations are done using the package rstan, that requires Rtools
-3.3 on Windows computers. Rtools 3.3 can be found here
-<a href="https://cran.r-project.org/bin/windows/Rtools/" class="uri">https://cran.r-project.org/bin/windows/Rtools/</a>
+3.3 on Windows computers. Rtools 4.3 can be found here
+<https://cran.r-project.org/bin/windows/Rtools/>
 
-On Windows 10, you might want to try the command
+On Windows 10, you may have to install the package wit this command
 
 ``` r
 devtools::install_github("nathoze/Rsero", INSTALL_opts = "--no-multiarch")
 ```
 
-More details
-------------
+## More details
 
 More details on the functions can be found in the documentation. The
 serocatalytic models are described in details in the vignette *models*.
 This vignette includes several examples and shows the different features
 of the packages.
 
-Working with serological data
------------------------------
+## Working with serological data
 
 One of the feature of *Rsero* is to store serological data in a standard
 format to permit some estimations and fit with serocatalytic models. A
@@ -100,9 +96,8 @@ seroprevalence by calling *seroprevalence.plot*
 
 ``` r
 seroprevalence(simulated.survey)
-#> [1] "Mean: 0.21    2.5%: 0.18    97.5%: 0.25"
+#> [1] "Mean: 0.2    2.5%: 0.16    97.5%: 0.24"
 seroprevalence.plot(simulated.survey,YLIM=0.3)
-#> [1] "Category: Category 1"
 #> [[1]]
 ```
 
@@ -117,8 +112,7 @@ sex= c(rep('males',250), rep('females', 250))
 simulated.survey  = SeroData(age_at_sampling =  age, Y = seropositive, sex = sex, location  = 'Paris', sampling_year = 2015, category = sex) 
 ```
 
-Example.
---------
+## Example.
 
 In this example we show the basic steps to follow to get a complete
 analysis of a serological survey. This analysis uses a simulated dataset
@@ -135,14 +129,13 @@ obtained simply by typing
 
 ``` r
 seroprevalence(one_peak_simulation)
-#> [1] "Mean: 0.13    2.5%: 0.1    97.5%: 0.16"
+#> [1] "Mean: 0.11    2.5%: 0.09    97.5%: 0.15"
 ```
 
 and a graph of the age profile of seroprevalence is obtained using
 
 ``` r
 seroprevalence.plot(one_peak_simulation)
-#> [1] "Category: Category 1"
 #> [[1]]
 ```
 
@@ -173,10 +166,7 @@ We can now fit the defined model to the data:
 ``` r
 FOIfit.constant = fit(data = one_peak_simulation,  model = ConstantModel, chains=1)
 #> 
-#> SAMPLING FOR MODEL 'intervention' NOW (CHAIN 1).
-#> Chain 1: Rejecting initial value:
-#> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
-#> Chain 1:   Stan can't start sampling from this initial value.
+#> SAMPLING FOR MODEL 'constant' NOW (CHAIN 1).
 #> Chain 1: Rejecting initial value:
 #> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
 #> Chain 1:   Stan can't start sampling from this initial value.
@@ -184,8 +174,8 @@ FOIfit.constant = fit(data = one_peak_simulation,  model = ConstantModel, chains
 #> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
 #> Chain 1:   Stan can't start sampling from this initial value.
 #> Chain 1: 
-#> Chain 1: Gradient evaluation took 0 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
+#> Chain 1: Gradient evaluation took 0.000121 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.21 seconds.
 #> Chain 1: Adjust your expectations accordingly!
 #> Chain 1: 
 #> Chain 1: 
@@ -202,9 +192,9 @@ FOIfit.constant = fit(data = one_peak_simulation,  model = ConstantModel, chains
 #> Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 3.776 seconds (Warm-up)
-#> Chain 1:                30.319 seconds (Sampling)
-#> Chain 1:                34.095 seconds (Total)
+#> Chain 1:  Elapsed Time: 1.819 seconds (Warm-up)
+#> Chain 1:                1.747 seconds (Sampling)
+#> Chain 1:                3.566 seconds (Total)
 #> Chain 1:
 ```
 
@@ -213,8 +203,6 @@ the fit
 
 ``` r
 seroprevalence.fit(FOIfit.constant, YLIM=0.5)
-#> [1] "Category: Category 1"
-#> [1] "Sampling year: 2019"
 #> [[1]]
 ```
 
@@ -237,9 +225,15 @@ We can now fit the defined model to the data:
 FOIfit.outbreak = fit( data = one_peak_simulation,  model = OutbreakModel, chains=1)
 #> 
 #> SAMPLING FOR MODEL 'outbreak' NOW (CHAIN 1).
+#> Chain 1: Rejecting initial value:
+#> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
+#> Chain 1:   Stan can't start sampling from this initial value.
+#> Chain 1: Rejecting initial value:
+#> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
+#> Chain 1:   Stan can't start sampling from this initial value.
 #> Chain 1: 
-#> Chain 1: Gradient evaluation took 0 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
+#> Chain 1: Gradient evaluation took 0.000182 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.82 seconds.
 #> Chain 1: Adjust your expectations accordingly!
 #> Chain 1: 
 #> Chain 1: 
@@ -256,18 +250,20 @@ FOIfit.outbreak = fit( data = one_peak_simulation,  model = OutbreakModel, chain
 #> Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: -5.839 seconds (Warm-up)
-#> Chain 1:                3.258 seconds (Sampling)
-#> Chain 1:                -2.581 seconds (Total)
+#> Chain 1:  Elapsed Time: 5.566 seconds (Warm-up)
+#> Chain 1:                2.808 seconds (Sampling)
+#> Chain 1:                8.374 seconds (Total)
 #> Chain 1:
+#> Warning: There were 2102 divergent transitions after warmup. See
+#> https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+#> to find out why this is a problem and how to eliminate them.
+#> Warning: Examine the pairs() plot to diagnose sampling problems
 ```
 
 and we plot the result
 
 ``` r
 seroprevalence.fit(FOIfit.outbreak)
-#> [1] "Category: Category 1"
-#> [1] "Sampling year: 2019"
 #> [[1]]
 ```
 
@@ -286,8 +282,7 @@ The DIC obtained for the outbreak model is lower than that for the
 constant model. This indicates a better fit of the outbreak model to the
 data.
 
-More information
-----------------
+## More information
 
 More details on the models can be found in the vignette *models* and
 [here](http://htmlpreview.github.io/?https://github.com/nathoze/Rsero/blob/master/vignettes/models.html).
