@@ -55,8 +55,7 @@
 ##' years =  seq(1962,2012)
 ##' alpha=c(0.25, 0.1)
 ##' T=c(1974, 2000)
-##' beta=c(1,0.5)
-##' FOI = alpha[1]*exp(-(years-T[1])^2/beta[1]^2) + alpha[2]*exp(-(years-T[2])^2/beta[2]^2)
+##' FOI = alpha[1]*exp(-(years-T[1])^2) + alpha[2]*exp(-(years-T[2])^2)
 ##' data1 <- simulate_SeroData( epidemic_years = years,foi=FOI, se=0.9)
 ##' seroprevalence(data1)
 ##' 

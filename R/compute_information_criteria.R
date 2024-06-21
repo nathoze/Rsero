@@ -1,7 +1,7 @@
 #' @title Compute the AIC, DIC and WAIC 
 #'
-#' @description This function returns the Aikake Information Criterion (AIC), the Deviance Information Criterion (DIC) and the
-#'  Watanabe Aikake Information Criterion (WAIC) from a fit of the class  \code{\link{FOIfit}}.
+#' @description This function returns the Aikake Information Criterion (AIC), the Deviance Information Criterion (DIC), the
+#'  Watanabe Aikake Information Criterion (WAIC), the Pareto smoothed importance sampling - leave one out (PSIS-LOO) from a \code{\link{FOIfit}} object.
 #'  
 #' @author Nathanael Hoze \email{nathanael.hoze@gmail.com}
 #'  
@@ -29,6 +29,8 @@
 ##' \item pwaic: Estimated effective number of parameters, used in the WAIC.
 ##' 
 ##' \item lpd: log pointwise predictive density, used in the WAIC.
+##' 
+##' \item PSIS_LOO: The output of the loo() method implemented in the loo package. 
 ##' }
 ##' 
 #' @examples
@@ -49,45 +51,42 @@ compute_information_criteria <- function(FOIfit,...){
   sensitivity <- FOIfit$model$se 
   specificity <- FOIfit$model$sp
   
-  M <- nrow(FOIs)
+  S <- nrow(FOIs)
   N <- FOIfit$data$N
   A <- FOIfit$data$A 
   Ncategory <- FOIfit$data$Ncategory
   NAgeGroups <- FOIfit$data$NAgeGroups
   
-  LogLikelihoods <- matrix(0, nrow = M, ncol = N) # as many elements as there are lambdas
+  LogLikelihoods <- matrix(0, nrow = S, ncol = N) # for each iteration and each individual
   Y <- FOIfit$data$Y
   age <- FOIfit$data$age
   category <- FOIfit$data$categoryindex
   
-  for (i in seq(1,M)){
-    lk  = chains$Like[i,]
-    for (j in seq(1,N)){
-      if( Y[j] == FALSE){ # if the individual is seronegative
-        L = log(1-lk[j])   
+  for (s in seq(1,S)){
+    lk  = chains$Like[s,]
+    for (i in seq(1,N)){
+      if( Y[i] == FALSE){ # if the individual is seronegative
+        L = log(1-lk[i])   
       }  else{
-        L=log(lk[j])
+        L=log(lk[i])
       } 
-      LogLikelihoods[i,j] <- L
+      LogLikelihoods[s,i] <- L
     }
   } 
   
   # log-likelihood on the mean lambdas 
-  
   # posterior mean
   
   LogLikelihoodMean <- 0
   P <- (colMeans(chains$P))
-  
-  for (j in seq(1,N) ){
+  for (i in seq(1,N) ){
     
-    age <- FOIfit$data$age[j]
-    age_group <- FOIfit$data$age_group[j]
-    cat <- category[j]
-    
+    age <- FOIfit$data$age[i]
+    age_group <- FOIfit$data$age_group[i]
+    cat <- category[i]
     p <- P[age,age_group, cat]
     
-    if(Y[j] == TRUE){
+    if(Y[i] == TRUE){
       LogLikelihoodMean <- LogLikelihoodMean + log(sensitivity-p*(sensitivity+specificity-1) )
     }else{
       LogLikelihoodMean <- LogLikelihoodMean + log(1-sensitivity+p*(sensitivity+specificity-1) )
@@ -110,8 +109,11 @@ compute_information_criteria <- function(FOIfit,...){
   
   V = ColVar(exp(LogLikelihoods))
   pwaic = sum(V)
-  lpd = sum(log( colSums(exp(LogLikelihoods))/M))
+  lpd = sum(log( colSums(exp(LogLikelihoods))/S))
   WAIC <- -2*(lpd-pwaic)
+  
+  ## Compute the PSIS-LOO using the package loo
+  PSIS_LOO = loo(FOIfit$fit)
   
   information_criteria <- list(AIC = AIC,
                                DIC = DIC,
@@ -121,11 +123,10 @@ compute_information_criteria <- function(FOIfit,...){
                                pwaic = pwaic,
                                lpd = lpd,
                                k = estimated_parameters,
-                               MLE= max(LP))
-  
+                               MLE= max(LP),
+                               PSIS_LOO=PSIS_LOO)
   
   class(information_criteria) <- "information_criteria"
-  
   return(information_criteria)
   
 }
@@ -136,6 +137,7 @@ print.information_criteria <- function(x,...){
   cat(sprintf('AIC:  %f, MLE: %f, k:  %f\n' , x$AIC, x$MLE, x$k))
   cat(sprintf('DIC:  %f, Dbar:  %f, pD:  %f\n' , x$DIC, x$Dbar, x$pD))
   cat(sprintf('WAIC:  %f, pwaic:  %f, lpd: %f \n' , x$WAIC, x$pwaic, x$lpd))
+  cat(sprintf('looic:  %f, elpd_loo:  %f, p_loo: %f \n' , x$PSIS_LOO$looic, x$PSIS_LOO$elpd_loo, x$PSIS_LOO$p_loo))
   
 }
 

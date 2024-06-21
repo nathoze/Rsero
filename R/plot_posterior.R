@@ -15,7 +15,7 @@
 ##' P[[1]]+ylim(0,200)
 ##' 
 ##' @export
-plot_posterior<- function(FOIfit) {
+plot_posterior<- function(FOIfit, show.prior = TRUE) {
   
   chains <- rstan::extract(FOIfit$fit)
   chainsout <- chains
@@ -27,7 +27,6 @@ plot_posterior<- function(FOIfit) {
   if(name %in% model.list('All models')){
     
     if(name %in% model.list('Constant models')){# constant or constantoutbreak
-      
       gT <- plot_histogram(distribution = data.frame(X= chains$annual_foi), 
                            title = 'Histogram for Annual FOI',
                            xlabel = "FOI",
@@ -36,16 +35,15 @@ plot_posterior<- function(FOIfit) {
       plotindex <- plotindex+1
       plots[[plotindex]]  = gT        
     }
+    
     if(name %in% model.list('I models')){
-
+      
       C<- chains$Time
       K=FOIfit$model$K
       
       YearMax <- max(FOIfit$data$sampling_year)
-      Years = matrix(0,ncol(C),nrow(C))
-      
+   #   Years = matrix(0,ncol(C),nrow(C))
       Years  <- YearMax - C+1
-      
       for(i in 1:K){
         if(name != 'constant'){
           chainsout$T[,i] <- Years[,i]
@@ -64,8 +62,6 @@ plot_posterior<- function(FOIfit) {
                              title = paste('Histogram for annual FOI',i),
                              xlabel = "FOI",
                              ylabel = 'Count') 
-        
-        
         plotindex <- plotindex+1
         plots[[plotindex]]  = gT        
       }
@@ -96,7 +92,7 @@ plot_posterior<- function(FOIfit) {
         }
         chainsout$T[,i] <- t(Years[i, ]) 
         chainsout$alpha[, i] <- t(chains$alpha)[Ranks[i,]] 
-        chainsout$beta[, i] <- t(chains$beta)[Ranks[i,]]
+        # chainsout$beta[, i] <- t(chains$beta)[Ranks[i,]]
         
         gT <- plot_histogram(distribution = data.frame(X= chainsout$T[,i] ), 
                              title = paste('Histogram for Time',i),
@@ -139,13 +135,13 @@ plot_posterior<- function(FOIfit) {
           plots[[plotindex]]  = gT
         }
         
-        gT <- plot_histogram(distribution = data.frame(X = chainsout$beta[,i]), 
-                             title = paste('Histogram for beta',i),
-                             xlabel = "Value",
-                             ylabel = 'Count') 
-        
-        plotindex <- plotindex+1
-        plots[[plotindex]]  = gT
+        # gT <- plot_histogram(distribution = data.frame(X = chainsout$beta[,i]), 
+        #                      title = paste('Histogram for beta',i),
+        #                      xlabel = "Value",
+        #                      ylabel = 'Count') 
+        # 
+        # plotindex <- plotindex+1
+        # plots[[plotindex]]  = gT
         
       }
     }
@@ -160,7 +156,7 @@ plot_posterior<- function(FOIfit) {
       #   params<- rbind(params,de)  
       # }
       # 
-     }
+    }
     
     if(FOIfit$model$seroreversion){
       
@@ -168,7 +164,7 @@ plot_posterior<- function(FOIfit) {
                            title = 'Histogram for Seroreversion',
                            xlabel = "Value",
                            ylabel = 'Count') 
-       
+      
       plotindex <- plotindex+1
       plots[[plotindex]]  = gT      
     }
@@ -205,7 +201,7 @@ plot_posterior<- function(FOIfit) {
 plot_histogram <- function(distribution, title, xlabel,  ylabel='Count'){
   
   gT <- ggplot(distribution, aes(X)) +
-    geom_histogram(bins = 12, fill = "red", col="red",alpha=.4) +
+    geom_histogram(bins = 12, fill = "red", col="red",alpha=.2) +
     labs(title = title, x=xlabel, y=ylabel)+
     theme_bw()+
     theme(axis.text.x = element_text(size=16),

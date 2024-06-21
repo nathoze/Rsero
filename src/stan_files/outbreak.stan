@@ -20,22 +20,27 @@ data {
   int <lower=1> K; // the number of peaks of epidemics
   real <lower = 0> prioralpha1[K];
   real <lower = 0> prioralpha2[K];
-  real <lower = 0> priorbeta1[K];
-  real <lower = 0> priorbeta2[K];
   real priorT1[K];
   real <lower = 0> priorT2[K];
   real<lower =0, upper=1> se;
   real<lower =0, upper=1> sp;
-  real <lower = 0> priorRho;
+  real <lower = 0> priorRho1;
+  real <lower = 0> priorRho2;
   int <lower = 0> cat_lambda; // 1 or 0: characterizes whether we distinguish categories by different FOI
+
+//  = 0,1, 2 to specify the prior distributions
+  int prior_distribution_alpha;
+  int prior_distribution_T;
+  int prior_distribution_constant_foi;
+  int prior_distribution_independent_foi;
+  int prior_distribution_rho;
+ 
 }
 
 parameters {
-  real  T[K];
+  real T[K];
   real<lower=0> alpha[K];
-  real<lower=0> beta[K];
-  real<lower = 0, upper = 20> rho;    
-  
+  real<lower = 0, upper = 20> rho;      
   real  Flambda2[maxNcategory,Ncategoryclass];  
 }
 
@@ -49,20 +54,24 @@ transformed parameters {
   real<lower =0, upper=1> P[A,NAgeGroups,Ncategory];  
   real<lower =0> Flambda[Ncategory]; 
   real<lower = 0, upper=1> Likelihood[N];  
+  real log_lik[N];  
+
   real c; 
   
 
   for(i in 1:K){
     S[i] =0;
     for(j in 1:A){
-      S[i]  =  S[i]  + exp(-((j-T[i])^2)/(beta[i])^2);
+      S[i]  =  S[i]  + exp(-(j-T[i])^2);
+     // S[i]  =  S[i]  + exp(-((j-T[i])^2)/(beta[i])^2);
     }
   }
   
   for(j in 1:A){
     lambda[j] =0;
     for(i in 1:K){
-      lambda[j]  =  lambda[j]  + alpha[i]/S[i]*exp(-((j-T[i])^2)/(beta[i])^2);
+      lambda[j]  =  lambda[j]  + alpha[i]/S[i]*exp(-(j-T[i])^2);
+     //lambda[j]  =  lambda[j]  + alpha[i]/S[i]*exp(-((j-T[i])^2)/(beta[i])^2);
     }
   }
   
@@ -138,29 +147,56 @@ transformed parameters {
       }
     }
   }
-  
-  
+
   for(j in 1:N){
     Likelihood[j] =se-(se+sp-1)*P[age[j],age_group[j],categoryindex[j]]; 
+    log_lik[j] = bernoulli_lpmf( Y[j] | Likelihood[j]);
   }
+
 }
 
 model {
   
   //FOI by group
+
+
   for (i in 1:K){
-    T[i] ~ uniform(priorT1[i], priorT2[i]);
-    alpha[i] ~ uniform(prioralpha1[i], prioralpha2[i]);
-    beta[i] ~ uniform(priorbeta1[i], priorbeta2[i]) ; 
+
+    if(prior_distribution_alpha == 0){
+        alpha[i] ~ uniform(prioralpha1[i], prioralpha2[i]);
+    }
+    if(prior_distribution_alpha == 1){
+        alpha[i] ~ normal(prioralpha1[i], prioralpha2[i]);
+    }
+    if(prior_distribution_alpha == 2){
+        alpha[i] ~ exponential(prioralpha1[i]);
+    }    
+
+    if(prior_distribution_T == 0){
+        T[i] ~ uniform(priorT1[i], priorT2[i]);
+    } 
+    if(prior_distribution_T == 1){
+        T[i] ~ normal(priorT1[i], priorT2[i]);
+    }
+    if(prior_distribution_T == 2){
+        T[i] ~ exponential(priorT1[i]);
+    }
   }
-  rho  ~ exponential(priorRho);
-  
+ 
   for(I in 1:Ncategoryclass){
     for(i in 1:maxNcategory){      
       Flambda2[i,I] ~ normal(0,1.73) ; // the prior corresponds to xx
     }
   }
-  
+  if(prior_distribution_rho == 0){
+    rho  ~ uniform(priorRho1, priorRho2);
+ }
+ if(prior_distribution_rho == 1){
+    rho  ~ normal(priorRho1, priorRho2);
+ } 
+ if(prior_distribution_rho == 2){
+    rho  ~ exponential(priorRho1);
+ }
   for (j in 1:N) {  
     target += bernoulli_lpmf( Y[j] | Likelihood[j]);
   }

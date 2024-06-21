@@ -96,7 +96,7 @@ seroprevalence by calling *seroprevalence.plot*
 
 ``` r
 seroprevalence(simulated.survey)
-#> [1] "Mean: 0.2    2.5%: 0.16    97.5%: 0.24"
+#> [1] "Mean: 0.23    2.5%: 0.19    97.5%: 0.27"
 seroprevalence.plot(simulated.survey,YLIM=0.3)
 #> [[1]]
 ```
@@ -167,15 +167,9 @@ We can now fit the defined model to the data:
 FOIfit.constant = fit(data = one_peak_simulation,  model = ConstantModel, chains=1)
 #> 
 #> SAMPLING FOR MODEL 'constant' NOW (CHAIN 1).
-#> Chain 1: Rejecting initial value:
-#> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
-#> Chain 1:   Stan can't start sampling from this initial value.
-#> Chain 1: Rejecting initial value:
-#> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
-#> Chain 1:   Stan can't start sampling from this initial value.
 #> Chain 1: 
-#> Chain 1: Gradient evaluation took 0.000121 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.21 seconds.
+#> Chain 1: Gradient evaluation took 0.000517 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 5.17 seconds.
 #> Chain 1: Adjust your expectations accordingly!
 #> Chain 1: 
 #> Chain 1: 
@@ -192,9 +186,9 @@ FOIfit.constant = fit(data = one_peak_simulation,  model = ConstantModel, chains
 #> Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 1.819 seconds (Warm-up)
-#> Chain 1:                1.747 seconds (Sampling)
-#> Chain 1:                3.566 seconds (Total)
+#> Chain 1:  Elapsed Time: 0.867 seconds (Warm-up)
+#> Chain 1:                0.876 seconds (Sampling)
+#> Chain 1:                1.743 seconds (Total)
 #> Chain 1:
 ```
 
@@ -225,15 +219,9 @@ We can now fit the defined model to the data:
 FOIfit.outbreak = fit( data = one_peak_simulation,  model = OutbreakModel, chains=1)
 #> 
 #> SAMPLING FOR MODEL 'outbreak' NOW (CHAIN 1).
-#> Chain 1: Rejecting initial value:
-#> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
-#> Chain 1:   Stan can't start sampling from this initial value.
-#> Chain 1: Rejecting initial value:
-#> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
-#> Chain 1:   Stan can't start sampling from this initial value.
 #> Chain 1: 
-#> Chain 1: Gradient evaluation took 0.000182 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.82 seconds.
+#> Chain 1: Gradient evaluation took 0.000404 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 4.04 seconds.
 #> Chain 1: Adjust your expectations accordingly!
 #> Chain 1: 
 #> Chain 1: 
@@ -250,14 +238,10 @@ FOIfit.outbreak = fit( data = one_peak_simulation,  model = OutbreakModel, chain
 #> Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 5.566 seconds (Warm-up)
-#> Chain 1:                2.808 seconds (Sampling)
-#> Chain 1:                8.374 seconds (Total)
+#> Chain 1:  Elapsed Time: 1.049 seconds (Warm-up)
+#> Chain 1:                1.049 seconds (Sampling)
+#> Chain 1:                2.098 seconds (Total)
 #> Chain 1:
-#> Warning: There were 2102 divergent transitions after warmup. See
-#> https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-#> to find out why this is a problem and how to eliminate them.
-#> Warning: Examine the pairs() plot to diagnose sampling problems
 ```
 
 and we plot the result

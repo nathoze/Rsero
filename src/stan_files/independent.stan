@@ -19,11 +19,19 @@ data {
   int <lower=1> age_at_init[NAgeGroups]; 
   real <lower = 0> priorY1;  
   real <lower = 0> priorY2;  
-  real <lower = 0> priorRho;
+  real <lower = 0> priorRho1;
+  real <lower = 0> priorRho2;
   real<lower =0, upper=1> se;
   real<lower =0, upper=1> sp;
   int <lower = 0> cat_lambda; // 1 or 0: characterizes whether we distinguish categories by different FOI
-}
+
+//  = 0,1, 2 to specify the prior distributions
+  int prior_distribution_alpha;
+   int prior_distribution_T;
+  int prior_distribution_constant_foi;
+  int prior_distribution_independent_foi;
+  int prior_distribution_rho;
+  }
 
 
 parameters {
@@ -40,6 +48,7 @@ transformed parameters {
   real<lower =0, upper=1> P[A,NAgeGroups,Ncategory]; 
   real<lower =0> Flambda[Ncategory]; //14 08
   real<lower = 0, upper=1> Likelihood[N];  
+  real log_lik[N];  
   real c; 
   
   c=0;
@@ -116,15 +125,25 @@ transformed parameters {
   }
   
   for(j in 1:N){
-    // Like[j] =1-(1-bg)*P[age[j],age_group[j],categoryindex[j]];
-    Likelihood[j] =se-(se+sp-1)*P[age[j],age_group[j],categoryindex[j]]; 
-  }
+     Likelihood[j] =se-(se+sp-1)*P[age[j],age_group[j],categoryindex[j]]; 
+    log_lik[j] = bernoulli_lpmf( Y[j] | Likelihood[j]);
+   }
+ 
 }
 
 model {
   //FOI by group
   for (j in 1:NGroups) {    
-    lambda[j] ~ uniform(priorY1,priorY2);
+     
+    if(prior_distribution_independent_foi == 0){
+      lambda[j] ~ uniform(priorY1,priorY2);
+    } 
+    if(prior_distribution_independent_foi == 1){
+      lambda[j] ~ normal(priorY1,priorY2);
+    }
+    if(prior_distribution_independent_foi == 2){
+      lambda[j] ~ exponential(priorY1);
+    }
   }
   
   for(I in 1:Ncategoryclass){
@@ -132,8 +151,15 @@ model {
       Flambda2[i,I] ~ normal(0,1.73) ;
     }
   }
-  rho  ~ exponential(priorRho);
-  
+if(prior_distribution_rho == 0){
+    rho  ~ uniform(priorRho1, priorRho2);
+ }
+ if(prior_distribution_rho == 1){
+    rho  ~ normal(priorRho1, priorRho2);
+ } 
+ if(prior_distribution_rho == 2){
+    rho  ~ exponential(priorRho1);
+ }
   for (j in 1:N) {  
     target += bernoulli_lpmf( Y[j] | Likelihood[j]);
   }

@@ -1,7 +1,7 @@
 Package: Rsero
 Type: Package
 Title: Estimate the annual force of infection using serological data
-Version: 1.0
+Version: 2.0
 Author: Nathanael Hoze
 Maintainer: Nathanael Hoze <nathanael.hoze@gmail.com>
 Description: Fit models of the force of infection to serological data using Bayesian MCMC methods. The package provides a standardized format for handling serological data, contains various serocatalytic models of force of infection, fits the models to the data, and provides tools to analyse and plot the results of the fits.  
@@ -18,7 +18,8 @@ Depends:
 	rstantools,
 	shinystan,
 	shiny,
-	httpuv 
+	httpuv,
+	loo
 LinkingTo: 
 	StanHeaders (>= 2.1.0),
 	rstan (>= 2.32.2), 

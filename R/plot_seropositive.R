@@ -122,7 +122,6 @@ seroprevalence.fit<- function(FOIfit,
         }
       }
 
-      
       p <- p  +
         scale_x_continuous(breaks=histdata$age,labels=histdata$labels_text)+  
         geom_point(data = histdata, aes(x=age, y=mean))  +

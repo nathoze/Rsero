@@ -43,10 +43,8 @@ In the constant model a single parameter of the force of infection is evaluated.
 The $piecewise$ models consider successive constant phases. They take as an input the number $K$ of different constant phases, where $K \geq 1$. The value $K=1$ corresponds to the constant model. 
 
 In the case of the outbreak model, the force of infection at year $i$ is given as a sum of $K$ gaussians: 
-$$\lambda_i  = \sum_{j=1}^K\bar{\alpha}_{j} e^{-\frac{(i-T_j)^2}{\beta_j^2}}.$$
-The $T_j$ are the time points where the force of infection is maximal and is equal to $\bar{\alpha}_j$. The parameter $\bar{\alpha}_j$ is normalized so that  $\alpha_j=\bar{\alpha}_j \sum_i e^{-\frac{(i-T_j)^2}{\beta_j^2}}$. 
-The width of the gaussians is quantified with the parameters $\beta_j$. The width of the gaussian is actually a parameter that can quantify two things: the duration of the epidemics, or the uncertainty for the location of the peak of the epidemics. 
-In the case where the $T_j$ are far apart, the gaussians are well separated and around $T_j$ the force of infection is given by a single gaussian. 
+$$\lambda_i  = \sum_{j=1}^K\bar{\alpha}_{j} e^{-{(i-T_j)^2}}.$$
+The $T_j$ are the time points where the force of infection is maximal and is equal to $\bar{\alpha}_j$. The parameter $\bar{\alpha}_j$ is normalized so that  $\alpha_j=\bar{\alpha}_j \sum_i e^{-(i-T_j)^2}$. In the case where the $T_j$ are far apart, the gaussians are well separated and around $T_j$ the force of infection is given by a single gaussian. 
 
 
 ### Using the models
@@ -59,8 +57,7 @@ model <- FOImodel(type = "outbreak", K = 1) # one outbreak
 model <- FOImodel(type = "constantoutbreak", K = 2) # two outbreaks and a constant annual force of infection
 print(model)
 ```
-Printing recapitulates the main information concerning the model. For instance, in the `"constantoutbreak"` model with `K=2`, a total of 7 parameters are estimated  (1 for the constant annual force of infection and 3 for each outbreak). The prior distribution for the `alpha`, `beta` and `T` of each outbreak and for the annual FOI are also printed. Without additional input the defaults priors are used. 
-
+Printing recapitulates the main information concerning the model. For instance, in the `"constantoutbreak"` model with `K=2`, a total of 7 parameters are estimated  (1 for the constant annual force of infection and 3 for each outbreak). The prior distribution for the `alpha` and `T` of each outbreak and for the annual FOI are also printed. Without additional input the defaults normal priors are used. 
 
 ## Secondary parameters affecting the seroprevalence
 
@@ -178,63 +175,62 @@ compute_information_criteria(FOIfit.vietnam2)
 ```
 The DIC of the piecewise constant model is lower than the DIC of the outbreak model. This indicates that the former is a more adequate description of the data. In general, DIC differences of more than 5 points with the lowest DIC indicate weak support for a model.
 
-
-
 ## Priors
 
-Flat priors were chosen for all parameters except the force of infection in the *independent* model and the relative risk of infection of the different categories. We give below the default values of the distribution parameters. For the uniform distributions, the first and second parameters are respectively the lower and upper boundaries.  
+Normal priors were set by default for all parameters. We give below the default values of the parameters that are mean and the standard deviation of the normal distribution, respectively. 
 
 ### Default prior distributions
 
+                     priorY1 = 0, 
+                     priorY2 = 1, 
+                     priorRho1 = 0,
+                     priorRho2 = 1,
+                     cat_lambda = 1,
+                     
 #### For the constant model
 ```{r prior1, echo=TRUE, warning=FALSE, eval=FALSE}
-priorC1 = 0
-priorC2 = 10
+priorC1 = 0 
+priorC2 = 1
 ```
-#### For the piecewise model
+#### For the piecewise constant model
 ```{r prior2, echo=TRUE, warning=FALSE, eval=FALSE}
 priorC1 = 0
-priorC2 = 10
-priorT1 = 1
-priorT2 = 100
+priorC2 = 1
+priorT1 = 50
+priorT2 = 20
 ```
 #### For the outbreak model
 ```{r prioroutbreak, echo=TRUE, warning=FALSE, eval=FALSE}
-prioralpha1 = 0
-prioralpha2 = 5
-priorbeta1 = 0
-priorbeta2 = 1
-priorT1 = 1
-priorT2 = 100
+prioralpha1 = 0.2
+prioralpha2 = 1
+priorT1 = 50
+priorT2 = 20
 ```
 #### For the constant+outbreak model
 ```{r priorconstantoutbreak, echo=TRUE, warning=FALSE, eval=FALSE}
-prioralpha1 = 0
-prioralpha2 = 5
-priorbeta1 = 0
-priorbeta2 = 1
-priorT1 = 0
-priorT2 = 100
+prioralpha1 = 0.2
+prioralpha2 = 1
+priorT1 = 50
+priorT2 = 20
 priorC1 = 0
-priorC2 = 10
+priorC2 = 1
 ```
 #### For the independent model
-The the *independent* model, the prior distribution of each annual probability of infection is drawn with a uniform distribution $U(priorY1, priorY2)$ with default values
 ```{r independent}
 priorY1 = 0
-priorY2 = 10
+priorY2 = 1
 ```
 
 #### In the case of seroreversion
-An exponential distribution was implemented $\rho \sim  Exp(2)$
 ```{r priorsrho}
-priorRho = 2
+priorRho1 = 0
+priorRho2 = 1
 ```
 
 
 ### Specifying the parameters of the prior distributions: example   
 
-In the case of the `"outbreak"` and the `"constantoutbreak"` models each outbreak can be defined by a specific set of prior distributions. Here we set `K=2`. For the first outbreak, the prior for `T` is uniform(10,30), the prior for alpha is uniform(0,5). For the second outbreak, the prior for `T` is uniform(40,70), the prior for alpha is uniform(0,1).
+In the case of the `"outbreak"` and the `"constantoutbreak"` models each outbreak can be defined by a specific set of prior distributions. Here we set `K=2`. For the first outbreak, the prior for `T` is normal(10,30), the prior for alpha is normal(0,5). For the second outbreak, the prior for `T` is normal(40,70), the prior for alpha is uniform(0,1).
 
 ```{r modeloutbreaks, echo=TRUE}
 model <- FOImodel(type = "outbreak", K = 2, 

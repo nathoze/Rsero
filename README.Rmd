@@ -49,7 +49,6 @@ devtools::install_github("nathoze/Rsero", INSTALL_opts = "--no-multiarch")
 
 More details on the functions can be found in the documentation. The serocatalytic models are described in details in the vignette *models*. This vignette includes several examples and shows the different features of the packages.
 
-
 ## Working with serological data 
 
 One of the feature of *Rsero* is to store serological data in a standard format to permit some estimations and fit with serocatalytic models. 
@@ -150,9 +149,7 @@ DIC.outbreak = compute_information_criteria(FOIfit.outbreak)
 ```
 The DIC obtained for the outbreak model is lower than that for the constant model. This indicates a better fit of the outbreak model to the data. 
 
-
 ## More information
-
 
 More details on the models can be found in the vignette  *models* and [here](http://htmlpreview.github.io/?https://github.com/nathoze/Rsero/blob/master/vignettes/models.html).
 A full running example  is available [here](https://htmlpreview.github.io/?https://github.com/nathoze/Rsero/blob/master/vignettes/FullExample.html).

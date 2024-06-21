@@ -128,7 +128,59 @@ fit <- function(model,
             se = model$se,
             sp = model$sp)
   
+  pars.distribution = c(model) 
+  
+  if( model$prior_distribution_alpha=="uniform"){
+    prior_distribution_alpha = 0
+  }
+  if( model$prior_distribution_alpha=="normal"){
+    prior_distribution_alpha = 1
+  }
+  if( model$prior_distribution_alpha=="exponential"){
+    prior_distribution_alpha = 2
+  }
+   
+  if( model$prior_distribution_T=="uniform"){
+    prior_distribution_T = 0
+  }
+  if( model$prior_distribution_T=="normal"){
+    prior_distribution_T = 1
+  }
+  if( model$prior_distribution_T=="exponential"){
+    prior_distribution_T = 2
+  }
+    if( model$prior_distribution_constant_foi=="uniform"){
+    prior_distribution_constant_foi = 0
+  }
+  if( model$prior_distribution_constant_foi=="normal"){
+    prior_distribution_constant_foi = 1
+  }
+  if( model$prior_distribution_constant_foi=="exponential"){
+    prior_distribution_constant_foi = 2
+  }
+  if( model$prior_distribution_independent_foi=="uniform"){
+    prior_distribution_independent_foi = 0
+  }
+  if( model$prior_distribution_independent_foi=="normal"){
+    prior_distribution_independent_foi = 1
+  }
+  if( model$prior_distribution_independent_foi=="exponential"){
+    prior_distribution_independent_foi = 2
+  }
+  if( model$prior_distribution_rho=="uniform"){
+    prior_distribution_rho = 0
+  }
+  if( model$prior_distribution_rho=="normal"){
+    prior_distribution_rho = 1
+  }
+  if( model$prior_distribution_rho=="exponential"){
+    prior_distribution_rho = 2
+  }
+  
+  prior.distributions <- c(prior_distribution_alpha,prior_distribution_T, prior_distribution_constant_foi, prior_distribution_independent_foi, prior_distribution_rho)
+   
   newdata = append(data,pars)
+  newdata = append(newdata, prior.distributions)
   if(model$type=='independent'){
     model$estimated_parameters =   model$estimated_parameters+data$A
   }
@@ -139,6 +191,7 @@ fit <- function(model,
   if(model$cat_lambda){
     model$estimated_parameters <- model$estimated_parameters+data$Ncat.unique-1
   }
+  
   fit.stan <- rstan::sampling(stanmodels[[mdls]],
                               data= newdata,
                               iter = iter,

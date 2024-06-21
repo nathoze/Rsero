@@ -42,7 +42,7 @@ traceplot_Rsero <- function(FOIfit,
     }
     
     if(name %in% model.list('Outbreak models')){
-      pars = c(pars, "T", "alpha", "beta")
+      pars = c(pars, "T", "alpha")
     }
     
     if(FOIfit$model$seroreversion){

@@ -55,7 +55,7 @@ parameters_credible_intervals <- function(FOIfit,
       for(i in 1:K){
         chainsout$T[,i] <- t(Years[i, ]) 
         chainsout$alpha[, i] <- t(chains$alpha)[Ranks[i, ]]
-        chainsout$beta[, i] <- t(chains$beta)[Ranks[i, ]]
+        # chainsout$beta[, i] <- t(chains$beta)[Ranks[i, ]]
         
         params <- add.quantiles.text(params,
                                      variable=chainsout$T[,i],
@@ -71,12 +71,12 @@ parameters_credible_intervals <- function(FOIfit,
                                      quants= quants,
                                      quantilestext=quantilestext )
          
-        params <- add.quantiles.text(params,
-                                     variable  = chainsout$beta[,i],
-                                     name = paste('beta',i),
-                                     quants= quants,
-                                     quantilestext=quantilestext )      
-        
+        # params <- add.quantiles.text(params,
+        #                              variable  = chainsout$beta[,i],
+        #                              name = paste('beta',i),
+        #                              quants= quants,
+        #                              quantilestext=quantilestext )      
+        # 
         params <- add.quantiles.text(params,
                                      variable  = 1-exp(-chainsout$alpha[,i]),
                                      name = paste('Outbreak Prob. Inf. ',i),
