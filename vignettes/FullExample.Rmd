@@ -11,16 +11,15 @@ vignette: >
 In this document, we present a full analysis of the use of the package *Rsero*, taking as an example a serological survey of chikungunya in Vietnam. Data were obtained in Quan et al., Evidence of Previous but Not Current Transmission of Chikungunya Virus in Southern and Central Vietnam: Results from a Systematic Review and a Seroprevalence Study in Four Locations, Plos NTD, 2018.
   
 ## Setup
-  
- To install the package, type
+
+The *Rsero* package is built upon the *rstan* package, the R interface to Stan. 
+Stan is based on C++ and its necessary to install Rtools on Windows computers. Rtools version 4.0 and more recent can be found [here](https://cran.r-project.org/bin/windows/Rtools/)
+
+ To install the package *Rsero*, use the devtool commande 
 ```{r install, warning=FALSE, message = FALSE, eval=FALSE}
   devtools::install_github("nathoze/Rsero")
 ```
-
-This step requires that the package devtools is installed. Installation may take a few minutes due to the compilation of the stan files that encode the serocatalytic models.
-
-MCMC simulations are done using the package rstan, that requires Rtools on Windows computers. Rtools version 4.0 and more recent can be found [here](https://cran.r-project.org/bin/windows/Rtools/)
-
+ Installation may take a few minutes due to the compilation of the stan files that encode the serocatalytic models.
 
 ## Preparing the data
 First, we load the package
@@ -37,17 +36,30 @@ chik.sero = SeroData(age_at_sampling = chikv_vietnam$age,
                      category = chikv_vietnam$location,
                      reference.category = 'Hue',
                      sampling_year = 2017)
+
+
+```
+
+For a first analysis, we aggregate the data all across Vietnam, simply by not specifying the `category`
+
+```{r vietnam_aggregated, warning=FALSE, message = FALSE,warning = FALSE}
+data('chikv_vietnam')
+chikv_vietnam$location =  as.character(chikv_vietnam$location)
+chik.sero.aggregated = SeroData(age_at_sampling = chikv_vietnam$age,
+                     Y = chikv_vietnam$Y,
+                     sampling_year = 2017)
+
 ```
 
 
 ## Visualizing the data
-We estimate the seroprevalence and plot the seroprevalence by age in each municipality. A large difference between regions and an increase in the seroprevalence with age can be observed.
+We estimate the seroprevalence and plot the seroprevalence by age on the aggregatedd dataset. 
 
 ```{r seroprevalence, warning=FALSE, message = FALSE}
-seroprevalence(chik.sero) # Value of the seroprevalence 
+seroprevalence(chik.sero.aggregated) # Value of the seroprevalence 
 ```
 ```{r seroprevalence.plot, warning=FALSE, message = FALSE}
-seroprevalence.plot(chik.sero) # plots of the seroprevalence vs age
+seroprevalence.plot(chik.sero.aggregated) # plots of the seroprevalence vs age
 ```
 
 ## Model of the force of infection
@@ -60,100 +72,157 @@ model[[2]] = FOImodel(type='intervention', K=2)
 model[[3]] = FOImodel(type='intervention', K=3)
 model[[4]] = FOImodel(type='outbreak', K=1)
 model[[5]] = FOImodel(type='outbreak', K=2)
- model[[6]] = FOImodel(type='constantoutbreak')
- model[[7]] = FOImodel(type='independent')
- model[[8]] = FOImodel(type='constant', sp=0.95, se=0.99)
- model[[9]] = FOImodel(type='constant', seroreversion = 1)
+model[[6]] = FOImodel(type='constantoutbreak', K=1)
+model[[7]] = FOImodel(type='constantoutbreak', K=2)
+model[[8]] = FOImodel(type='independent')
+model[[9]] = FOImodel(type='constant', sp=0.95, se=0.99)
+model[[10]] = FOImodel(type='outbreak', K=1, sp=0.95, se=0.99)
+model[[11]] = FOImodel(type='constant', seroreversion = 1)
 ```
 
 ## Fitting a model to the serological data
-Next, we fit each  to the data and compute the DIC and the effective number of parameters pD. For each model, we run 4 independent chains of 10,000 iterations each, where by default the first 5000 are warmups. By specifying the option cores = 4 the chains are run in parallel on 4 CPUs.
 
+Our objective is to infer the parameters for the differents models, assess whether the models are adequate at reproducing the data, and select the best model(s). Doing these steps for all models is time consuming and we just compare two models here. For each model, we run 4 independent chains of 5,000 iterations each, where by default the first 2,500 are warmups. By specifying the option cores = 4 the chains are run in parallel on 4 CPUs.
 
-The step of evaluating all twelve models being time consuming, we only fit here the model of two successive outbreaks and a background probability of infection.
+ First, we fit the model of a single outbreak and a constant annual force of infection (model 6). 
+ 
 ```{r print_model, warning=FALSE, message = FALSE}
-print(model[[8]])
+print(model[[6]])
+```
+```{r fit_1, warning=FALSE, message = FALSE}
+Fit_1 = fit(data = chik.sero.aggregated,
+          model = model[[6]],
+          chain=4,
+          cores=4, 
+          iter = 5000,
+          xarmpu = 2500)
 ```
 
-```{r fit, warning=FALSE, message = FALSE}
-Fit = fit(data = chik.sero,
-          model = model[[8]],
+Second, we test the model of a constant force of infection and imperfect sensibility and specificity (model 9). In this model, the user has to provide the values of the sensibility and specificity, here se = 0.99 and sp = 0.95.
+```{r print_model_9, warning=FALSE, message = FALSE}
+print(model[[9]])
+```
+```{r fit_2, warning=FALSE, message = FALSE}
+Fit_2 = fit(data = chik.sero.aggregated,
+          model = model[[9]],
           chain=4,
           cores=4, 
           iter=5000)
 ```
 
-
-## Specifying additional MCMC parameters
-Default parameters for the fit are 5000 iterations (including 2500 warmups), four chains, and a random set of initial parameters. Rstan allows more parameters to be specified by the user. We show a few ones here, but interested users might read the documentation of the rstan::sampling() function [here](https://www.rdocumentation.org/packages/rstan/versions/2.19.2/topics/sampling) 
-
-### Initial parameters
-The initial parameters must come as a list of lists with as many elements as the number of chains, and where each list contains (at least some) initial parameters of a given chain. Unless these parameters are specified they are chosen by default at random.
-
-```{r initial.parameters, warning=FALSE, message = FALSE}
- 
-initial.parameters = list(list(annual_foi=1),list(annual_foi=0.1),list(annual_foi=0.05),list(annual_foi=0.03))
-Fit = fit(data = chik.sero,
-          model = model[[8]],
+Third, we test the model of one outbreak and imperfect sensibility and specificity (model 10).  
+```{r print_model_10, warning=FALSE, message = FALSE}
+print(model[[10]])
+```
+```{r fit_3, warning=FALSE, message = FALSE}
+Fit_3 = fit(data = chik.sero.aggregated,
+          model = model[[10]],
           chain=4,
-          cores=4,
-          iter=10000,
-          init = initial.parameters)
+          cores=4, 
+          iter=5000)
 ```
 
-Additional parameters such as the thinning, the algorithm (HMC, NUTS, Fixed_param), and important parameters to control the sampler behavior (control) can be modified. For example:
-
-A list of the parameters for the HMC algorithm (Hamiltonian Monte-Carlo) can be found [here](https://mc-stan.org/docs/2_19/reference-manual/hmc-algorithm-parameters.html).
  
-
+ 
 ## Analyzing the results
-We included a certain number of functions to analyze the MCMC chains and the posterior distributions of the parameters. First, as presented above, the compute_information_criteria function evaluates the AIC, DIC and WAIC. The AIC, which requires an estimation of the maximum likelihood, is obtained for the ensemble of parameters in the chain that maximizes the likelihood.
+The Rsero packages includes a certain number of functions to analyze the MCMC chains and the posterior distributions of the parameters. We first compare the different models and evaluate the goodness of fit. The *compute_information_criteria* function implemented in Rsero evaluates the AIC, DIC, WAIC, and the PSIS-LOO. The AIC, which requires an estimation of the maximum likelihood, is obtained for the ensemble of parameters in the chain that maximizes the likelihood.
 
 ```{r compute_information_criteria, warning=FALSE, message = FALSE}
-compute_information_criteria(Fit)
+C_1 = compute_information_criteria(Fit_1)
+C_2 = compute_information_criteria(Fit_2)
+C_3 = compute_information_criteria(Fit_3)
+
+print(C_1)
+print(C_2)
+print(C_3)
+```
+The DIC of model 10 is significantly lower for model 10 than for model 6 and 9. This indicates that model 10 (outbreak model with imperfect sensitivity) is more adequate at fitting the data. ``
+This can be checked visually when plotting the observed and fitted seroprevalance. In the plot, the black segments are the mean and 95% confidence interval, the blue line and envelopes are mean and 95% credible interval of the seroprevalence. 
+For model 6, 
+```{r seroprevalence.plot1, warning=FALSE, message = FALSE}
+p = seroprevalence.fit(Fit_1)
+print(p)
 ```
 
-The package can additionally plot the mean and 95% credible interval of the seroprevalence. It generates as many plots as there are categories.
-
-```{r seroprevalence.fit, warning=FALSE, message = FALSE}
-p = seroprevalence.fit(Fit)
-```
-The plots corresponding to the different categories are stored in a list and accessible using
-
-```{r printFit, warning=FALSE, message = FALSE}
-print(Fit$data$unique.categories[1])
+For the model 9,
+```{r seroprevalence.plot2, warning=FALSE, message = FALSE}
+p = seroprevalence.fit(Fit_2)
+print(p)
 ```
 
-Similarly, the annual force of infection is obtained by typing
-```{r plotFit, warning=FALSE, message = FALSE}
-plot(Fit)
+And finally for model 10,  
+```{r seroprevalence.plot3, warning=FALSE, message = FALSE}
+p = seroprevalence.fit(Fit_3)
+print(p)
 ```
 
-the *parameters_credible_intervals* function, which gives the mean and 2.5%, 50% and 97.5% quantiles of the posterior distributions of the most relevant parameters.
+According to this model, an outbreak occurred around 30 years before the survey. The non-zero seroprevalence in the younger individuals is explained here by false positives (implied by the sp parameter).
+  
+ 
+
+The posterior distribution can be plotted using the command 
+```{r plot_posterior, warning=FALSE, message = FALSE}
+plot_posterior(Fit_3)
+```
+
+Numerical values are given by the the *parameters_credible_intervals* function, which gives the mean and 2.5%, 50% and 97.5% quantiles of the posterior distributions of the most relevant parameters.
 
 ```{r parameters_credible_intervals, warning=FALSE, message = FALSE}
-parameters_credible_intervals(Fit)
+parameters_credible_intervals(Fit_3)
 ```
-Visually, it can also be obtained by plotting the posterior distributions
-```{r plot_posterior, warning=FALSE, message = FALSE}
-plot_posterior(Fit)
+ 
+The plot of the annual force of infection is obtained by typing
+```{r plotFit, warning=FALSE, message = FALSE}
+plot(Fit_3, YLIM =0.3) 
 ```
+
 
 ## Diagnostics
 
 We show here how to do the MCMC chains diagnosis using the tools provided in the *rstan* package. The output object of the fit using the package *Rsero* contains the data, the model, and the fit. These various objects can be extracted using the commands
 
 ```{r Fitobjects, warning=FALSE, message = FALSE, eval = FALSE}
-Fit$data
-Fit$model
-Fit$fit
+Fit_3$data
+Fit_3$model
+Fit_3$fit
 ```
-Using this fit, it is possible first to obtain the traceplots using the rstan::traceplot function, providing information on chain convergence and mixing. We plot the traceplot for a few parameters only: the probability of background infection, the force of infection of the reference category, the relative force of infection in each category
+Using this fit, it is possible first to obtain the traceplots using the *rstan::traceplot* function, providing information on chain convergence and mixing. The *Rsero::traceplot_Rsero()* function restricts the plots to the most relevant parameters. In the case of model 10, these are the force of infection (alpha) and timing of the outbreak (T). 
+```{r traceplot_Rsero, warning=FALSE, message = FALSE}
+traceplot_Rsero(Fit_3)
+```
 
-
-using
+Additional diagnostics for the HMC and NUTS are available using standard *rstan* functions. The following functions are not intended for a precise diagnostic of individual parameters but rather to quickly identify if acceptable values are reached for all parameters. The Rhat compares the between and within-chain estimates and is a measure of good mixing should be lower than 1.1. The effective sample size is a measure of "how much independent information there is in autocorrelated chains" (Kruschke 2015) and it should be larger than 200 to provide a stable parameter estimate. This roughly indicates whether 
 ```{r Diagnostics, warning=FALSE, message = FALSE}
-stan_diag(Fit$fit, info = 'sample') # shows diagnostic (loglikelihood, acceptance rate)
-stan_rhat(Fit$fit) # show the Rhat statistic
-stan_ess(Fit$fit) # show the ratio of effective sample size over total sample size
+stan_diag(Fit_3$fit,info = c("sample")) # shows diagnostic (loglikelihood, acceptance rate,etc)
+stan_rhat(Fit_3$fit) # show the Rhat statistic
+stan_ess(Fit_3$fit) # show the ratio of effective sample size over total sample size
 ``` 
+
+
+## Applying the model to Chikungunya data in the different regions
+We apply model 10 the dataset "chik.sero" which contains information the survey participant sampling locations.
+
+```{r fit_4_regional, warning=FALSE, message = FALSE}
+Fit_4 = fit(data = chik.sero,
+          model = model[[10]],
+          chain=4,
+          cores=4, 
+          iter=5000)
+```
+
+The fits are obtained using the same function *seroprevalence.fit*
+```{r seroprevalence.plot4, warning=FALSE, message = FALSE}
+p = seroprevalence.fit(Fit_4)
+print(p)
+```
+
+
+
+
+## Specifying additional MCMC parameters
+Default parameters for the fit are 5,000 iterations (including 2,500 warmups), four chains, and a random set of initial parameters. Rstan allows more parameters to be specified by the user. We show a few ones here, but more information is available in the documentation of the rstan::sampling() function [here](https://www.rdocumentation.org/packages/rstan/versions/2.19.2/topics/sampling). Additional parameters such as the thinning, the algorithm (HMC, NUTS), and important parameters to control the sampler behavior (control) can be modified. 
+A list of the parameters for the HMC algorithm (Hamiltonian Monte-Carlo) can be found [here](https://mc-stan.org/docs/2_19/reference-manual/hmc-algorithm-parameters.html).
+ 
+
+
+
