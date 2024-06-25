@@ -7,7 +7,11 @@ vignette: >
   %\VignetteIndexEntry{A Running Example}
   %\VignetteEncoding{UTF-8}
 ---
- 
+
+```{r figsize, warning=FALSE, message = FALSE}
+ knitr::opts_chunk$set(fig.width=7, fig.height=4) 
+```
+
 In this document, we present a full analysis of the use of the package *Rsero*, taking as an example a serological survey of chikungunya in Vietnam. Data were obtained in Quan et al., Evidence of Previous but Not Current Transmission of Chikungunya Virus in Southern and Central Vietnam: Results from a Systematic Review and a Seroprevalence Study in Four Locations, Plos NTD, 2018.
   
 ## Setup
@@ -15,7 +19,7 @@ In this document, we present a full analysis of the use of the package *Rsero*, 
 The *Rsero* package is built upon the *rstan* package, the R interface to Stan. 
 Stan is based on C++ and its necessary to install Rtools on Windows computers. Rtools version 4.0 and more recent can be found [here](https://cran.r-project.org/bin/windows/Rtools/)
 
- To install the package *Rsero*, use the devtool commande 
+ To install the package *Rsero*, use the devtools command
 ```{r install, warning=FALSE, message = FALSE, eval=FALSE}
   devtools::install_github("nathoze/Rsero")
 ```
@@ -136,15 +140,16 @@ print(C_1)
 print(C_2)
 print(C_3)
 ```
-The DIC of model 10 is significantly lower for model 10 than for model 6 and 9. This indicates that model 10 (outbreak model with imperfect sensitivity) is more adequate at fitting the data. ``
+The DIC is significantly lower for model 10 than for model 6 and 9. This indicates that model 10 (outbreak model with imperfect sensitivity) is more adequate at fitting the data.
+
 This can be checked visually when plotting the observed and fitted seroprevalance. In the plot, the black segments are the mean and 95% confidence interval, the blue line and envelopes are mean and 95% credible interval of the seroprevalence. 
-For model 6, 
+For model 6 
 ```{r seroprevalence.plot1, warning=FALSE, message = FALSE}
 p = seroprevalence.fit(Fit_1)
 print(p)
 ```
 
-For the model 9,
+For model 9,
 ```{r seroprevalence.plot2, warning=FALSE, message = FALSE}
 p = seroprevalence.fit(Fit_2)
 print(p)
@@ -191,7 +196,8 @@ Using this fit, it is possible first to obtain the traceplots using the *rstan::
 traceplot_Rsero(Fit_3)
 ```
 
-Additional diagnostics for the HMC and NUTS are available using standard *rstan* functions. The following functions are not intended for a precise diagnostic of individual parameters but rather to quickly identify if acceptable values are reached for all parameters. The Rhat compares the between and within-chain estimates and is a measure of good mixing should be lower than 1.1. The effective sample size is a measure of "how much independent information there is in autocorrelated chains" (Kruschke 2015) and it should be larger than 200 to provide a stable parameter estimate. This roughly indicates whether 
+Additional diagnostics for the HMC and NUTS are available using standard *rstan* functions. The following functions are not intended for a precise diagnostic of individual parameters but rather to quickly identify if acceptable values are reached for all parameters. The Rhat compares the between and within-chain estimates and is a measure of good mixing should be lower than 1.1. The effective sample size is a measure of "how much independent information there is in autocorrelated chains" (Kruschke 2015) and it should be larger than 200 to provide a stable parameter estimate. For more detailed diagnostics the use of the *posterior* package is recommanded.  
+
 ```{r Diagnostics, warning=FALSE, message = FALSE}
 stan_diag(Fit_3$fit,info = c("sample")) # shows diagnostic (loglikelihood, acceptance rate,etc)
 stan_rhat(Fit_3$fit) # show the Rhat statistic
@@ -200,7 +206,7 @@ stan_ess(Fit_3$fit) # show the ratio of effective sample size over total sample 
 
 
 ## Applying the model to Chikungunya data in the different regions
-We apply model 10 the dataset "chik.sero" which contains information the survey participant sampling locations.
+We fit model 10 to the dataset "chik.sero" which contains information the survey participant sampling locations.
 
 ```{r fit_4_regional, warning=FALSE, message = FALSE}
 Fit_4 = fit(data = chik.sero,

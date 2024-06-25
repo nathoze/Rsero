@@ -12,7 +12,7 @@
 
 <meta name="author" content="Nathanael Hoze" />
 
-<meta name="date" content="2024-06-20" />
+<meta name="date" content="2024-06-25" />
 
 <title>Using the models defined in the Rsero package</title>
 
@@ -341,7 +341,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h1 class="title toc-ignore">Using the models defined in the Rsero
 package</h1>
 <h4 class="author">Nathanael Hoze</h4>
-<h4 class="date">2024-06-20</h4>
+<h4 class="date">2024-06-25</h4>
 
 
 
@@ -366,11 +366,11 @@ of exposure.</p>
 ## 5 serological samples  
 ## Max age: 70  
 ##   age age_at_sampling     Y sampling_year location sex   category
-## 1  55              55 FALSE          2019       NA All Category 1
-## 2  41              41 FALSE          2019       NA All Category 1
-## 3  12              12 FALSE          2019       NA All Category 1
-## 4  53              53  TRUE          2019       NA All Category 1
-## 5  53              53  TRUE          2019       NA All Category 1</code></pre>
+## 1  14              14 FALSE          2019       NA All Category 1
+## 2  19              19 FALSE          2019       NA All Category 1
+## 3  20              20 FALSE          2019       NA All Category 1
+## 4   2               2 FALSE          2019       NA All Category 1
+## 5  54              54  TRUE          2019       NA All Category 1</code></pre>
 </div>
 <div id="models-of-the-force-of-infection" class="section level2">
 <h2>Models of the force of infection</h2>
@@ -423,7 +423,7 @@ of infection is given by a single gaussian.</p>
 ##   T: Normal( 50 ,  20 )
 ##   alpha: Normal( 0.2 ,  1 )
 ##   T: Normal( 50 ,  20 )
-##   Annual FOI: Normal( 0 ,  1 )</code></pre>
+##   Annual FOI: Normal( 0.01 ,  1 )</code></pre>
 <p>Printing recapitulates the main information concerning the model. For
 instance, in the <code>&quot;constantoutbreak&quot;</code> model with
 <code>K=2</code>, a total of 7 parameters are estimated (1 for the
@@ -568,12 +568,16 @@ occupation).</p>
 </div>
 <div id="model-comparison" class="section level2">
 <h2>Model comparison</h2>
-<p>Different measures of model adequacy were implemented: The deviance
+<p>Different measures of model adequacy were implemented: The Pareto
+smoothed importance sampling leave-one-out (PSIS-lLOO) The deviance
 information criterion (DIC), the Akaike information criterion (AIC), the
 Watanabe-Akaike information criterion (WAIC). for a detailed explanation
 of all three measures, see Gelman A, Hwang J, Vehtari A. Understanding
 predictive information criteria for Bayesian models. Statistics and
-computing. 2014 Nov 1;24(6):997-1016.</p>
+computing. 2014 Nov 1;24(6):997-1016 and Vehtari, A., Gelman, A., &amp;
+Gabry, J. (2017). Practical Bayesian model evaluation using
+leave-one-out cross-validation and WAIC. Statistics and computing, 27,
+1413-1432.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">compute_information_criteria</span>(FOIfit.vietnam)</span></code></pre></div>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>modelOutbreak <span class="ot">=</span><span class="fu">FOImodel</span>(<span class="at">type=</span><span class="st">&#39;outbreak&#39;</span>,</span>
 <span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>                          <span class="at">K=</span><span class="dv">1</span>)</span>
@@ -586,54 +590,49 @@ points with the lowest DIC indicate weak support for a model.</p>
 </div>
 <div id="priors" class="section level2">
 <h2>Priors</h2>
-<p>Normal priors were set by default for all parameters. We give below
-the default values of the parameters that are mean and the standard
-deviation of the normal distribution, respectively.</p>
+<p>The user can choose between a uniform, a normal or an exponential
+distribution. Normal priors were set by default for all parameters. We
+give below the default values of the parameters that are mean and the
+standard deviation of the normal distribution, respectively.</p>
 <div id="default-prior-distributions" class="section level3">
 <h3>Default prior distributions</h3>
-<pre><code>                 priorY1 = 0, 
-                 priorY2 = 1, 
-                 priorRho1 = 0,
-                 priorRho2 = 1,
-                 cat_lambda = 1,
-                 </code></pre>
 <div id="for-the-constant-model" class="section level4">
 <h4>For the constant model</h4>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>priorC1 <span class="ot">=</span> <span class="dv">0</span> </span>
-<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>priorC2 <span class="ot">=</span> <span class="dv">1</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>priorC1 <span class="ot">=</span> <span class="dv">0</span> </span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>priorC2 <span class="ot">=</span> <span class="dv">1</span></span></code></pre></div>
 </div>
 <div id="for-the-piecewise-constant-model" class="section level4">
 <h4>For the piecewise constant model</h4>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>priorC1 <span class="ot">=</span> <span class="dv">0</span></span>
-<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>priorC2 <span class="ot">=</span> <span class="dv">1</span></span>
-<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a>priorT1 <span class="ot">=</span> <span class="dv">50</span></span>
-<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a>priorT2 <span class="ot">=</span> <span class="dv">20</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>priorC1 <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>priorC2 <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>priorT1 <span class="ot">=</span> <span class="dv">50</span></span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a>priorT2 <span class="ot">=</span> <span class="dv">20</span></span></code></pre></div>
 </div>
 <div id="for-the-outbreak-model" class="section level4">
 <h4>For the outbreak model</h4>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>prioralpha1 <span class="ot">=</span> <span class="fl">0.2</span></span>
-<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>prioralpha2 <span class="ot">=</span> <span class="dv">1</span></span>
-<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>priorT1 <span class="ot">=</span> <span class="dv">50</span></span>
-<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a>priorT2 <span class="ot">=</span> <span class="dv">20</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>prioralpha1 <span class="ot">=</span> <span class="fl">0.2</span></span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>prioralpha2 <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a>priorT1 <span class="ot">=</span> <span class="dv">50</span></span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a>priorT2 <span class="ot">=</span> <span class="dv">20</span></span></code></pre></div>
 </div>
 <div id="for-the-constantoutbreak-model" class="section level4">
 <h4>For the constant+outbreak model</h4>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>prioralpha1 <span class="ot">=</span> <span class="fl">0.2</span></span>
-<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>prioralpha2 <span class="ot">=</span> <span class="dv">1</span></span>
-<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a>priorT1 <span class="ot">=</span> <span class="dv">50</span></span>
-<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a>priorT2 <span class="ot">=</span> <span class="dv">20</span></span>
-<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a>priorC1 <span class="ot">=</span> <span class="dv">0</span></span>
-<span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a>priorC2 <span class="ot">=</span> <span class="dv">1</span></span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>prioralpha1 <span class="ot">=</span> <span class="fl">0.2</span></span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>prioralpha2 <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>priorT1 <span class="ot">=</span> <span class="dv">50</span></span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a>priorT2 <span class="ot">=</span> <span class="dv">20</span></span>
+<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a>priorC1 <span class="ot">=</span> <span class="fl">0.01</span></span>
+<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a>priorC2 <span class="ot">=</span> <span class="dv">1</span></span></code></pre></div>
 </div>
 <div id="for-the-independent-model" class="section level4">
 <h4>For the independent model</h4>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>priorY1 <span class="ot">=</span> <span class="dv">0</span></span>
-<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>priorY2 <span class="ot">=</span> <span class="dv">1</span></span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>priorY1 <span class="ot">=</span> <span class="fl">0.01</span></span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>priorY2 <span class="ot">=</span> <span class="dv">1</span></span></code></pre></div>
 </div>
 <div id="in-the-case-of-seroreversion" class="section level4">
 <h4>In the case of seroreversion</h4>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>priorRho1 <span class="ot">=</span> <span class="dv">0</span></span>
-<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a>priorRho2 <span class="ot">=</span> <span class="dv">1</span></span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>priorRho1 <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>priorRho2 <span class="ot">=</span> <span class="dv">1</span></span></code></pre></div>
 </div>
 </div>
 <div id="specifying-the-parameters-of-the-prior-distributions-example" class="section level3">
@@ -645,10 +644,10 @@ the first outbreak, the prior for <code>T</code> is normal(10,30), the
 prior for alpha is normal(0,5). For the second outbreak, the prior for
 <code>T</code> is normal(40,70), the prior for alpha is
 uniform(0,1).</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">FOImodel</span>(<span class="at">type =</span> <span class="st">&quot;outbreak&quot;</span>, <span class="at">K =</span> <span class="dv">2</span>, </span>
-<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>                  <span class="at">prioralpha1 =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>), <span class="at">prioralpha2=</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">1</span>), </span>
-<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a>                  <span class="at">priorT1 =</span> <span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">40</span>), <span class="at">priorT2=</span> <span class="fu">c</span>(<span class="dv">30</span>, <span class="dv">70</span>))</span>
-<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a><span class="fu">print</span>(model)</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">FOImodel</span>(<span class="at">type =</span> <span class="st">&quot;outbreak&quot;</span>, <span class="at">K =</span> <span class="dv">2</span>, </span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a>                  <span class="at">prioralpha1 =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>), <span class="at">prioralpha2=</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">1</span>), </span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a>                  <span class="at">priorT1 =</span> <span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">40</span>), <span class="at">priorT2=</span> <span class="fu">c</span>(<span class="dv">30</span>, <span class="dv">70</span>))</span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a><span class="fu">print</span>(model)</span></code></pre></div>
 <pre><code>## &lt;FOImodel object&gt;
 ## Model name:  outbreak 
 ##   Estimated parameters:  6 
@@ -660,6 +659,24 @@ uniform(0,1).</p>
 ##   T: Normal( 10 ,  30 )
 ##   alpha: Normal( 0 ,  1 )
 ##   T: Normal( 40 ,  70 )</code></pre>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="do">## choosing other prior distributions</span></span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a>model_2 <span class="ot">&lt;-</span> <span class="fu">FOImodel</span>(<span class="at">type =</span> <span class="st">&quot;outbreak&quot;</span>, <span class="at">K =</span> <span class="dv">1</span>,</span>
+<span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a>                    <span class="at">seroreversion =</span> <span class="dv">1</span>,</span>
+<span id="cb27-5"><a href="#cb27-5" tabindex="-1"></a>                    <span class="at">prior_distribution_alpha =</span> <span class="st">&quot;uniform&quot;</span>,</span>
+<span id="cb27-6"><a href="#cb27-6" tabindex="-1"></a>                    <span class="at">prior_distribution_rho =</span> <span class="st">&quot;exponential&quot;</span>,</span>
+<span id="cb27-7"><a href="#cb27-7" tabindex="-1"></a>                    <span class="at">priorRho1=</span><span class="dv">1</span>)</span>
+<span id="cb27-8"><a href="#cb27-8" tabindex="-1"></a><span class="fu">print</span>(model_2)</span></code></pre></div>
+<pre><code>## &lt;FOImodel object&gt;
+## Model name:  outbreak 
+##   Estimated parameters:  4 
+## Model with categories for the force of infection 
+## Parameters: 
+##   K:  1 
+## Priors: 
+##   alpha: Uniform( 0.2 ,  1 )
+##   T: Normal( 50 ,  20 )
+##   rho: Exponential( 1 )</code></pre>
 </div>
 </div>
 

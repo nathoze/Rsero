@@ -337,7 +337,7 @@ print.FOImodel <- function(x, ...){
       if(x$prior_distribution_rho == "normal"){
         cat('\t T: Normal(',x$priors$priorRho1, ', ', x$priors$priorRho2,')\n')
       }   
-      if(x$prior_distribution_rho == "Exponential"){
+      if(x$prior_distribution_rho == "exponential"){
         cat('\t rho: Exponential(',x$priors$priorRho1,')\n')
       }
     }

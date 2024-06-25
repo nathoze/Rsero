@@ -161,8 +161,9 @@ data_tmp = SeroData(age_at_sampling =  ages ,
  
 ## Model comparison
 
-Different measures of model adequacy were implemented: The deviance information criterion (DIC), the Akaike information criterion (AIC), the  Watanabe-Akaike information criterion (WAIC). 
-for a detailed explanation of all three measures, see Gelman A, Hwang J, Vehtari A. Understanding predictive information criteria for Bayesian models. Statistics and computing. 2014 Nov 1;24(6):997-1016.
+Different measures of model adequacy were implemented: The Pareto smoothed importance sampling leave-one-out (PSIS-lLOO) The deviance information criterion (DIC), the Akaike information criterion (AIC), the  Watanabe-Akaike information criterion (WAIC). 
+for a detailed explanation of all three measures, see Gelman A, Hwang J, Vehtari A. Understanding predictive information criteria for Bayesian models. Statistics and computing. 2014 Nov 1;24(6):997-1016 and Vehtari, A., Gelman, A., & Gabry, J. (2017). Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC. Statistics and computing, 27, 1413-1432.
+
 ```{r DIC1, echo=TRUE, warning=FALSE, eval=FALSE}
 compute_information_criteria(FOIfit.vietnam)
 ```
@@ -177,16 +178,12 @@ The DIC of the piecewise constant model is lower than the DIC of the outbreak mo
 
 ## Priors
 
+The user can choose between a uniform, a normal or an exponential distribution. 
 Normal priors were set by default for all parameters. We give below the default values of the parameters that are mean and the standard deviation of the normal distribution, respectively. 
 
 ### Default prior distributions
 
-                     priorY1 = 0, 
-                     priorY2 = 1, 
-                     priorRho1 = 0,
-                     priorRho2 = 1,
-                     cat_lambda = 1,
-                     
+                   
 #### For the constant model
 ```{r prior1, echo=TRUE, warning=FALSE, eval=FALSE}
 priorC1 = 0 
@@ -212,12 +209,12 @@ prioralpha1 = 0.2
 prioralpha2 = 1
 priorT1 = 50
 priorT2 = 20
-priorC1 = 0
+priorC1 = 0.01
 priorC2 = 1
 ```
 #### For the independent model
 ```{r independent}
-priorY1 = 0
+priorY1 = 0.01
 priorY2 = 1
 ```
 
@@ -237,4 +234,13 @@ model <- FOImodel(type = "outbreak", K = 2,
                   prioralpha1 = c(0,0), prioralpha2= c(5, 1), 
                   priorT1 = c(10,40), priorT2= c(30, 70))
 print(model)
+
+## choosing other prior distributions
+
+model_2 <- FOImodel(type = "outbreak", K = 1,
+                    seroreversion = 1,
+                    prior_distribution_alpha = "uniform",
+                    prior_distribution_rho = "exponential",
+                    priorRho1=1)
+print(model_2)
 ```
