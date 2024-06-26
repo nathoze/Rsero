@@ -151,7 +151,7 @@ FOImodel <- function(type = 'constant',
   }
   
   if(type %in% model.list(whichmodels = 'Outbreak models')  ){
-    estimated_parameters <- estimated_parameters + K*3
+    estimated_parameters <- estimated_parameters + K*2
   } 
   if(type  %in% model.list(whichmodels = 'I models') ){
     estimated_parameters <- estimated_parameters + K*2-1 
@@ -335,7 +335,7 @@ print.FOImodel <- function(x, ...){
         cat('\t rho: Uniform(',x$priors$priorRho1, ', ', x$priors$priorRho2,')\n')
       }
       if(x$prior_distribution_rho == "normal"){
-        cat('\t T: Normal(',x$priors$priorRho1, ', ', x$priors$priorRho2,')\n')
+        cat('\t rho: Normal(',x$priors$priorRho1, ', ', x$priors$priorRho2,')\n')
       }   
       if(x$prior_distribution_rho == "exponential"){
         cat('\t rho: Exponential(',x$priors$priorRho1,')\n')

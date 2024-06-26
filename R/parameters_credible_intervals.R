@@ -45,32 +45,39 @@ parameters_credible_intervals <- function(FOIfit,
       K=FOIfit$model$K
       Ranks <- matrix(0,ncol(C),nrow(C))
       YearMax <- max(FOIfit$data$sampling_year)
-      Years = matrix(0,ncol(C),nrow(C))
+      Years = Time = matrix(0,ncol(C),nrow(C))
       
       for (i in 1:K) { 
         Ranks[i, ] <- which(apply(C,1,function(x) rank(x)) == i);
         Years[i, ] <- YearMax - t(C)[Ranks[i,]]+1
+        Time[i, ] <-  t(C)[Ranks[i,]]+1
       }
       
       for(i in 1:K){
-        chainsout$T[,i] <- t(Years[i, ]) 
+      #  chainsout$Years[,i] <- t(Years[i, ]) 
+       # chainsout$T[,i] <- t(Time[i, ]) 
         chainsout$alpha[, i] <- t(chains$alpha)[Ranks[i, ]]
         # chainsout$beta[, i] <- t(chains$beta)[Ranks[i, ]]
         
         params <- add.quantiles.text(params,
-                                     variable=chainsout$T[,i],
+                                     variable=Time[i, ],#chainsout$T[,i],
                                      name = paste('T',i),
                                      quants= quants,
                                      quantilestext=quantilestext)
         
-        name <- paste('alpha',i)
+        params <- add.quantiles.text(params,
+                                     variable=Years[i, ], #chainsout$Years[,i],
+                                     name = paste('Year',i),
+                                     quants= quants,
+                                     quantilestext=quantilestext)
         
+        name <- paste('alpha',i)
         params <- add.quantiles.text(params,
                                      variable=chainsout$alpha[,i],
                                      name = name,
                                      quants= quants,
                                      quantilestext=quantilestext )
-         
+        
         # params <- add.quantiles.text(params,
         #                              variable  = chainsout$beta[,i],
         #                              name = paste('beta',i),
@@ -99,7 +106,7 @@ parameters_credible_intervals <- function(FOIfit,
                                        quantilestext=quantilestext )
           
         }
-
+        
         LL <- 100*(1-exp(-chains$annual_foi[,i]))
         params <- add.quantiles.text(params,
                                      variable  = LL,
@@ -108,12 +115,34 @@ parameters_credible_intervals <- function(FOIfit,
                                      quantilestext=quantilestext )
       }
     }
-    
-    if(FOIfit$model$type=='constantoutbreak'){
-      LL <- 100*(1-exp(-chains$annual_foi))
+    if(FOIfit$model$type=='constant'){
+      LL <- chains$annual_foi
       params <- add.quantiles.text(params,
                                    variable  = LL,
-                                   name = paste0('Annual Prob. Infection (in %)_',i),
+                                   name = "Force of Infection",
+                                   quants= quants,
+                                   quantilestext=quantilestext )
+      LL <- 100*(1-exp(-chains$annual_foi))
+      
+      params <- add.quantiles.text(params,
+                                   variable  = LL,
+                                   name = 'Annual Prob. Infection (in %)',
+                                   quants= quants,
+                                   quantilestext=quantilestext )
+    }
+    
+    if(FOIfit$model$type=='constantoutbreak'){
+      LL <- chains$annual_foi
+      params <- add.quantiles.text(params,
+                                   variable  = LL,
+                                   name = "Force of Infection",
+                                   quants= quants,
+                                   quantilestext=quantilestext )
+      LL <- 100*(1-exp(-chains$annual_foi))
+      
+      params <- add.quantiles.text(params,
+                                   variable  = LL,
+                                   name = 'Annual Prob. Infection (in %)',
                                    quants= quants,
                                    quantilestext=quantilestext )
       

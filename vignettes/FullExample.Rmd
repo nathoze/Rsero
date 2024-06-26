@@ -88,38 +88,24 @@ model[[11]] = FOImodel(type='constant', seroreversion = 1)
 
 Our objective is to infer the parameters for the differents models, assess whether the models are adequate at reproducing the data, and select the best model(s). Doing these steps for all models is time consuming and we just compare two models here. For each model, we run 4 independent chains of 5,000 iterations each, where by default the first 2,500 are warmups. By specifying the option cores = 4 the chains are run in parallel on 4 CPUs.
 
- First, we fit the model of a single outbreak and a constant annual force of infection (model 6). 
- 
-```{r print_model, warning=FALSE, message = FALSE}
-print(model[[6]])
-```
-```{r fit_1, warning=FALSE, message = FALSE}
-Fit_1 = fit(data = chik.sero.aggregated,
-          model = model[[6]],
-          chain=4,
-          cores=4, 
-          iter = 5000,
-          xarmpu = 2500)
-```
-
-Second, we test the model of a constant force of infection and imperfect sensibility and specificity (model 9). In this model, the user has to provide the values of the sensibility and specificity, here se = 0.99 and sp = 0.95.
+First, we test the model of a constant force of infection and imperfect sensibility and specificity (model 9). In this model, the user has to provide the values of the sensibility and specificity, here se = 0.99 and sp = 0.95.
 ```{r print_model_9, warning=FALSE, message = FALSE}
 print(model[[9]])
 ```
-```{r fit_2, warning=FALSE, message = FALSE}
-Fit_2 = fit(data = chik.sero.aggregated,
+```{r fit_1, warning=FALSE, message = FALSE}
+Fit_1 = fit(data = chik.sero.aggregated,
           model = model[[9]],
           chain=4,
           cores=4, 
           iter=5000)
 ```
 
-Third, we test the model of one outbreak and imperfect sensibility and specificity (model 10).  
+Second, we test the model of one outbreak and imperfect sensibility and specificity (model 10).  
 ```{r print_model_10, warning=FALSE, message = FALSE}
 print(model[[10]])
 ```
-```{r fit_3, warning=FALSE, message = FALSE}
-Fit_3 = fit(data = chik.sero.aggregated,
+```{r fit_2, warning=FALSE, message = FALSE}
+Fit_2 = fit(data = chik.sero.aggregated,
           model = model[[10]],
           chain=4,
           cores=4, 
@@ -134,51 +120,44 @@ The Rsero packages includes a certain number of functions to analyze the MCMC ch
 ```{r compute_information_criteria, warning=FALSE, message = FALSE}
 C_1 = compute_information_criteria(Fit_1)
 C_2 = compute_information_criteria(Fit_2)
-C_3 = compute_information_criteria(Fit_3)
 
 print(C_1)
 print(C_2)
-print(C_3)
 ```
-The DIC is significantly lower for model 10 than for model 6 and 9. This indicates that model 10 (outbreak model with imperfect sensitivity) is more adequate at fitting the data.
+The DIC is significantly lower for model 10 than for model 9. This indicates that model 10 (outbreak model with imperfect sensitivity) is more adequate at fitting the data.
 
 This can be checked visually when plotting the observed and fitted seroprevalance. In the plot, the black segments are the mean and 95% confidence interval, the blue line and envelopes are mean and 95% credible interval of the seroprevalence. 
-For model 6 
+
+
+For model 9,
 ```{r seroprevalence.plot1, warning=FALSE, message = FALSE}
 p = seroprevalence.fit(Fit_1)
 print(p)
 ```
 
-For model 9,
+And for model 10,  
 ```{r seroprevalence.plot2, warning=FALSE, message = FALSE}
 p = seroprevalence.fit(Fit_2)
 print(p)
 ```
 
-And finally for model 10,  
-```{r seroprevalence.plot3, warning=FALSE, message = FALSE}
-p = seroprevalence.fit(Fit_3)
-print(p)
-```
-
-According to this model, an outbreak occurred around 30 years before the survey. The non-zero seroprevalence in the younger individuals is explained here by false positives (implied by the sp parameter).
+According to this model, an outbreak occurred around 40 years before the survey. The non-zero seroprevalence in the younger individuals is explained here by false positives (implied by the sp parameter).
   
- 
 
 The posterior distribution can be plotted using the command 
 ```{r plot_posterior, warning=FALSE, message = FALSE}
-plot_posterior(Fit_3)
+plot_posterior(Fit_2)
 ```
 
 Numerical values are given by the the *parameters_credible_intervals* function, which gives the mean and 2.5%, 50% and 97.5% quantiles of the posterior distributions of the most relevant parameters.
 
 ```{r parameters_credible_intervals, warning=FALSE, message = FALSE}
-parameters_credible_intervals(Fit_3)
+parameters_credible_intervals(Fit_2)
 ```
  
 The plot of the annual force of infection is obtained by typing
 ```{r plotFit, warning=FALSE, message = FALSE}
-plot(Fit_3, YLIM =0.3) 
+plot(Fit_2, YLIM =0.3) 
 ```
 
 
@@ -187,29 +166,31 @@ plot(Fit_3, YLIM =0.3)
 We show here how to do the MCMC chains diagnosis using the tools provided in the *rstan* package. The output object of the fit using the package *Rsero* contains the data, the model, and the fit. These various objects can be extracted using the commands
 
 ```{r Fitobjects, warning=FALSE, message = FALSE, eval = FALSE}
-Fit_3$data
-Fit_3$model
-Fit_3$fit
+Fit_2$data
+Fit_2$model
+Fit_2$fit
 ```
 Using this fit, it is possible first to obtain the traceplots using the *rstan::traceplot* function, providing information on chain convergence and mixing. The *Rsero::traceplot_Rsero()* function restricts the plots to the most relevant parameters. In the case of model 10, these are the force of infection (alpha) and timing of the outbreak (T). 
 ```{r traceplot_Rsero, warning=FALSE, message = FALSE}
-traceplot_Rsero(Fit_3)
+traceplot_Rsero(Fit_2)
 ```
 
 Additional diagnostics for the HMC and NUTS are available using standard *rstan* functions. The following functions are not intended for a precise diagnostic of individual parameters but rather to quickly identify if acceptable values are reached for all parameters. The Rhat compares the between and within-chain estimates and is a measure of good mixing should be lower than 1.1. The effective sample size is a measure of "how much independent information there is in autocorrelated chains" (Kruschke 2015) and it should be larger than 200 to provide a stable parameter estimate. For more detailed diagnostics the use of the *posterior* package is recommanded.  
 
 ```{r Diagnostics, warning=FALSE, message = FALSE}
-stan_diag(Fit_3$fit,info = c("sample")) # shows diagnostic (loglikelihood, acceptance rate,etc)
-stan_rhat(Fit_3$fit) # show the Rhat statistic
-stan_ess(Fit_3$fit) # show the ratio of effective sample size over total sample size
+stan_diag(Fit_2$fit,info = c("sample")) # shows diagnostic (loglikelihood, acceptance rate,etc)
+stan_rhat(Fit_2$fit) # show the Rhat statistic
+stan_ess(Fit_2$fit) # show the ratio of effective sample size over total sample size
 ``` 
-
-
+Finally the chains are available using the *rstan::extract()* function 
+```{r extract, warning=FALSE, message = FALSE}
+Chains= rstan::extract(Fit_2$fit)
+``` 
 ## Applying the model to Chikungunya data in the different regions
 We fit model 10 to the dataset "chik.sero" which contains information the survey participant sampling locations.
 
-```{r fit_4_regional, warning=FALSE, message = FALSE}
-Fit_4 = fit(data = chik.sero,
+```{r fit_3_regional, warning=FALSE, message = FALSE}
+Fit_3 = fit(data = chik.sero,
           model = model[[10]],
           chain=4,
           cores=4, 
@@ -218,11 +199,9 @@ Fit_4 = fit(data = chik.sero,
 
 The fits are obtained using the same function *seroprevalence.fit*
 ```{r seroprevalence.plot4, warning=FALSE, message = FALSE}
-p = seroprevalence.fit(Fit_4)
+p = seroprevalence.fit(Fit_3)
 print(p)
 ```
-
-
 
 
 ## Specifying additional MCMC parameters
