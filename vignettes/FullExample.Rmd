@@ -72,8 +72,8 @@ To define a model of pathogen circulation we use the method *FOImodel()*. Some m
 ```{r list_models, warning=FALSE, message = FALSE}
 model = list()
 model[[1]] = FOImodel(type='constant')
-model[[2]] = FOImodel(type='intervention', K=2)
-model[[3]] = FOImodel(type='intervention', K=3)
+model[[2]] = FOImodel(type='piecewise', K=2)
+model[[3]] = FOImodel(type='piecewise', K=3)
 model[[4]] = FOImodel(type='outbreak', K=1)
 model[[5]] = FOImodel(type='outbreak', K=2)
 model[[6]] = FOImodel(type='constantoutbreak', K=1)
