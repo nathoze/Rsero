@@ -54,11 +54,7 @@ parameters_credible_intervals <- function(FOIfit,
       }
       
       for(i in 1:K){
-      #  chainsout$Years[,i] <- t(Years[i, ]) 
-       # chainsout$T[,i] <- t(Time[i, ]) 
         chainsout$alpha[, i] <- t(chains$alpha)[Ranks[i, ]]
-        # chainsout$beta[, i] <- t(chains$beta)[Ranks[i, ]]
-        
         params <- add.quantiles.text(params,
                                      variable=Time[i, ],#chainsout$T[,i],
                                      name = paste('T',i),
@@ -78,12 +74,6 @@ parameters_credible_intervals <- function(FOIfit,
                                      quants= quants,
                                      quantilestext=quantilestext )
         
-        # params <- add.quantiles.text(params,
-        #                              variable  = chainsout$beta[,i],
-        #                              name = paste('beta',i),
-        #                              quants= quants,
-        #                              quantilestext=quantilestext )      
-        # 
         params <- add.quantiles.text(params,
                                      variable  = 1-exp(-chainsout$alpha[,i]),
                                      name = paste('Outbreak Prob. Inf. ',i),
@@ -197,26 +187,6 @@ add.quantiles.text <- function(params, variable, name, quants = quants, quantile
   P <- data.frame(t(quantile(variable, probs = quants)), mean = mean(variable))
   names( P) <- quantilestext
   rownames( P)[1] = name
-  
   return(rbind(params,P))
   
 }
-
-# 
-# measure.foi.Gmodel <- function(alpha, beta, Time, years){
-#   
-#   # To measure the total foi corresponding to a peak, set the parameter alpha of the other peaks to 0 and sum the lambdas
-#   J=0
-#   S <- matrix(0, ncol= length(alpha), nrow = length(years))
-#   
-#   for(y in years){
-#     J=J+1 
-#     S[J, ]=  alpha*exp(-(Time-y)^2/beta^2)  
-#     
-#   }
-#   FOI  = colSums(S )  
-#   
-#   return(FOI)
-#   
-# }
-# 

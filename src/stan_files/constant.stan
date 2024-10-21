@@ -25,17 +25,17 @@ data {
   real <lower = 0, upper=1> sp;  
   int <lower = 0> cat_lambda; // 1 or 0: characterizes whether we distinguish categories by different FOI
   
-//  = 0,1, 2 to specify the prior distributions
+  //  1 or 2 to specify the prior distributions
   int prior_distribution_alpha;
   int prior_distribution_T;
   int prior_distribution_constant_foi;
   int prior_distribution_independent_foi;
   int prior_distribution_rho;
-
+  
 } 
-parameters {
-  real<lower = 0.00001>  annual_foi; 
-  real<lower = 0, upper = 20> rho;    
+parameters { 
+  real annual_foi_raw;
+  real rho_raw;      
   real  Flambda2[maxNcategory,Ncategoryclass]; 
 }
 
@@ -50,6 +50,23 @@ transformed parameters {
   real<lower = 0, upper=1> Likelihood[N];  
   real log_lik[N];  
   real c;        
+  real<lower = 0> annual_foi;
+  real<lower = 0, upper = 20> rho;      
+  
+  if(prior_distribution_constant_foi == 1){
+    annual_foi = priorC1*exp(priorC2*annual_foi_raw) ;
+  }   
+  if(prior_distribution_constant_foi == 2){
+    annual_foi = annual_foi_raw ;
+  }
+  
+  if(prior_distribution_rho == 1){ //normal distribution
+  rho = priorRho1*exp( rho_raw*priorRho2);
+  }
+  if(prior_distribution_rho == 2){ // exponential distribution
+  rho =  rho_raw ;
+  } 
+  
   for(j in 1:A){
     lambda[j] = annual_foi;
   }  
@@ -132,31 +149,25 @@ transformed parameters {
   }
 }
 
-model {
-   
-  if(prior_distribution_constant_foi == 0){
-    annual_foi ~ uniform(priorC1, priorC2);
-  }
+model { 
   if(prior_distribution_constant_foi == 1){
-    annual_foi ~ normal(priorC1, priorC2);
- }   
- if(prior_distribution_constant_foi == 3){
-    annual_foi ~ exponential(priorC1);
- }
+    annual_foi_raw ~ normal(0, 1);
+  }   
+  if(prior_distribution_constant_foi == 2){
+    annual_foi_raw ~ exponential(priorC1);
+  }
   for(I in 1:Ncategoryclass){
     for(i in 1:maxNcategory){      
       Flambda2[i,I] ~ normal(0,1.73) ;
     }
   }
-if(prior_distribution_rho == 0){
-    rho  ~ uniform(priorRho1, priorRho2);
- }
- if(prior_distribution_rho == 1){
-    rho  ~ normal(priorRho1, priorRho2);
- } 
- if(prior_distribution_rho == 2){
-    rho  ~ exponential(priorRho1);
- }
+  
+  if(prior_distribution_rho == 1){
+    rho_raw  ~ normal(0,1);
+  } 
+  if(prior_distribution_rho == 2){
+    rho_raw  ~ exponential(priorRho1);
+  }
   for(j in 1:N){
     target += bernoulli_lpmf( Y[j] | Likelihood[j]);
   }

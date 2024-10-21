@@ -27,43 +27,62 @@ data {
   real <lower = 0> priorRho1;
   real <lower = 0> priorRho2;
   int <lower = 0> cat_lambda; // 1 or 0: characterizes whether we distinguish categories by different FOI
-
-//  = 0,1, 2 to specify the prior distributions
+  
+  //  1 or 2 to specify the prior distributions
   int prior_distribution_alpha;
   int prior_distribution_T;
   int prior_distribution_constant_foi;
   int prior_distribution_independent_foi;
   int prior_distribution_rho;
- 
 }
 
 parameters {
-  real T[K];
-  real<lower=0> alpha[K];
-  real<lower = 0, upper = 20> rho;      
+  real T_raw[K];
+  real alpha_raw[K];
+  real rho_raw;      
   real  Flambda2[maxNcategory,Ncategoryclass];  
 }
 
 transformed parameters {
-  
   real x[A]; 
   real L;
-  real lambda[A];
+  real<lower=0> lambda[A];
   real S[K]; // Normalization constant
   real<lower =0, upper=1> P1[A,NAgeGroups,Ncategory];  
   real<lower =0, upper=1> P[A,NAgeGroups,Ncategory];  
   real<lower =0> Flambda[Ncategory]; 
   real<lower = 0, upper=1> Likelihood[N];  
   real log_lik[N];  
-
+  real T[K];
+  real<lower = 0> alpha[K];
+  real<lower = 0, upper = 20> rho;      
   real c; 
   
-
+  for(i in 1:K){
+    if(prior_distribution_alpha == 1){ //normal distribution
+    alpha[i] = prioralpha1[i]*exp(alpha_raw[i]*prioralpha2[i]);
+    }
+    if(prior_distribution_alpha == 2){ // exponential distribution
+    alpha[i] =   alpha_raw[i];
+    } 
+    if(prior_distribution_T == 1){ //normal distribution
+    T[i] = priorT1[i] + T_raw[i]*priorT2[i];
+    }
+    if(prior_distribution_T == 2){ // exponential distribution
+    T[i] = T_raw[i] ;
+    } 
+  }
+  if(prior_distribution_rho == 1){ //normal distribution
+  rho = priorRho1*exp( rho_raw*priorRho2);
+  }
+  if(prior_distribution_rho == 2){ // exponential distribution
+  rho =  rho_raw ;
+  } 
+  //}
   for(i in 1:K){
     S[i] =0;
     for(j in 1:A){
       S[i]  =  S[i]  + exp(-(j-T[i])^2);
-     // S[i]  =  S[i]  + exp(-((j-T[i])^2)/(beta[i])^2);
     }
   }
   
@@ -71,7 +90,6 @@ transformed parameters {
     lambda[j] =0;
     for(i in 1:K){
       lambda[j]  =  lambda[j]  + alpha[i]/S[i]*exp(-(j-T[i])^2);
-     //lambda[j]  =  lambda[j]  + alpha[i]/S[i]*exp(-((j-T[i])^2)/(beta[i])^2);
     }
   }
   
@@ -135,7 +153,6 @@ transformed parameters {
     }
   }
   // accounting for age classes
-  
   for(J in 1:NAgeGroups){
     for(i in 1:Ncategory){        
       for(j in 1:A){
@@ -147,56 +164,43 @@ transformed parameters {
       }
     }
   }
-
+  
   for(j in 1:N){
     Likelihood[j] =se-(se+sp-1)*P[age[j],age_group[j],categoryindex[j]]; 
     log_lik[j] = bernoulli_lpmf( Y[j] | Likelihood[j]);
   }
-
+  
 }
 
 model {
-  
-  //FOI by group
-
-
   for (i in 1:K){
-
-    if(prior_distribution_alpha == 0){
-        alpha[i] ~ uniform(prioralpha1[i], prioralpha2[i]);
-    }
     if(prior_distribution_alpha == 1){
-        alpha[i] ~ normal(prioralpha1[i], prioralpha2[i]);
+      alpha_raw[i] ~ normal(0,1);// T[-prioralpha1[i]/prioralpha2[i],];
     }
     if(prior_distribution_alpha == 2){
-        alpha[i] ~ exponential(prioralpha1[i]);
+      alpha_raw[i] ~  exponential(prioralpha1[i]);
     }    
-
-    if(prior_distribution_T == 0){
-        T[i] ~ uniform(priorT1[i], priorT2[i]);
-    } 
+    
     if(prior_distribution_T == 1){
-        T[i] ~ normal(priorT1[i], priorT2[i]);
+      T_raw[i] ~ normal(0,1) ;
     }
     if(prior_distribution_T == 2){
-        T[i] ~ exponential(priorT1[i]);
+      T_raw[i] ~  exponential(priorT1[i]);
     }
   }
- 
+  
   for(I in 1:Ncategoryclass){
     for(i in 1:maxNcategory){      
       Flambda2[i,I] ~ normal(0,1.73) ; // the prior corresponds to xx
     }
   }
-  if(prior_distribution_rho == 0){
-    rho  ~ uniform(priorRho1, priorRho2);
- }
- if(prior_distribution_rho == 1){
-    rho  ~ normal(priorRho1, priorRho2);
- } 
- if(prior_distribution_rho == 2){
-    rho  ~ exponential(priorRho1);
- }
+  
+  if(prior_distribution_rho == 1){
+    rho_raw  ~ normal(0,1);
+  } 
+  if(prior_distribution_rho == 2){
+    rho_raw  ~ exponential(priorRho1);
+  }
   for (j in 1:N) {  
     target += bernoulli_lpmf( Y[j] | Likelihood[j]);
   }
