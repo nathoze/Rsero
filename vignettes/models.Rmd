@@ -178,7 +178,7 @@ The DIC of the piecewise constant model is lower than the DIC of the outbreak mo
 
 ## Priors
 
-The user can choose between a uniform, a normal or an exponential distribution. 
+The user can choose between a normal and an exponential distribution. 
 Normal priors were set by default for all parameters. We give below the default values of the parameters that are mean and the standard deviation of the normal distribution, respectively. 
 
 ### Default prior distributions
@@ -186,29 +186,29 @@ Normal priors were set by default for all parameters. We give below the default 
                    
 #### For the constant model
 ```{r prior1, echo=TRUE, warning=FALSE, eval=FALSE}
-priorC1 = 0 
+priorC1 = 0.01
 priorC2 = 1
 ```
 #### For the piecewise constant model
 ```{r prior2, echo=TRUE, warning=FALSE, eval=FALSE}
-priorC1 = 0
+priorC1 = 0.01
 priorC2 = 1
-priorT1 = 50
-priorT2 = 20
+priorT1 = 20
+priorT2 = 10
 ```
 #### For the outbreak model
 ```{r prioroutbreak, echo=TRUE, warning=FALSE, eval=FALSE}
 prioralpha1 = 0.2
-prioralpha2 = 1
-priorT1 = 50
-priorT2 = 20
+prioralpha2 = 0.2
+priorT1 = 20
+priorT2 = 10
 ```
 #### For the constant+outbreak model
 ```{r priorconstantoutbreak, echo=TRUE, warning=FALSE, eval=FALSE}
 prioralpha1 = 0.2
-prioralpha2 = 1
-priorT1 = 50
-priorT2 = 20
+prioralpha2 = 0.2
+priorT1 = 20
+priorT2 = 10
 priorC1 = 0.01
 priorC2 = 1
 ```
@@ -220,14 +220,14 @@ priorY2 = 1
 
 #### In the case of seroreversion
 ```{r priorsrho}
-priorRho1 = 0
+priorRho1 = 1
 priorRho2 = 1
 ```
 
 
 ### Specifying the parameters of the prior distributions: example   
 
-In the case of the `"outbreak"` and the `"constantoutbreak"` models each outbreak can be defined by a specific set of prior distributions. Here we set `K=2`. For the first outbreak, the prior for `T` is normal(10,30), the prior for alpha is normal(0,5). For the second outbreak, the prior for `T` is normal(40,70), the prior for alpha is uniform(0,1).
+In the case of the `"outbreak"` and the `"constantoutbreak"` models each outbreak can be defined by a specific set of prior distributions. Here we set `K=2`. For the first outbreak, the prior for `T` is normal(10,30), the prior for alpha is normal(0,5). For the second outbreak, the prior for `T` is normal(40,70), the prior for alpha is normal(0,1).
 
 ```{r modeloutbreaks, echo=TRUE}
 model <- FOImodel(type = "outbreak", K = 2, 
@@ -239,7 +239,7 @@ print(model)
 
 model_2 <- FOImodel(type = "outbreak", K = 1,
                     seroreversion = 1,
-                    prior_distribution_alpha = "uniform",
+                    prior_distribution_alpha = "normal",
                     prior_distribution_rho = "exponential",
                     priorRho1=1)
 print(model_2)

@@ -8,7 +8,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r figsize, warning=FALSE, message = FALSE}
+```{r figsize, warning=FALSE, message = FALSE, include=FALSE}
  knitr::opts_chunk$set(fig.width=7, fig.height=4) 
 ```
 
@@ -93,7 +93,7 @@ First, we test the model of a constant force of infection and imperfect sensibil
 print(model[[9]])
 ```
 ```{r fit_1, warning=FALSE, message = FALSE}
-Fit_1 = fit(data = chik.sero.aggregated,
+Fit_9 = fit(data = chik.sero.aggregated,
           model = model[[9]],
           chain=4,
           cores=4, 
@@ -105,7 +105,7 @@ Second, we test the model of one outbreak and imperfect sensibility and specific
 print(model[[10]])
 ```
 ```{r fit_2, warning=FALSE, message = FALSE}
-Fit_2 = fit(data = chik.sero.aggregated,
+Fit_10 = fit(data = chik.sero.aggregated,
           model = model[[10]],
           chain=4,
           cores=4, 
@@ -118,11 +118,11 @@ Fit_2 = fit(data = chik.sero.aggregated,
 The Rsero packages includes a certain number of functions to analyze the MCMC chains and the posterior distributions of the parameters. We first compare the different models and evaluate the goodness of fit. The *compute_information_criteria* function implemented in Rsero evaluates the AIC, DIC, WAIC, and the PSIS-LOO. The AIC, which requires an estimation of the maximum likelihood, is obtained for the ensemble of parameters in the chain that maximizes the likelihood.
 
 ```{r compute_information_criteria, warning=FALSE, message = FALSE}
-C_1 = compute_information_criteria(Fit_1)
-C_2 = compute_information_criteria(Fit_2)
+C_9 = compute_information_criteria(Fit_9)
+C_10 = compute_information_criteria(Fit_10)
 
-print(C_1)
-print(C_2)
+print(C_9)
+print(C_10)
 ```
 The DIC is significantly lower for model 10 than for model 9. This indicates that model 10 (outbreak model with imperfect sensitivity) is more adequate at fitting the data.
 
@@ -131,13 +131,13 @@ This can be checked visually when plotting the observed and fitted seroprevalanc
 
 For model 9,
 ```{r seroprevalence.plot1, warning=FALSE, message = FALSE}
-p = seroprevalence.fit(Fit_1)
+p = seroprevalence.fit(Fit_9)
 print(p)
 ```
 
 And for model 10,  
 ```{r seroprevalence.plot2, warning=FALSE, message = FALSE}
-p = seroprevalence.fit(Fit_2)
+p = seroprevalence.fit(Fit_10)
 print(p)
 ```
 
@@ -146,18 +146,18 @@ According to this model, an outbreak occurred around 40 years before the survey.
 
 The posterior distribution can be plotted using the command 
 ```{r plot_posterior, warning=FALSE, message = FALSE}
-plot_posterior(Fit_2)
+plot_posterior(Fit_10)
 ```
 
 Numerical values are given by the the *parameters_credible_intervals* function, which gives the mean and 2.5%, 50% and 97.5% quantiles of the posterior distributions of the most relevant parameters.
 
 ```{r parameters_credible_intervals, warning=FALSE, message = FALSE}
-parameters_credible_intervals(Fit_2)
+parameters_credible_intervals(Fit_10)
 ```
  
 The plot of the annual force of infection is obtained by typing
 ```{r plotFit, warning=FALSE, message = FALSE}
-plot(Fit_2, YLIM =0.3) 
+plot(Fit_10, YLIM =0.3) 
 ```
 
 
@@ -166,25 +166,25 @@ plot(Fit_2, YLIM =0.3)
 We show here how to do the MCMC chains diagnosis using the tools provided in the *rstan* package. The output object of the fit using the package *Rsero* contains the data, the model, and the fit. These various objects can be extracted using the commands
 
 ```{r Fitobjects, warning=FALSE, message = FALSE, eval = FALSE}
-Fit_2$data
-Fit_2$model
-Fit_2$fit
+Fit_10$data
+Fit_10$model
+Fit_10$fit
 ```
 Using this fit, it is possible first to obtain the traceplots using the *rstan::traceplot* function, providing information on chain convergence and mixing. The *Rsero::traceplot_Rsero()* function restricts the plots to the most relevant parameters. In the case of model 10, these are the force of infection (alpha) and timing of the outbreak (T). 
 ```{r traceplot_Rsero, warning=FALSE, message = FALSE}
-traceplot_Rsero(Fit_2)
+traceplot_Rsero(Fit_10)
 ```
 
 Additional diagnostics for the HMC and NUTS are available using standard *rstan* functions. The following functions are not intended for a precise diagnostic of individual parameters but rather to quickly identify if acceptable values are reached for all parameters. The Rhat compares the between and within-chain estimates and is a measure of good mixing should be lower than 1.1. The effective sample size is a measure of "how much independent information there is in autocorrelated chains" (Kruschke 2015) and it should be larger than 200 to provide a stable parameter estimate. For more detailed diagnostics the use of the *posterior* package is recommanded.  
 
 ```{r Diagnostics, warning=FALSE, message = FALSE}
-stan_diag(Fit_2$fit,info = c("sample")) # shows diagnostic (loglikelihood, acceptance rate,etc)
-stan_rhat(Fit_2$fit) # show the Rhat statistic
-stan_ess(Fit_2$fit) # show the ratio of effective sample size over total sample size
+stan_diag(Fit_10$fit,info = c("sample")) # shows diagnostic (loglikelihood, acceptance rate,etc)
+stan_rhat(Fit_10$fit) # show the Rhat statistic
+stan_ess(Fit_10$fit) # show the ratio of effective sample size over total sample size
 ``` 
 Finally the chains are available using the *rstan::extract()* function 
 ```{r extract, warning=FALSE, message = FALSE}
-Chains= rstan::extract(Fit_2$fit)
+Chains= rstan::extract(Fit_10$fit)
 ``` 
 ## Applying the model to Chikungunya data in the different regions
 We fit model 10 to the dataset "chik.sero" which contains information the survey participant sampling locations.

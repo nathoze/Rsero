@@ -1,22 +1,22 @@
 data {
   int <lower=0> A; //the number of age classes
   int <lower=1> NAgeGroups ;  
-  int <lower=1> class1[A,NAgeGroups]; //lower boundary for the age class corresponding to the indexed age
-  int <lower=1> class2[A,NAgeGroups]; //upper boundary for the age class corresponding to the indexed age  
-  int <lower=0> NGroups; //the number of foi groups
-  int <lower=0> N; //the number of individuals
-  int <lower=0> age[N]; // Age  
-  int <lower=0, upper=1> Y[N]; // Outcome
+  array[A,NAgeGroups] int <lower=1> class1 ; //lower boundary for the age class corresponding to the indexed age
+  array[A,NAgeGroups] int <lower=1> class2 ; //lower boundary for the age class corresponding to the indexed age
+  int <lower=0> NGroups; //the number of foi groups      
+  int <lower=0> N; //the number of individuals  
+  array[N] int <lower=0> age; // Age   
+  array[N] int <lower=0, upper=1> Y; // Outcome
   int<lower = 0, upper=1> seroreversion; 
-  int <lower=1> categoryindex[N];  
-  int <lower=1> Ncategory;
-  int<lower= 1> Ncategoryclass;  
-  int<lower=1> maxNcategory;  
-  int<lower=1> MatrixCategory[Ncategory,Ncategoryclass];    
-  int <lower=0> age_at_sampling[N];  
-  int <lower=0> sampling_year[N];  
-  int <lower=1> age_group[N] ;  
-  int <lower=1> age_at_init[NAgeGroups]; 
+  array[N] int <lower=1> categoryindex ; 
+  int<lower= 1> Ncategoryclass; 
+  int <lower=1> Ncategory;  
+  int<lower=1> maxNcategory;
+  array[Ncategory,Ncategoryclass] int<lower=1> MatrixCategory ;
+  array[N] int <lower=0> age_at_sampling ; 
+  array[N] int <lower=0> sampling_year ;  
+  array[N] int <lower=1> age_group ;   
+  array[NAgeGroups] int <lower=1> age_at_init; 
   real <lower = 0> priorY1;  
   real <lower = 0> priorY2;  
   real <lower = 0> priorRho1;
@@ -34,21 +34,23 @@ data {
 }
 
 parameters {
-  real lambda_raw[NGroups]; 
+  array[NGroups] real lambda_raw; 
   real rho_raw;   
-  real  Flambda2[maxNcategory,Ncategoryclass]; //14 08
+  array[maxNcategory,Ncategoryclass] real Flambda2;  
 }
 
 transformed parameters {
-  real x[A]; 
+
+  array[A] real x; 
   real L;
-  real<lower =0, upper=1> P1[A,NAgeGroups,Ncategory]; // Probability of being seronegative
-  real<lower =0, upper=1> P[A,NAgeGroups,Ncategory]; 
-  real<lower =0> Flambda[Ncategory]; //14 08
-  real<lower = 0, upper=1> Likelihood[N];  
-  real log_lik[N];  
+  array[A,NAgeGroups,Ncategory] real<lower = 0, upper = 1> P1; 
+  array[A,NAgeGroups,Ncategory] real<lower = 0, upper = 1> P;  
+  array[Ncategory] real<lower = 0> Flambda;  
+  array[N] real<lower = 0, upper = 1> Likelihood;  
+  array[N] real log_lik;  
+
+  array[NGroups] real lambda;  
   real c; 
-  real lambda[NGroups]; 
   real<lower = 0, upper = 20> rho;      
   
   for (j in 1:NGroups) {    

@@ -1,27 +1,28 @@
 data {
   int <lower=0> A; //the number of age classes
   int <lower=1> NAgeGroups ;   
-  int <lower=1> class1[A,NAgeGroups]; //lower boundary for the age class corresponding to the indexed age
-  int <lower=1> class2[A,NAgeGroups]; //upper boundary for the age class corresponding to the indexed age  
+
+  array[A,NAgeGroups] int <lower=1> class1 ; //lower boundary for the age class corresponding to the indexed age
+  array[A,NAgeGroups] int <lower=1> class2 ; //lower boundary for the age class corresponding to the indexed age
   int <lower=0> NGroups; //the number of foi groups      
   int <lower=0> N; //the number of individuals  
-  int <lower=0> age[N]; // Age   
-  int <lower=0, upper=1> Y[N]; // Outcome
+  array[N] int <lower=0> age; // Age   
+  array[N] int <lower=0, upper=1> Y; // Outcome
   int<lower = 0, upper=1> seroreversion; 
-  int <lower=1> categoryindex[N]; 
+  array[N] int <lower=1> categoryindex ; 
   int<lower= 1> Ncategoryclass; 
   int <lower=1> Ncategory;  
   int<lower=1> maxNcategory;
-  int<lower=1> MatrixCategory[Ncategory,Ncategoryclass];
-  int <lower=0> age_at_sampling[N]; 
-  int <lower=0> sampling_year[N];  
-  int <lower=1> age_group[N] ;   
-  int <lower=1> age_at_init[NAgeGroups]; 
+  array[Ncategory,Ncategoryclass] int<lower=1> MatrixCategory ;
+  array[N] int <lower=0> age_at_sampling ; 
+  array[N] int <lower=0> sampling_year ;  
+  array[N] int <lower=1> age_group ;   
+  array[NAgeGroups] int <lower=1> age_at_init; 
   int <lower=1> K; // the number of peaks of epidemics
-  real <lower = 0> prioralpha1[K];
-  real <lower = 0> prioralpha2[K];
-  real priorT1[K];
-  real <lower = 0> priorT2[K];
+  array[K] real<lower = 0> prioralpha1;
+  array[K] real <lower = 0> prioralpha2;
+  array[K] real priorT1;
+  array[K] real <lower = 0> priorT2;
   real<lower =0, upper=1> se;
   real<lower =0, upper=1> sp;
   real <lower = 0> priorRho1;
@@ -37,24 +38,27 @@ data {
 }
 
 parameters {
-  real T_raw[K];
-  real alpha_raw[K];
+  array[K] real T_raw;
+  array[K] real alpha_raw;
   real rho_raw;      
-  real  Flambda2[maxNcategory,Ncategoryclass];  
+  array[maxNcategory,Ncategoryclass] real Flambda2;  
 }
 
 transformed parameters {
-  real x[A]; 
+ 
+  array[A] real x; 
   real L;
-  real<lower=0> lambda[A];
-  real S[K]; // Normalization constant
-  real<lower =0, upper=1> P1[A,NAgeGroups,Ncategory];  
-  real<lower =0, upper=1> P[A,NAgeGroups,Ncategory];  
-  real<lower =0> Flambda[Ncategory]; 
-  real<lower = 0, upper=1> Likelihood[N];  
-  real log_lik[N];  
-  real T[K];
-  real<lower = 0> alpha[K];
+  array[A,NAgeGroups,Ncategory] real<lower = 0, upper = 1> P1; 
+  array[A,NAgeGroups,Ncategory] real<lower = 0, upper = 1> P;  
+  array[Ncategory] real<lower = 0> Flambda;  
+  array[N] real<lower = 0, upper = 1> Likelihood;  
+  array[N] real log_lik;  
+  array[A] real<lower=0>  lambda;
+  array[K] real S; 
+  array[K] real T; 
+  array[K] real<lower = 0> alpha; 
+ 
+ 
   real<lower = 0, upper = 20> rho;      
   real c; 
   
