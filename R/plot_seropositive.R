@@ -15,6 +15,12 @@
 ##' 
 ##' @param YLIM Upper limit of the y-axis. Default = 1. The lower limit is set to 0.
 ##' 
+##' @param fill.color Ribbon color. By default, fill.color  = "#d7def3"
+##' 
+##' @param line.color Line color. By default, line.color  = "#5e6b91"
+##' 
+##' @param mid.age.plot Boolean. Whether the data is plotted at the mid-point of the age category (TRUE) or at the mean age of the individuals in the data within this category (FALSE). Default = \code{TRUE}. 
+##' 
 ##' @return A list of \code{ggplot2} objects. 
 ##' 
 ##' @examples
@@ -34,6 +40,9 @@ seroprevalence.fit<- function(FOIfit,
                               individual_samples = 0,
                               age_class = 10,
                               YLIM=1,
+                              fill.color  = "#d7def3", 
+                              line.color  = "#5e6b91", 
+                              mid.age.plot = TRUE,
                               ...){
   
   plots  <- NULL
@@ -55,11 +64,11 @@ seroprevalence.fit<- function(FOIfit,
     for(cat in unique.categories){ 
       
       if(length(unique.categories)==1){
-      #  title =  paste0("Sampling year: ", sampling_year)
+        #  title =  paste0("Sampling year: ", sampling_year)
         title =  ""
       }
       if(length(unique.categories)>1){
-       # title= paste0('Category: ',cat," Sampling year: ", sampling_year)
+        # title= paste0('Category: ',cat," Sampling year: ", sampling_year)
         title= paste0('Category: ',cat)
       }
       
@@ -95,7 +104,7 @@ seroprevalence.fit<- function(FOIfit,
       DataEnvelope = data.frame(x = xpoly, y = ypoly)
       
       # histogram  of data
-      histdata <- sero.age.groups(dat = subdat,age_class = age_class,YLIM=YLIM) 
+      histdata <- sero.age.groups(dat = subdat,age_class = age_class,YLIM=YLIM, mid.age.plot=mid.age.plot) 
       histdata$labels_text <- as.character(histdata$labels)
       
       last_row_index <- tail(which(complete.cases(histdata)), 1)
@@ -104,14 +113,14 @@ seroprevalence.fit<- function(FOIfit,
       }
       
       max.age= max(histdata$age)
-    
+      
       DataEnvelope =  subset(DataEnvelope, x<=max.age)
       meanFit = subset(meanFit, x<=max.age )
       
       # plot the mean and 95% credible interval of the seroprevalence
       p <- ggplot2::ggplot() + 
-        ggplot2::geom_polygon(data=DataEnvelope, ggplot2::aes(x, y), fill="#d7def3") + 
-        ggplot2::geom_line(data = meanFit, ggplot2::aes(x = x, y = y), linewidth = 1, color ='#5e6b91')
+        ggplot2::geom_polygon(data=DataEnvelope, ggplot2::aes(x, y), fill=fill.color) + 
+        ggplot2::geom_line(data = meanFit, ggplot2::aes(x = x, y = y), linewidth = 1, color =line.color)
       
       # if plot individual runs of the chain
       if(individual_samples>0){
@@ -121,9 +130,10 @@ seroprevalence.fit<- function(FOIfit,
           p <- p + ggplot2::geom_line(data = ind_foi, ggplot2::aes(x = x, y = y), linewidth = 0.8, colour = "#bbbbbb", alpha = 0.6)
         }
       }
-
+      print(histdata)
       p <- p  +
-        scale_x_continuous(breaks=histdata$age,labels=histdata$labels_text)+  
+        scale_x_continuous(breaks=histdata$age-round(age_class/2),labels=histdata$labels_text)+  
+#        scale_x_continuous(breaks=histdata$age,labels=histdata$labels_text)+  
         geom_point(data = histdata, aes(x=age, y=mean))  +
         geom_segment(data=histdata, aes(x=age,y=lower, xend= age, yend=upper))+
         ggplot2::xlab("Age (years)") + 
