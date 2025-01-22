@@ -158,6 +158,18 @@ parameters_credible_intervals <- function(FOIfit,
                                    quants = quants,
                                    quantilestext=quantilestext )
     }
+    
+    
+    if(FOIfit$model$age_dependent_foi){
+      age_risk = chains$age_risk
+      params <- add.quantiles.text(params,
+                                   variable=age_risk,
+                                   name = paste('age_risk'),
+                                   quants = quants,
+                                   quantilestext=quantilestext )
+    }
+    
+    
   }
   
   

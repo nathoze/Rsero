@@ -9,6 +9,7 @@ data {
   array[N] int <lower=0> age; // Age   
   array[N] int <lower=0, upper=1> Y; // Outcome
   int<lower = 0, upper=1> seroreversion; 
+  int<lower = 0, upper=1> age_dependent_foi; 
   array[N] int <lower=1> categoryindex ; 
   int<lower= 1> Ncategoryclass; 
   int <lower=1> Ncategory;  
@@ -43,7 +44,9 @@ parameters {
   array[K] real  T_raw;
   array[K] real annual_foi_raw;
   real rho_raw;   
-  array[maxNcategory,Ncategoryclass] real Flambda2; //14 08
+  array[maxNcategory,Ncategoryclass] real Flambda2; 
+  real age_risk;
+
 }
 
 transformed parameters {
@@ -62,7 +65,9 @@ transformed parameters {
   array[K] real T;
   array[K] real<lower = 0> annual_foi;
   real<lower = 0, upper = 20> rho;      
-  
+  real<lower = 0> C1;
+  C1=0;
+
   for(i in 1:K){
     
     if(prior_distribution_constant_foi == 1){
@@ -126,24 +131,24 @@ transformed parameters {
   
   L=1;
   
-  if(seroreversion==0){
+   if(seroreversion==0 && age_dependent_foi == 0){
     for(J in 1:NAgeGroups){
       for(i in 1:Ncategory){      
-        P1[1,J,i] = exp(-Flambda[i]*lambda[1]) ;
+        P1[1,J,i ] = exp(-Flambda[i]*lambda[1]) ;
         for(j in 1:A-1){
           x[j]=1;         
           if(j<age_at_init[J]){
-            P1[j+1,J,i] = exp(-Flambda[i]*lambda[j]) ;    
+            P1[j+1,J,i] = exp(- Flambda[i]*lambda[j]) ;    
           }else{
-            P1[j+1,J,i] = P1[j,J,i]*exp(-Flambda[i]*lambda[j+1]);                 
+            P1[j+1,J,i] = P1[j,J,i]*exp(- Flambda[i]*lambda[j+1]);                 
           } 
         }
         x[A]=1;
       }
-    } 
+    }
   }
   
-  if(seroreversion==1){
+  if(seroreversion==1 && age_dependent_foi == 0){
     for(J in 1:NAgeGroups){
       for(i in 1:Ncategory){    
         x[A] =1;
@@ -152,7 +157,7 @@ transformed parameters {
         }
         
         for(j in 1:A){
-          // x[j] = exp(-Flambda[i]*lambda[age_at_init[J]]) ;
+          //  x[j] = exp(-Flambda[i]*lambda[age_at_init[J]]) ;
           L=Flambda[i]*lambda[age_at_init[J]];
           x[j] = rho/(L+rho) +L/(L+rho)*exp(-L) ;
           if(j >1){
@@ -167,6 +172,63 @@ transformed parameters {
       }
     }
   }
+
+  if(seroreversion==1 && age_dependent_foi == 1){
+    for(J in 1:NAgeGroups){
+      for(i in 1:Ncategory){    
+        x[A] =1;
+        for(j in 1:A){
+          x[j] = exp(-Flambda[i]*lambda[1]) ;
+        }
+        
+        for(j in 1:A){
+          //  x[j] = exp(-Flambda[i]*lambda[age_at_init[J]]) ;
+          L=Flambda[i]*lambda[age_at_init[J]];
+          C1= exp(age_risk*(age_at_init[J]-1));// equivalent
+
+          x[j] = rho/(L*C1+rho) +L*C1/(L*C1+rho)*exp(-L*C1) ;
+          if(j >1){
+            for(k in 2:j){
+              L=Flambda[i]*lambda[j-k+2];
+              C1= C1*exp(age_risk);
+             x[j-k+2-1] = x[j-k+2]*exp(-(rho+L*C1)) +rho/(L*C1+rho)*(1- exp(-(rho+L*C1)));
+            }
+          }         
+          P1[j,J,i]  = x[age_at_init[J]];
+          
+        }
+      }
+    }
+  }
+
+  if(seroreversion==0 && age_dependent_foi == 1){
+    for(J in 1:NAgeGroups){
+      for(i in 1:Ncategory){    
+        x[A] =1;
+        for(j in 1:A){
+          x[j] = exp(-Flambda[i]*lambda[1]) ;
+        }
+        
+        for(j in 1:A){
+          //  x[j] = exp(-Flambda[i]*lambda[age_at_init[J]]) ;
+          L=Flambda[i]*lambda[age_at_init[J]];
+          C1= exp(age_risk*(age_at_init[J]-1));// equivalent
+
+          x[j] = exp(-L*C1) ;
+          if(j >1){
+            for(k in 2:j){
+              L=Flambda[i]*lambda[j-k+2];
+              C1= C1*exp(age_risk);
+              x[j-k+2-1] = x[j-k+2]*exp(-L*C1) ;
+            }
+          }         
+          P1[j,J,i]  = x[age_at_init[J]];
+          
+        }
+      }
+    }
+  }
+
   
   for(J in 1:NAgeGroups){
     for(i in 1:Ncategory){        
@@ -213,6 +275,10 @@ model {
   if(prior_distribution_rho == 2){
     rho_raw  ~ exponential(priorRho1);
   }
+
+    age_risk ~ normal(0,1);
+
+
   for(j in 1:N){
     target += bernoulli_lpmf( Y[j] | Likelihood[j]);
   }

@@ -12,7 +12,7 @@
 
 <meta name="author" content="Nathanael Hoze" />
 
-<meta name="date" content="2024-11-05" />
+<meta name="date" content="2025-01-22" />
 
 <title>Using the models defined in the Rsero package</title>
 
@@ -341,7 +341,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h1 class="title toc-ignore">Using the models defined in the Rsero
 package</h1>
 <h4 class="author">Nathanael Hoze</h4>
-<h4 class="date">2024-11-05</h4>
+<h4 class="date">2025-01-22</h4>
 
 
 
@@ -366,11 +366,11 @@ of exposure.</p>
 ## 5 serological samples  
 ## Max age: 70  
 ##   age age_at_sampling     Y sampling_year location sex   category
-## 1  69              69 FALSE          2019       NA All Category 1
-## 2  46              46 FALSE          2019       NA All Category 1
-## 3  54              54 FALSE          2019       NA All Category 1
-## 4  62              62  TRUE          2019       NA All Category 1
-## 5  46              46  TRUE          2019       NA All Category 1</code></pre>
+## 1  13              13 FALSE          2019       NA All Category 1
+## 2  70              70  TRUE          2019       NA All Category 1
+## 3  24              24  TRUE          2019       NA All Category 1
+## 4  43              43  TRUE          2019       NA All Category 1
+## 5  31              31 FALSE          2019       NA All Category 1</code></pre>
 </div>
 <div id="models-of-the-force-of-infection" class="section level2">
 <h2>Models of the force of infection</h2>
@@ -444,7 +444,12 @@ model.</p>
 <p>We note <span class="math inline">\(X_a(t)\)</span> the probability
 that an individual born a years before the survey was seropositive <span class="math inline">\(t\)</span> years before the survey. Starting at
 birth, where <span class="math inline">\(X_a(a) = 0\)</span> (i.e. we
-assume all individuals are born seronegative), and considering <span class="math inline">\(\lambda_y\)</span> the FOI on year <span class="math inline">\(y\)</span> and the seroreversion rate <span class="math inline">\(\rho\)</span>, the difference equation is <span class="math display">\[
+assume all individuals are born seronegative), and considering <span class="math inline">\(\lambda_y\)</span> the FOI on year <span class="math inline">\(y\)</span> and the seroreversion rate <span class="math inline">\(\rho\)</span>, the probability that an individual
+is seropositive <span class="math inline">\(y-1\)</span> years before
+the survey is given by the difference equation involving the probability
+that they are seropositive <span class="math inline">\(y\)</span> years
+before the survey and the probability the force of infection between
+year <span class="math inline">\(y\)</span> and <span class="math inline">\(y-1\)</span>, considered as a constant : <span class="math display">\[
 X_a(y-1) =X_a(y) e^{-(\lambda_y+\rho)}
 +\frac{\lambda_y}{\lambda_y+\rho}(1-e^{-(\lambda_y+\rho)}).
 \]</span> The probability that the individual is seropositive in the
@@ -452,6 +457,31 @@ survey is <span class="math inline">\(P=X_a(0)\)</span>. A parameter
 <code>seroreversion = 0</code> or <code>seroreversion = 1</code> can be
 defined in the <code>FOIModel</code>. By default
 <code>seroreversion = 0</code>.</p>
+</div>
+<div id="age-dependent-force-of-infection" class="section level3">
+<h3>Age-dependent force of infection</h3>
+<p>We implemented models that both consider age- and time-dependency in
+the force of infection. In this model, the force of infection is defined
+by an additional parameter <span class="math inline">\(C\)</span>, so
+that $ (y, age) = _y*e^{C(age-1)}$, so that the reference FOI is given
+during the first year of exposure (one-year-old children in the sample
+being exposed from 0 to 1 y.o), and <span class="math inline">\(C&gt;0\)</span> indicates an increasing risk with
+age (<span class="math inline">\(C&lt;0\)</span> indicates a decreasing
+risk with age). With the same rational as for the general seroreversion
+equation, the probability that an individual is seropositive in the
+survey is given by <span class="math inline">\(P=X_a(0)\)</span>, where
+<span class="math inline">\(X_a(a)=0\)</span> and</p>
+<p><span class="math display">\[
+X_a(y-1) = 1 -(1-X_a(y)) e^{-\lambda_y e^{C(a-y)}}.
+\]</span> or equivalently, <span class="math display">\[
+P = 1-exp(-\sum_{i=0}^{a-1}\lambda_{a-i}e^{Ci})
+\]</span> This parameter can be defined in addition to the seroreversion
+parameter, in which case the difference equation accounts for both
+terms.</p>
+<p>A parameter <code>age_dependent_foi = 0</code> or
+<code>age_dependent_foi = 1</code> can be defined in the
+<code>FOIModel</code>. By default
+<code>age_dependent_foi = 0</code>.</p>
 </div>
 <div id="imperfect-sensitivity-and-specificity" class="section level3">
 <h3>Imperfect sensitivity and specificity</h3>

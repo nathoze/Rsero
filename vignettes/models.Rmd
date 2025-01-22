@@ -65,13 +65,29 @@ Printing recapitulates the main information concerning the model. For instance, 
 
 Seroreversion is modeled as a rate of switching from a seropositive state to a seronegative state. In the *Rsero* package we implemented a combination of seroreversion with any epidemiological model.
 
-We note $X_a(t)$ the probability that an individual born a years before the survey was seropositive $t$ years before the survey. Starting at birth, where $X_a(a) = 0$ (i.e. we assume all individuals are born seronegative), and considering $\lambda_y$ the FOI on year $y$ and the seroreversion rate $\rho$, the difference equation is 
+We note $X_a(t)$ the probability that an individual born a years before the survey was seropositive $t$ years before the survey. Starting at birth, where $X_a(a) = 0$ (i.e. we assume all individuals are born seronegative), and considering $\lambda_y$ the FOI on year $y$ and the seroreversion rate $\rho$, the probability that an individual is seropositive $y-1$ years before the survey is given by the difference equation involving the probability that they are seropositive $y$ years before the survey and the probability the force of infection between year $y$ and $y-1$, considered as a constant :
 $$
 X_a(y-1) =X_a(y) e^{-(\lambda_y+\rho)} +\frac{\lambda_y}{\lambda_y+\rho}(1-e^{-(\lambda_y+\rho)}).
 $$
 The probability that the individual is seropositive in the survey is $P=X_a(0)$.
 A parameter  `seroreversion = 0` or `seroreversion = 1 ` can be defined in the `FOIModel`.  By default `seroreversion = 0`.
 
+
+
+### Age-dependent force of infection 
+
+We implemented models that both consider age- and time-dependency in the force of infection. In this model, the force of infection is defined by an additional parameter $C$, so that $ \lambda(y, age) = \lambda_y*e^{C(age-1)}$, so that the reference FOI is given during the first year of exposure (one-year-old children in the sample being exposed from 0 to 1 y.o), and $C>0$ indicates an increasing risk with age ($C<0$ indicates a decreasing risk with age). With the same rational as for the general seroreversion equation, the probability that an individual is seropositive in the survey is given by   $P=X_a(0)$, where $X_a(a)=0$ and 
+
+$$
+X_a(y-1) = 1 -(1-X_a(y)) e^{-\lambda_y e^{C(a-y)}}.
+$$
+or equivalently, 
+$$
+P = 1-exp(-\sum_{i=0}^{a-1}\lambda_{a-i}e^{Ci})
+$$
+This parameter can be defined in addition to the seroreversion parameter, in which case the difference equation accounts for both terms. 
+
+A parameter  `age_dependent_foi = 0` or `age_dependent_foi = 1` can be defined in the `FOIModel`. By default `age_dependent_foi = 0`.
 
 ### Imperfect sensitivity and specificity
 

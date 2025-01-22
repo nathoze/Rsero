@@ -125,6 +125,7 @@ fit <- function(model,
             group_size_length=group_size_length,
             cat_lambda=model$cat_lambda,
             seroreversion = model$seroreversion,
+            age_dependent_foi = model$age_dependent_foi,
             se = model$se,
             sp = model$sp)
   

@@ -83,7 +83,8 @@ simulate_SeroData <- function(number_samples = 500,
                               category = "Category 1",
                               se = 1,
                               sp = 1,
-                              rho=0){
+                              rho=0,
+                              age_risk = 0){
   
   if(length(epidemic_years)!= length(foi) ){
     stop("The number of epidemic years must be the same as the number input foi")
@@ -95,11 +96,29 @@ simulate_SeroData <- function(number_samples = 500,
   I <- which(epidemics_index>0 & epidemics_index<=max_age)
   FOI[epidemics_index[I]]  =  foi[I] 
   
-  if(rho == 0){
+  
+  if(rho == 0 & age_risk ==0){
     cumulative_FOI <- cumsumfromright(FOI)
     infection_probability <- se-(se+sp-1)*exp(-cumulative_FOI)
     
-  } else{
+  }   
+  if(rho == 0 & age_risk!=0){
+    P=rep(0,1,max_age)
+    for(J in seq(max_age,1,by=-1)){
+      x=rep(0,1,max_age)
+      x[J]=1
+      for (i in seq(J,1,by =-1)){
+        exposure_age = exp(age_risk*(seq(J-1,0,by =-1)))[i]
+        L = rev(FOI)[i]
+        x[i-1] = x[i]*exp(-L*exposure_age)
+      }
+      P[J]=x[1]
+    }
+    
+    infection_probability <- se-(se+sp-1)*P#rev(P)
+    
+  }
+  if(rho> 0 & age_risk==0){
     P=rep(0,1,max_age)
     for(J in seq(max_age,1,by=-1)){
       x=rep(0,1,max_age)
@@ -112,8 +131,24 @@ simulate_SeroData <- function(number_samples = 500,
     }
     
     infection_probability <- se-(se+sp-1)*P#rev(P)
-    
   }
+  
+  if(rho > 0 & age_risk !=0) {
+    P=rep(0,1,max_age)
+    for(J in seq(max_age,1,by=-1)){
+      x=rep(0,1,max_age)
+      x[J]=1
+      for (i in seq(J,1,by =-1)){
+        exposure_age = exp(age_risk*(seq(J-1,0,by =-1)))[i]
+        L = rev(FOI)[i]
+        x[i-1] = x[i]*exp(-rho-L*exposure_age)+(rho/(L*exposure_age+rho))*(1-exp(-rho-L*exposure_age))
+      }
+      P[J]=x[1]
+    }
+    
+    infection_probability <- se-(se+sp-1)*P#rev(P)
+  }
+  
   
   # generate random individuals with seropositivity status
   # dataframe with numbers_samples individuals
@@ -122,17 +157,16 @@ simulate_SeroData <- function(number_samples = 500,
   }else{
     number_samples=number_samples*max_age
     age <- rep(1:max_age, each = number_samples/max_age)
-    
   }  
   
   Y <- rbinom(number_samples, 1, infection_probability[age])
   
-  sampling_year <- rep(sampling_year, 1, number_samples) 
+  sampling_year_rep <- rep(sampling_year, 1, number_samples) 
   
   #age <-  ceiling(age_class*floor((age-1)/age_class)+age_class/2)
   dat <- SeroData(age_at_sampling =  age,
                   Y = as.logical(as.integer(Y)),
-                  sampling_year = sampling_year,
+                  sampling_year = sampling_year_rep,
                   max_age = max_age,
                   age_class = age_class,
                   location = location,

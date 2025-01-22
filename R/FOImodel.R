@@ -92,7 +92,8 @@
 FOImodel <- function(type = 'constant',
                      K = 1,
                      group_size = 1,
-                     seroreversion =0,
+                     seroreversion = 0,
+                     age_dependent_foi = 0,
                      se = 1, 
                      sp = 1, 
                      prioralpha1 = 0.2,
@@ -122,6 +123,11 @@ FOImodel <- function(type = 'constant',
   if(seroreversion){
     estimated_parameters <- estimated_parameters +1
   }
+  
+  if(age_dependent_foi){
+    estimated_parameters <- estimated_parameters +1
+  }
+  
   if(type == "constantoutbreak"){
     estimated_parameters <- estimated_parameters +1
   }
@@ -215,6 +221,7 @@ FOImodel <- function(type = 'constant',
                 K = K,
                 group_size=group_size,
                 seroreversion=seroreversion,
+                age_dependent_foi = age_dependent_foi,
                 se=se,
                 sp=sp,
                 cat_lambda = cat_lambda,
@@ -340,6 +347,18 @@ print.FOImodel <- function(x, ...){
       if(x$prior_distribution_rho == "exponential"){
         cat('\t rho: Exponential(',x$priors$priorRho1,')\n')
       }
+    }
+    
+    if(x$age_dependent_foi){
+      # # if(x$prior_distribution_rho == "uniform"){
+      # #   cat('\t rho: Uniform(',x$priors$priorRho1, ', ', x$priors$priorRho2,')\n')
+      # # }
+      # if(x$prior_distribution_rho == "normal"){
+      #   cat('\t rho: Normal(',x$priors$priorRho1, ', ', x$priors$priorRho2,')\n')
+      # }   
+      # if(x$prior_distribution_rho == "exponential"){
+      #   cat('\t rho: Exponential(',x$priors$priorRho1,')\n')
+      # }
     }
     
   }else{

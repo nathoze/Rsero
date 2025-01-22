@@ -124,13 +124,14 @@ plot_posterior<- function(FOIfit, show.prior = TRUE) {
             Title = 'Histogram for total force of infection'
           }
           else{
-            Title = paste0('Histogram for total force of infection, category ',k)
+            Title = paste0('Histogram for total infection probability, category ',k)
           }
-          
-          gT <- plot_histogram(distribution = data.frame(X= 1-exp(-chains$Flambda[,k]*chainsout$alpha[,i])), 
+
+          gT <- plot_histogram(distribution = data.frame(X= 1-exp(-chains$Flambda[,k]*chainsout$alpha[,i])),
                                title = paste(Title,i),
                                xlabel = "Value",
-                               ylabel = 'Count') 
+                               ylabel = 'Count')
+
           plotindex <- plotindex+1
           plots[[plotindex]]  = gT
         }
@@ -168,6 +169,18 @@ plot_posterior<- function(FOIfit, show.prior = TRUE) {
       plotindex <- plotindex+1
       plots[[plotindex]]  = gT      
     }
+    
+    if(FOIfit$model$age_dependent_foi){
+      gT <- plot_histogram(distribution = data.frame(X = chainsout$age_risk), 
+                           title = 'Histogram for age risk',
+                           xlabel = "Value",
+                           ylabel = 'Count') 
+      
+      plotindex <- plotindex+1
+      plots[[plotindex]]  = gT      
+    }
+    
+    
     
     d= FOIfit$data$category.position.in.table
     

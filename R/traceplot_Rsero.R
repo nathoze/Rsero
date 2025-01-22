@@ -48,6 +48,9 @@ traceplot_Rsero <- function(FOIfit,
     if(FOIfit$model$seroreversion){
       pars =c(pars, "rho")
     }
+    if(FOIfit$model$age_dependent_foi){
+      pars =c(pars, "age_risk")
+    }
     
     d= FOIfit$data$category.position.in.table
     if(FOIfit$model$cat_lambda & dim(d)[1]>0){ 

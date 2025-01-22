@@ -130,8 +130,7 @@ seroprevalence.fit<- function(FOIfit,
           p <- p + ggplot2::geom_line(data = ind_foi, ggplot2::aes(x = x, y = y), linewidth = 0.8, colour = "#bbbbbb", alpha = 0.6)
         }
       }
-      print(histdata)
-      p <- p  +
+       p <- p  +
         scale_x_continuous(breaks=histdata$age-round(age_class/2),labels=histdata$labels_text)+  
 #        scale_x_continuous(breaks=histdata$age,labels=histdata$labels_text)+  
         geom_point(data = histdata, aes(x=age, y=mean))  +
