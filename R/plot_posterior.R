@@ -42,7 +42,7 @@ plot_posterior<- function(FOIfit, show.prior = TRUE) {
       K=FOIfit$model$K
       
       YearMax <- max(FOIfit$data$sampling_year)
-   #   Years = matrix(0,ncol(C),nrow(C))
+      #   Years = matrix(0,ncol(C),nrow(C))
       Years  <- YearMax - C+1
       for(i in 1:K){
         if(name != 'constant'){
@@ -126,12 +126,12 @@ plot_posterior<- function(FOIfit, show.prior = TRUE) {
           else{
             Title = paste0('Histogram for total infection probability, category ',k)
           }
-
+          
           gT <- plot_histogram(distribution = data.frame(X= 1-exp(-chains$Flambda[,k]*chainsout$alpha[,i])),
                                title = paste(Title,i),
                                xlabel = "Value",
                                ylabel = 'Count')
-
+          
           plotindex <- plotindex+1
           plots[[plotindex]]  = gT
         }
@@ -159,8 +159,28 @@ plot_posterior<- function(FOIfit, show.prior = TRUE) {
       # 
     }
     
-    if(FOIfit$model$seroreversion){
+    if(name == "emergence"){
+      gT <- plot_histogram(distribution = data.frame(X= chains$annual_foi), 
+                           title = 'Histogram for Annual FOI',
+                           xlabel = "FOI",
+                           ylabel = 'Count') 
       
+      plotindex <- plotindex+1
+      plots[[plotindex]]  = gT       
+      
+      C<- chains$Time
+      YearMax <- max(FOIfit$data$sampling_year)
+      Years  <- YearMax - C+1
+      chainsout$T[,i] <- Years[,i]
+      gT <- plot_histogram(distribution = data.frame(X= chainsout$T[,i] ), 
+                           title = paste('Histogram for Time',i),
+                           xlabel = "Year",
+                           ylabel = 'Count') 
+      
+      plotindex <- plotindex+1
+      plots[[plotindex]]  = gT
+    }
+    if(FOIfit$model$seroreversion){
       gT <- plot_histogram(distribution = data.frame(X = chainsout$rho), 
                            title = 'Histogram for Seroreversion',
                            xlabel = "Value",

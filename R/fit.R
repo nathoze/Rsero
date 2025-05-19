@@ -140,7 +140,6 @@ fit <- function(model,
   if( model$prior_distribution_alpha=="exponential"){
     prior_distribution_alpha = 2
   }
-   
   if( model$prior_distribution_T=="uniform"){
     prior_distribution_T = 0
   }
@@ -178,7 +177,11 @@ fit <- function(model,
     prior_distribution_rho = 2
   }
   
-  prior.distributions <- c(prior_distribution_alpha,prior_distribution_T, prior_distribution_constant_foi, prior_distribution_independent_foi, prior_distribution_rho)
+  prior.distributions <- c(prior_distribution_alpha,
+                           prior_distribution_T,
+                           prior_distribution_constant_foi,
+                           prior_distribution_independent_foi,
+                           prior_distribution_rho)
    
   newdata = append(data,pars)
   newdata = append(newdata, prior.distributions)

@@ -94,13 +94,10 @@ simulate_SeroData <- function(number_samples = 500,
   
   epidemics_index <- max_age - (sampling_year - epidemic_years) 
   I <- which(epidemics_index>0 & epidemics_index<=max_age)
-  FOI[epidemics_index[I]]  =  foi[I] 
-  
-  
+  FOI[epidemics_index[I]] = foi[I] 
   if(rho == 0 & age_risk ==0){
     cumulative_FOI <- cumsumfromright(FOI)
     infection_probability <- se-(se+sp-1)*exp(-cumulative_FOI)
-    
   }   
   if(rho == 0 & age_risk!=0){
     P=rep(0,1,max_age)
@@ -114,8 +111,7 @@ simulate_SeroData <- function(number_samples = 500,
       }
       P[J]=x[1]
     }
-    
-    infection_probability <- se-(se+sp-1)*P#rev(P)
+      infection_probability <- se-(se+sp-1)*P#rev(P)
     
   }
   if(rho> 0 & age_risk==0){
@@ -158,9 +154,7 @@ simulate_SeroData <- function(number_samples = 500,
     number_samples=number_samples*max_age
     age <- rep(1:max_age, each = number_samples/max_age)
   }  
-  
   Y <- rbinom(number_samples, 1, infection_probability[age])
-  
   sampling_year_rep <- rep(sampling_year, 1, number_samples) 
   
   #age <-  ceiling(age_class*floor((age-1)/age_class)+age_class/2)

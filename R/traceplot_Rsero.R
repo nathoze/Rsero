@@ -40,18 +40,19 @@ traceplot_Rsero <- function(FOIfit,
       pars = c(pars, "Time")
       pars = c(pars, "annual_foi")
     }
-    
+    if(name =="emergence"){
+      pars = c(pars, "Time")
+      pars = c(pars, "annual_foi")
+    }
     if(name %in% model.list('Outbreak models')){
       pars = c(pars, "T", "alpha")
     }
-    
     if(FOIfit$model$seroreversion){
       pars =c(pars, "rho")
     }
     if(FOIfit$model$age_dependent_foi){
       pars =c(pars, "age_risk")
     }
-    
     d= FOIfit$data$category.position.in.table
     if(FOIfit$model$cat_lambda & dim(d)[1]>0){ 
       pars =c(pars, "Flambda")

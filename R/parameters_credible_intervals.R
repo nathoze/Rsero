@@ -37,9 +37,7 @@ parameters_credible_intervals <- function(FOIfit,
   params <- NULL
   
   if(FOIfit$model$type %in% model.list('All models')){ 
-    
     if(FOIfit$model$type  %in% model.list('Outbreak models')){
-      
       C<- chains$T
       Torder <- data.frame(C, t(apply(-C, 1, rank, ties.method='min')))
       K=FOIfit$model$K
@@ -93,16 +91,14 @@ parameters_credible_intervals <- function(FOIfit,
           params <- add.quantiles.text(params, variable  = Years[,i],
                                        name = paste('Year_',i),
                                        quants= quants,
-                                       quantilestext=quantilestext )
-          
+                                       quantilestext=quantilestext)
         }
-        
         LL <- 100*(1-exp(-chains$annual_foi[,i]))
         params <- add.quantiles.text(params,
                                      variable  = LL,
                                      name = paste0('Annual Prob. Infection (in %)_',i),
                                      quants= quants,
-                                     quantilestext=quantilestext )
+                                     quantilestext=quantilestext)
       }
     }
     if(FOIfit$model$type=='constant'){
@@ -120,6 +116,36 @@ parameters_credible_intervals <- function(FOIfit,
                                    quants= quants,
                                    quantilestext=quantilestext )
     }
+    
+    ###### IICICICICIICICICICICICIIIC C##############
+    if(FOIfit$model$type=='emergence'){
+      LL <- chains$annual_foi
+      params <- add.quantiles.text(params,
+                                   variable  = LL,
+                                   name = "Force of Infection",
+                                   quants= quants,
+                                   quantilestext=quantilestext )
+      LL <- 100*(1-exp(-chains$annual_foi))
+      
+      params <- add.quantiles.text(params,
+                                   variable  = LL,
+                                   name = 'Annual Prob. Infection (in %)',
+                                   quants= quants,
+                                   quantilestext=quantilestext )
+      
+      
+       C<- chains$Time
+      YearMax <- max(FOIfit$data$sampling_year)
+      Years  <- YearMax - C+1
+      params <- add.quantiles.text(params, variable  = Years ,
+                                   name = paste('Year '),
+                                   quants= quants,
+                                   quantilestext=quantilestext)
+      
+    }
+    ###### IICICICICIICICICICICICIIIC C##############
+    
+    
     
     if(FOIfit$model$type=='constantoutbreak'){
       LL <- chains$annual_foi

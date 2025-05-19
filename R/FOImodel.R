@@ -156,6 +156,11 @@ FOImodel <- function(type = 'constant',
     stanname= 'constantoutbreak'
   }
   
+  
+  if(type=='emergence'){
+    stanname= 'emergence'
+  }
+  
   if(type %in% model.list(whichmodels = 'Outbreak models')  ){
     estimated_parameters <- estimated_parameters + K*2
   } 
@@ -215,7 +220,6 @@ FOImodel <- function(type = 'constant',
                  priorRho1 = priorRho1,
                  priorRho2 = priorRho2)
   
-  
   model <- list(type = type,
                 stanname = stanname,
                 K = K,
@@ -260,7 +264,6 @@ print.FOImodel <- function(x, ...){
       cat('Model with categories for the force of infection \n')
     }
     cat('Parameters: \n')
-    
     if(x$type  %in% c('intervention', 'piecewise','outbreak') ){
       cat('\t K: ',x$K ,'\n')
     }
@@ -269,40 +272,23 @@ print.FOImodel <- function(x, ...){
       cat('\t Specificity: ', x$sp, '\n')
     }
     cat('Priors: \n')
-    
-    # print(x$prior_distribution_alpha )
-    # print(x$prior_distribution_T )
-    # print(x$prior_distribution_rho)
-    
     if(x$type %in% model.list('Outbreak models')){
       for(i in 1:x$K){
-        # if(x$prior_distribution_alpha == "uniform"){
-        #   cat('\t alpha: Uniform(',x$priors$prioralpha1[i], ', ', x$priors$prioralpha2[i] ,')\n')
-        # }
         if(x$prior_distribution_alpha == "normal"){
           cat('\t alpha: Normal(',x$priors$prioralpha1[i], ', ', x$priors$prioralpha2[i] ,')\n')
         }
         if(x$prior_distribution_alpha == "exponential"){
           cat('\t alpha: Exponential(',x$priors$prioralpha1[i] ,')\n')
         }
-        
-        # if(x$prior_distribution_T == "uniform"){
-        #   cat('\t T: Uniform(',x$priors$priorT1[i], ', ', x$priors$priorT2[i],')\n')
-        # }
         if(x$prior_distribution_T == "normal"){
           cat('\t T: Normal(',x$priors$priorT1[i], ', ', x$priors$priorT2[i],')\n')
         } 
         if(x$prior_distribution_T == "exponential"){
-        cat('\t T: Exponential(',x$priors$priorT1[i] ,')\n')
-      }
-        
+          cat('\t T: Exponential(',x$priors$priorT1[i] ,')\n')
+        }
       }
     }
-    
     if(x$type%in% model.list('Constant models')){
-      # if(x$prior_distribution_constant_foi == "uniform"){
-      #   cat('\t Annual FOI: Uniform(',x$priors$priorC1, ', ', x$priors$priorC2 ,')\n')
-      # }
       if(x$prior_distribution_constant_foi == "normal"){
         cat('\t Annual FOI: Normal(',x$priors$priorC1, ', ', x$priors$priorC2 ,')\n')
       }
@@ -310,11 +296,21 @@ print.FOImodel <- function(x, ...){
         cat('\t Annual FOI: Exponential(',x$priors$priorC1, ')\n')
       }
     }
-    
+    if(x$type == "emergence"){
+      if(x$prior_distribution_constant_foi == "normal"){
+        cat('\t Annual FOI: Normal(',x$priors$priorC1, ', ', x$priors$priorC2 ,')\n')
+      }
+      if(x$prior_distribution_constant_foi == "exponential"){
+        cat('\t Annual FOI: Exponential(',x$priors$priorC1, ')\n')
+      }
+      if(x$prior_distribution_T == "normal"){
+        cat('\t T: Normal(',x$priors$priorT1, ', ', x$priors$priorT2,')\n')
+      } 
+      if(x$prior_distribution_T == "exponential"){
+        cat('\t T: Exponential(',x$priors$priorT1 ,')\n')
+      }
+    }
     if(x$type=='independent' | x$type=='independent_group'){
-      # if(x$prior_distribution_independent_foi == "uniform"){
-      #   cat('\t Annual FOI: Uniform(',x$priors$priorY1, ', ', x$priors$priorY2 ,')\n')
-      # }
       if(x$prior_distribution_independent_foi == "normal"){
         cat('\t Annual FOI: Normal(',x$priors$priorY1, ', ', x$priors$priorY2 ,')\n')
       }
@@ -322,7 +318,7 @@ print.FOImodel <- function(x, ...){
         cat('\t Annual FOI: Exponential(',x$priors$priorY1,')\n')
       }
     }
-  
+    
     if(x$type %in% model.list('I models')){  
       for(i in 1:x$K){
         # if(x$prior_distribution_T == "uniform"){
@@ -338,9 +334,6 @@ print.FOImodel <- function(x, ...){
     }
     
     if(x$seroreversion){
-      # if(x$prior_distribution_rho == "uniform"){
-      #   cat('\t rho: Uniform(',x$priors$priorRho1, ', ', x$priors$priorRho2,')\n')
-      # }
       if(x$prior_distribution_rho == "normal"){
         cat('\t rho: Normal(',x$priors$priorRho1, ', ', x$priors$priorRho2,')\n')
       }   
@@ -388,9 +381,8 @@ model.list <-function(whichmodels){
   if(whichmodels == 'Constant models'){
     out <- c('constantoutbreak','constant')
   } 
-  
   if (whichmodels == 'All models'){
-    out <-  c('outbreak','independent','constant','intervention', 'constantoutbreak','independent_group','piecewise')
+    out <-  c('outbreak','independent','constant','intervention', 'constantoutbreak','independent_group','piecewise', 'emergence')
   } 
   
   if (whichmodels == 'Outbreak models'){
