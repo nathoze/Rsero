@@ -9,6 +9,9 @@ seroprevalence.fit(
   individual_samples = 0,
   age_class = 10,
   YLIM = 1,
+  fill.color = "#d7def3",
+  line.color = "#5e6b91",
+  mid.age.plot = TRUE,
   ...
 )
 }
@@ -20,6 +23,12 @@ seroprevalence.fit(
 \item{age_class}{Integer. Length of the age groups (in years). Used if \code{show_data = TRUE}. Default = 10.}
 
 \item{YLIM}{Upper limit of the y-axis. Default = 1. The lower limit is set to 0.}
+
+\item{fill.color}{Ribbon color. By default, fill.color  = "#d7def3"}
+
+\item{line.color}{Line color. By default, line.color  = "#5e6b91"}
+
+\item{mid.age.plot}{Boolean. Whether the data is plotted at the mid-point of the age category (TRUE) or at the mean age of the individuals in the data within this category (FALSE). Default = \code{TRUE}.}
 
 \item{show_data}{Boolean. If \code{TRUE}, shows the fraction of seropositive as well. By default, ages are associated in groups of \code{age_class} years.  Default = \code{TRUE}.}
 }

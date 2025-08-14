@@ -4,7 +4,13 @@
 \alias{seroprevalence.plot}
 \title{Plot the seroprevalence by age}
 \usage{
-seroprevalence.plot(serodata, age_class = 10, YLIM = 1, ...)
+seroprevalence.plot(
+  serodata,
+  age_class = 10,
+  YLIM = 1,
+  mid.age.plot = TRUE,
+  ...
+)
 }
 \arguments{
 \item{serodata}{An object of the class \code{SeroData}.}
@@ -12,6 +18,8 @@ seroprevalence.plot(serodata, age_class = 10, YLIM = 1, ...)
 \item{age_class}{Integer. The length in years of the age classes. Default = 10.}
 
 \item{YLIM}{Upper limit of the y-axis. Default = 1. The lower limit is set to 0.}
+
+\item{mid.age.plot}{Boolean. Whether the data is plotted at the mid-point of the age category (TRUE) or at the mean age of the individuals in the data within this category (FALSE). Default = \code{TRUE}.}
 }
 \value{
 a list with plots of the seroprevalence for each category, or one plot if only one category is defined.

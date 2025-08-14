@@ -4,7 +4,7 @@
 \alias{plot_posterior}
 \title{Plot posterior distribution}
 \usage{
-plot_posterior(FOIfit)
+plot_posterior(FOIfit, show.prior = TRUE)
 }
 \arguments{
 \item{FOIfit}{An object of the class \code{FOIfit}.}

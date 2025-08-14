@@ -32,11 +32,13 @@ following items:
 \item pwaic: Estimated effective number of parameters, used in the WAIC.
 
 \item lpd: log pointwise predictive density, used in the WAIC.
+
+\item PSIS_LOO: The output of the loo() method implemented in the loo package. 
 }
 }
 \description{
-This function returns the Aikake Information Criterion (AIC), the Deviance Information Criterion (DIC) and the
- Watanabe Aikake Information Criterion (WAIC) from a fit of the class  \code{\link{FOIfit}}.
+This function returns the Aikake Information Criterion (AIC), the Deviance Information Criterion (DIC), the
+ Watanabe Aikake Information Criterion (WAIC), the Pareto smoothed importance sampling - leave one out (PSIS-LOO) from a \code{\link{FOIfit}} object.
 }
 \examples{
 data('one_peak_simulation')

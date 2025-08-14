@@ -10,21 +10,25 @@ FOImodel(
   K = 1,
   group_size = 1,
   seroreversion = 0,
+  age_dependent_foi = 0,
   se = 1,
   sp = 1,
-  prioralpha1 = 0,
-  prioralpha2 = 5,
-  priorbeta1 = 0,
-  priorbeta2 = 1,
-  priorT1 = 1,
-  priorT2 = 100,
-  priorC1 = 0,
-  priorC2 = 10,
-  priorY1 = 0,
-  priorY2 = 10,
-  priorRho = 2,
+  prioralpha1 = 0.2,
+  prioralpha2 = 0.2,
+  priorT1 = 20,
+  priorT2 = 10,
+  priorC1 = 0.01,
+  priorC2 = 1,
+  priorY1 = 0.01,
+  priorY2 = 1,
+  priorRho1 = 1,
+  priorRho2 = 1,
   cat_lambda = 1,
-  fixed_parameters = NULL,
+  prior_distribution_alpha = "normal",
+  prior_distribution_T = "normal",
+  prior_distribution_constant_foi = "normal",
+  prior_distribution_independent_foi = "normal",
+  prior_distribution_rho = "normal",
   ...
 )
 
@@ -41,7 +45,7 @@ FOImodel(
   \item 'independent_group': Similar to the independent model, but with piecewise constant values of the force annual force of infection in time periods of length \code{group_size} years.
 }}
 
-\item{K}{integer. An additional parameter used in the outbreak, constantoutbreak and piecewise stan models. In the case of the outbreaks, this parameter is the number of Gaussians used. In the case of the piecewise constant model it is the number of constant phases. Default = 1.}
+\item{K}{integer. An additional parameter used in the "outbreak", "constantoutbreak" and "piecewise" stan models. In the case of the outbreaks, this parameter is the number of Gaussians used. In the case of the piecewise constant model it is the number of constant phases. Default = 1.}
 
 \item{group_size}{integer. An additional parameter used in the independent_group models. The force of infection is averaged over \code{group_size} year period. By default \code{group_size} = 1, which is equivalent ot the independent model.}
 
@@ -51,30 +55,27 @@ FOImodel(
 
 \item{sp}{numeric, between 0 and 1. If \code{sp=1} the assay has a perfect specificity. Default = 1.}
 
-\item{prioralpha1}{First parameter of the uniform prior distribution  of the parameter alpha, used as the intensity of the force of infection in the outbreak models. Default = 0.}
+\item{prioralpha1}{First parameter of the prior distribution of the parameter alpha, used as the intensity of the force of infection in the outbreak models. If a normal distribution is chosen (prior_distribution_alpha= "normal"), it corresponds to the mean parameter. If an exponential distribution is chosen (prior_distribution_alpha = "exponential"), it is the rate parameter. Default = 0.2.}
 
-\item{prioralpha2}{Second parameter of the uniform prior distribution  of the parameter alpha, used as the intensity of the force of infection in the outbreak models.  Default = 5.}
+\item{prioralpha2}{Second parameter of the prior distribution of the parameter alpha, used as the intensity of the force of infection in the outbreak models. If a normal distribution is chosen (prior_distribution_alpha= "normal"), it corresponds to the sd parameter on the log scale. Default = 0.2.}
 
-\item{priorbeta1}{First parameter of the uniform prior distribution  of the parameter beta, used as the spread of the force of infection in the outbreak models. Default = 0.}
+\item{priorT1}{First parameter for the prior distribution for the T parameter. The time of the outbreak is defined as the number of years before the survey (outbreak and constant outbreak models). It is the time interval for the change of FOI in the piecewise constant model. If a normal distribution is chosen (prior_distribution_T= "normal"), it corresponds to the mean parameter.  If an exponential distribution is chosen, it is the rate parameter. Default = 20.}
 
-\item{priorbeta2}{Second parameter of the uniform prior distribution  of the parameter beta, used as the spread of the force of infection in the outbreak models. Default = 1.}
+\item{priorT2}{Second parameter for the prior distribution for the T parameter. If a normal distribution is chosen (prior_distribution_T= "normal"), it corresponds to the sd parameter. Default = 10.}
 
-\item{priorT1}{First parameter for the uniform distribution for the T parameter. The time of the outbreak is defined as the number of years before the survey (outbreak and constant outbreak models). It is the time interval for the change of FOI in the piecewise constant model. Default = 1.}
+\item{priorC1}{First parameter of the prior distribution for the constant force of infection, used in the constant and piecewise constant models. If a normal distribution is chosen, it corresponds to the mean parameter on the natural scale.  If an exponential distribution is chosen, it is the rate parameter. Default = 0.01.}
 
-\item{priorT2}{Second parameter for the uniform distribution for the T parameter. Default = 100.}
+\item{priorC2}{Second parameter of the prior distribution for the constant force of infection, used in the constant and piecewise constant models. If a normal distribution is chosen, it corresponds to the sd parameter on the log scale.  Default = 1.}
 
-\item{priorC1}{First parameter of the uniform prior distribution for the constant force of infection, used in the constant and piecewise constant models. Default = 0.}
+\item{priorY1}{First parameter of the prior distribution for the annual hazard of infection, used in the independent models. If a normal distribution is chosen, it corresponds to the mean parameter on the natural scale. If an exponential distribution is chosen, it is the rate parameter. Default = 0.01.}
 
-\item{priorC2}{Second parameter of the uniform prior distribution for the constant force of infection, used in the constant and piecewise constant models. Default = 10.}
+\item{priorY2}{Second parameter of the prior distribution for the annual hazard of infection, used in the independent models. If a normal distribution is chosen, it corresponds to the sd parameter on the log scale. Default = 1.}
 
-\item{priorY1}{First parameter of the uniform prior distribution for the annual hazard of infection, used in the independent models. Default = 0.}
+\item{priorRho1}{First parameter of the prior distribution for rho, the seroreversion rate used when seroreversion=1. If a lognormal distribution is chosen (prior_distribution_rho = "normal"), it corresponds to the mean parameter on the natural scale. If an exponential distribution is chosen (prior_distribution_rho = "exponential"), it is the rate parameter. Default = 1.}
 
-\item{priorY2}{Second parameter of the uniform prior distribution for the annual hazard of infection, used in the independent models.  Default = 10.}
+\item{priorRho2}{First parameter of the prior distribution for rho, the seroreversion rate used when seroreversion=1. If a lognormal distribution is chosen (prior_distribution_rho = "normal"), it corresponds to the sd parameter on the log scale. Default = 1.}
 
-\item{priorRho}{Parameter of the exponential prior distribution for rho, the seroreversion rate used when seroreversion=1. Default = 2.
-##'}
-
-\item{cat_lambda}{integer, equal to 0 or 1. If \code{cat_lambda=1} the force of infection varies accross the different categories defined in an objet \code{SeroData}.
+\item{cat_lambda}{integer, equal to 0 or 1. If \code{cat_lambda=1} the force of infection varies across the different categories defined in an objet \code{SeroData}.
 See the vignette \code{models} for details. Default = 1.}
 
 \item{...}{Additional arguments (not used).}
@@ -97,6 +98,15 @@ following items:
 
 \item K: the input parameter used in the outbreak and piecewise models, if given.
 
+\item prior_distribution_alpha: The prior distribution of the alpha parameter used in the outbreaks models. "normal" or "exponential". Default = "normal".
+
+\item prior_distribution_T: The prior distribution of the T parameter used in the outbreaks models and the piecewise constant model. "normal" or "exponential". Default = "normal".
+
+\item prior_distribution_constant_foi: The prior distribution of the constant FOI parameter used in the constant and piecewise constant models. "normal" or "exponential". Default = "normal".
+
+\item prior_distribution_independent_foi: The prior distribution of the annual FOI parameter used in the independent model. "normal" or "exponential". Default = "normal".
+
+\item prior_distribution_rho: The prior distribution of the seroreversion parameter. "normal" or "exponential". Default = "normal".
 }
 }
 \description{

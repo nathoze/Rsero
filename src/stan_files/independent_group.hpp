@@ -25,155 +25,242 @@ namespace model_independent_group_namespace {
 using stan::model::model_base_crtp;
 using namespace stan::math;
 stan::math::profile_map profiles__;
-static constexpr std::array<const char*, 148> locations_array__ =
+static constexpr std::array<const char*, 235> locations_array__ =
   {" (found before start of program)",
-  " (in 'independent_group', line 55, column 2 to column 38)",
-  " (in 'independent_group', line 56, column 2 to column 34)",
+  " (in 'independent_group', line 40, column 2 to column 39)",
+  " (in 'independent_group', line 41, column 2 to column 15)",
+  " (in 'independent_group', line 42, column 2 to column 51)",
+  " (in 'independent_group', line 43, column 2 to column 16)",
+  " (in 'independent_group', line 47, column 2 to column 18)",
+  " (in 'independent_group', line 48, column 2 to column 9)",
+  " (in 'independent_group', line 49, column 2 to column 36)",
+  " (in 'independent_group', line 50, column 2 to column 62)",
+  " (in 'independent_group', line 51, column 2 to column 61)",
+  " (in 'independent_group', line 52, column 2 to column 43)",
+  " (in 'independent_group', line 53, column 2 to column 49)",
+  " (in 'independent_group', line 54, column 2 to column 24)",
+  " (in 'independent_group', line 55, column 4 to column 23)",
+  " (in 'independent_group', line 56, column 2 to column 9)",
   " (in 'independent_group', line 57, column 2 to column 46)",
-  " (in 'independent_group', line 60, column 2 to column 12)",
-  " (in 'independent_group', line 61, column 2 to column 9)",
-  " (in 'independent_group', line 62, column 2 to column 26)",
-  " (in 'independent_group', line 63, column 2 to column 53)",
-  " (in 'independent_group', line 64, column 2 to column 52)",
-  " (in 'independent_group', line 65, column 2 to column 36)",
-  " (in 'independent_group', line 66, column 2 to column 41)",
-  " (in 'independent_group', line 67, column 2 to column 9)",
-  " (in 'independent_group', line 71, column 4 to column 48)",
-  " (in 'independent_group', line 69, column 17 to line 72, column 3)",
-  " (in 'independent_group', line 69, column 2 to line 72, column 3)",
-  " (in 'independent_group', line 74, column 2 to column 6)",
-  " (in 'independent_group', line 81, column 6 to column 12)",
-  " (in 'independent_group', line 84, column 8 to column 48)",
-  " (in 'independent_group', line 83, column 33 to line 85, column 9)",
-  " (in 'independent_group', line 83, column 8 to line 85, column 9)",
-  " (in 'independent_group', line 82, column 32 to line 86, column 7)",
-  " (in 'independent_group', line 82, column 6 to line 86, column 7)",
-  " (in 'independent_group', line 87, column 6 to column 27)",
-  " (in 'independent_group', line 80, column 25 to line 88, column 5)",
-  " (in 'independent_group', line 80, column 4 to line 88, column 5)",
-  " (in 'independent_group', line 79, column 7 to line 89, column 3)",
-  " (in 'independent_group', line 77, column 6 to column 21)",
-  " (in 'independent_group', line 76, column 25 to line 78, column 5)",
-  " (in 'independent_group', line 76, column 4 to line 78, column 5)",
-  " (in 'independent_group', line 75, column 17 to line 79, column 3)",
-  " (in 'independent_group', line 75, column 2 to line 89, column 3)",
-  " (in 'independent_group', line 91, column 2 to column 6)",
-  " (in 'independent_group', line 96, column 8 to column 48)",
-  " (in 'independent_group', line 99, column 10 to column 17)",
-  " (in 'independent_group', line 103, column 12 to column 65)",
-  " (in 'independent_group', line 102, column 15 to line 104, column 11)",
-  " (in 'independent_group', line 101, column 12 to column 54)",
-  " (in 'independent_group', line 100, column 30 to line 102, column 11)",
-  " (in 'independent_group', line 100, column 10 to line 104, column 11)",
-  " (in 'independent_group', line 97, column 23 to line 105, column 9)",
-  " (in 'independent_group', line 97, column 8 to line 105, column 9)",
-  " (in 'independent_group', line 106, column 8 to column 15)",
-  " (in 'independent_group', line 95, column 27 to line 107, column 7)",
-  " (in 'independent_group', line 95, column 6 to line 107, column 7)",
-  " (in 'independent_group', line 94, column 26 to line 108, column 5)",
-  " (in 'independent_group', line 94, column 4 to line 108, column 5)",
-  " (in 'independent_group', line 93, column 22 to line 109, column 3)",
-  " (in 'independent_group', line 93, column 2 to line 109, column 3)",
-  " (in 'independent_group', line 130, column 8 to column 16)",
-  " (in 'independent_group', line 132, column 10 to column 45)",
-  " (in 'independent_group', line 131, column 21 to line 133, column 9)",
-  " (in 'independent_group', line 131, column 8 to line 133, column 9)",
-  " (in 'independent_group', line 137, column 10 to column 46)",
-  " (in 'independent_group', line 138, column 10 to column 49)",
-  " (in 'independent_group', line 141, column 14 to column 41)",
-  " (in 'independent_group', line 142, column 14 to column 82)",
-  " (in 'independent_group', line 140, column 25 to line 143, column 13)",
-  " (in 'independent_group', line 140, column 12 to line 143, column 13)",
-  " (in 'independent_group', line 139, column 18 to line 144, column 11)",
-  " (in 'independent_group', line 139, column 10 to line 144, column 11)",
-  " (in 'independent_group', line 145, column 10 to column 41)",
-  " (in 'independent_group', line 135, column 21 to line 147, column 9)",
-  " (in 'independent_group', line 135, column 8 to line 147, column 9)",
-  " (in 'independent_group', line 129, column 27 to line 148, column 7)",
-  " (in 'independent_group', line 129, column 6 to line 148, column 7)",
-  " (in 'independent_group', line 128, column 26 to line 149, column 5)",
-  " (in 'independent_group', line 128, column 4 to line 149, column 5)",
-  " (in 'independent_group', line 127, column 22 to line 150, column 3)",
-  " (in 'independent_group', line 127, column 2 to line 150, column 3)",
-  " (in 'independent_group', line 155, column 8 to column 19)",
-  " (in 'independent_group', line 157, column 10 to column 41)",
-  " (in 'independent_group', line 156, column 41 to line 158, column 9)",
-  " (in 'independent_group', line 156, column 8 to line 158, column 9)",
-  " (in 'independent_group', line 159, column 8 to column 56)",
-  " (in 'independent_group', line 154, column 19 to line 160, column 7)",
-  " (in 'independent_group', line 154, column 6 to line 160, column 7)",
-  " (in 'independent_group', line 153, column 25 to line 161, column 5)",
-  " (in 'independent_group', line 153, column 4 to line 161, column 5)",
-  " (in 'independent_group', line 152, column 24 to line 162, column 3)",
-  " (in 'independent_group', line 152, column 2 to line 162, column 3)",
-  " (in 'independent_group', line 166, column 4 to column 72)",
-  " (in 'independent_group', line 164, column 15 to line 167, column 3)",
-  " (in 'independent_group', line 164, column 2 to line 167, column 3)",
-  " (in 'independent_group', line 175, column 4 to column 46)",
-  " (in 'independent_group', line 174, column 23 to line 176, column 3)",
-  " (in 'independent_group', line 174, column 2 to line 176, column 3)",
-  " (in 'independent_group', line 180, column 6 to column 38)",
-  " (in 'independent_group', line 179, column 28 to line 181, column 5)",
-  " (in 'independent_group', line 179, column 4 to line 181, column 5)",
-  " (in 'independent_group', line 178, column 28 to line 182, column 3)",
-  " (in 'independent_group', line 178, column 2 to line 182, column 3)",
-  " (in 'independent_group', line 183, column 2 to column 30)",
-  " (in 'independent_group', line 186, column 4 to column 52)",
-  " (in 'independent_group', line 185, column 17 to line 187, column 3)",
-  " (in 'independent_group', line 185, column 2 to line 187, column 3)",
+  " (in 'independent_group', line 58, column 2 to column 34)",
+  " (in 'independent_group', line 60, column 2 to column 6)",
+  " (in 'independent_group', line 61, column 2 to column 7)",
+  " (in 'independent_group', line 64, column 6 to column 66)",
+  " (in 'independent_group', line 63, column 47 to line 65, column 5)",
+  " (in 'independent_group', line 63, column 4 to line 65, column 5)",
+  " (in 'independent_group', line 67, column 6 to column 44)",
+  " (in 'independent_group', line 66, column 47 to line 68, column 5)",
+  " (in 'independent_group', line 66, column 4 to line 68, column 5)",
+  " (in 'independent_group', line 62, column 23 to line 69, column 3)",
+  " (in 'independent_group', line 62, column 2 to line 69, column 3)",
+  " (in 'independent_group', line 72, column 2 to column 42)",
+  " (in 'independent_group', line 71, column 33 to line 73, column 3)",
+  " (in 'independent_group', line 71, column 2 to line 73, column 3)",
+  " (in 'independent_group', line 75, column 2 to column 18)",
+  " (in 'independent_group', line 74, column 33 to line 76, column 3)",
+  " (in 'independent_group', line 74, column 2 to line 76, column 3)",
+  " (in 'independent_group', line 80, column 4 to column 50)",
+  " (in 'independent_group', line 78, column 17 to line 81, column 3)",
+  " (in 'independent_group', line 78, column 2 to line 81, column 3)",
+  " (in 'independent_group', line 89, column 6 to column 12)",
+  " (in 'independent_group', line 92, column 8 to column 48)",
+  " (in 'independent_group', line 91, column 33 to line 93, column 9)",
+  " (in 'independent_group', line 91, column 8 to line 93, column 9)",
+  " (in 'independent_group', line 90, column 32 to line 94, column 7)",
+  " (in 'independent_group', line 90, column 6 to line 94, column 7)",
+  " (in 'independent_group', line 95, column 6 to column 27)",
+  " (in 'independent_group', line 88, column 25 to line 96, column 5)",
+  " (in 'independent_group', line 88, column 4 to line 96, column 5)",
+  " (in 'independent_group', line 87, column 7 to line 97, column 3)",
+  " (in 'independent_group', line 85, column 6 to column 21)",
+  " (in 'independent_group', line 84, column 25 to line 86, column 5)",
+  " (in 'independent_group', line 84, column 4 to line 86, column 5)",
+  " (in 'independent_group', line 83, column 17 to line 87, column 3)",
+  " (in 'independent_group', line 83, column 2 to line 97, column 3)",
+  " (in 'independent_group', line 99, column 2 to column 6)",
+  " (in 'independent_group', line 104, column 8 to column 49)",
+  " (in 'independent_group', line 106, column 10 to column 17)",
+  " (in 'independent_group', line 110, column 12 to column 66)",
+  " (in 'independent_group', line 109, column 15 to line 111, column 11)",
+  " (in 'independent_group', line 108, column 12 to column 55)",
+  " (in 'independent_group', line 107, column 30 to line 109, column 11)",
+  " (in 'independent_group', line 107, column 10 to line 111, column 11)",
+  " (in 'independent_group', line 105, column 23 to line 112, column 9)",
+  " (in 'independent_group', line 105, column 8 to line 112, column 9)",
+  " (in 'independent_group', line 113, column 8 to column 15)",
+  " (in 'independent_group', line 103, column 27 to line 114, column 7)",
+  " (in 'independent_group', line 103, column 6 to line 114, column 7)",
+  " (in 'independent_group', line 102, column 26 to line 115, column 5)",
+  " (in 'independent_group', line 102, column 4 to line 115, column 5)",
+  " (in 'independent_group', line 101, column 49 to line 116, column 3)",
+  " (in 'independent_group', line 101, column 3 to line 116, column 3)",
+  " (in 'independent_group', line 121, column 8 to column 16)",
+  " (in 'independent_group', line 123, column 10 to column 45)",
+  " (in 'independent_group', line 122, column 21 to line 124, column 9)",
+  " (in 'independent_group', line 122, column 8 to line 124, column 9)",
+  " (in 'independent_group', line 128, column 10 to column 46)",
+  " (in 'independent_group', line 129, column 10 to column 49)",
+  " (in 'independent_group', line 132, column 14 to column 41)",
+  " (in 'independent_group', line 133, column 14 to column 82)",
+  " (in 'independent_group', line 131, column 25 to line 134, column 13)",
+  " (in 'independent_group', line 131, column 12 to line 134, column 13)",
+  " (in 'independent_group', line 130, column 18 to line 135, column 11)",
+  " (in 'independent_group', line 130, column 10 to line 135, column 11)",
+  " (in 'independent_group', line 136, column 10 to column 41)",
+  " (in 'independent_group', line 126, column 21 to line 138, column 9)",
+  " (in 'independent_group', line 126, column 8 to line 138, column 9)",
+  " (in 'independent_group', line 120, column 27 to line 139, column 7)",
+  " (in 'independent_group', line 120, column 6 to line 139, column 7)",
+  " (in 'independent_group', line 119, column 26 to line 140, column 5)",
+  " (in 'independent_group', line 119, column 4 to line 140, column 5)",
+  " (in 'independent_group', line 118, column 48 to line 141, column 3)",
+  " (in 'independent_group', line 118, column 2 to line 141, column 3)",
+  " (in 'independent_group', line 145, column 8 to column 16)",
+  " (in 'independent_group', line 147, column 10 to column 45)",
+  " (in 'independent_group', line 146, column 21 to line 148, column 9)",
+  " (in 'independent_group', line 146, column 8 to line 148, column 9)",
+  " (in 'independent_group', line 152, column 10 to column 46)",
+  " (in 'independent_group', line 153, column 10 to column 47)",
+  " (in 'independent_group', line 154, column 10 to column 61)",
+  " (in 'independent_group', line 157, column 14 to column 41)",
+  " (in 'independent_group', line 158, column 14 to column 35)",
+  " (in 'independent_group', line 159, column 14 to column 91)",
+  " (in 'independent_group', line 156, column 25 to line 160, column 13)",
+  " (in 'independent_group', line 156, column 12 to line 160, column 13)",
+  " (in 'independent_group', line 155, column 18 to line 161, column 11)",
+  " (in 'independent_group', line 155, column 10 to line 161, column 11)",
+  " (in 'independent_group', line 162, column 10 to column 41)",
+  " (in 'independent_group', line 150, column 21 to line 164, column 9)",
+  " (in 'independent_group', line 150, column 8 to line 164, column 9)",
+  " (in 'independent_group', line 144, column 27 to line 165, column 7)",
+  " (in 'independent_group', line 144, column 6 to line 165, column 7)",
+  " (in 'independent_group', line 143, column 26 to line 166, column 5)",
+  " (in 'independent_group', line 143, column 4 to line 166, column 5)",
+  " (in 'independent_group', line 142, column 48 to line 167, column 3)",
+  " (in 'independent_group', line 142, column 2 to line 167, column 3)",
+  " (in 'independent_group', line 171, column 8 to column 16)",
+  " (in 'independent_group', line 173, column 10 to column 45)",
+  " (in 'independent_group', line 172, column 21 to line 174, column 9)",
+  " (in 'independent_group', line 172, column 8 to line 174, column 9)",
+  " (in 'independent_group', line 178, column 10 to column 46)",
+  " (in 'independent_group', line 179, column 10 to column 47)",
+  " (in 'independent_group', line 180, column 10 to column 29)",
+  " (in 'independent_group', line 183, column 14 to column 41)",
+  " (in 'independent_group', line 184, column 14 to column 35)",
+  " (in 'independent_group', line 185, column 14 to column 48)",
+  " (in 'independent_group', line 182, column 25 to line 186, column 13)",
+  " (in 'independent_group', line 182, column 12 to line 186, column 13)",
+  " (in 'independent_group', line 181, column 18 to line 187, column 11)",
+  " (in 'independent_group', line 181, column 10 to line 187, column 11)",
+  " (in 'independent_group', line 188, column 10 to column 41)",
+  " (in 'independent_group', line 176, column 21 to line 190, column 9)",
+  " (in 'independent_group', line 176, column 8 to line 190, column 9)",
+  " (in 'independent_group', line 170, column 27 to line 191, column 7)",
+  " (in 'independent_group', line 170, column 6 to line 191, column 7)",
+  " (in 'independent_group', line 169, column 26 to line 192, column 5)",
+  " (in 'independent_group', line 169, column 4 to line 192, column 5)",
+  " (in 'independent_group', line 168, column 48 to line 193, column 3)",
+  " (in 'independent_group', line 168, column 2 to line 193, column 3)",
+  " (in 'independent_group', line 197, column 8 to column 19)",
+  " (in 'independent_group', line 199, column 10 to column 41)",
+  " (in 'independent_group', line 198, column 41 to line 200, column 9)",
+  " (in 'independent_group', line 198, column 8 to line 200, column 9)",
+  " (in 'independent_group', line 201, column 8 to column 56)",
+  " (in 'independent_group', line 196, column 19 to line 202, column 7)",
+  " (in 'independent_group', line 196, column 6 to line 202, column 7)",
+  " (in 'independent_group', line 195, column 25 to line 203, column 5)",
+  " (in 'independent_group', line 195, column 4 to line 203, column 5)",
+  " (in 'independent_group', line 194, column 24 to line 204, column 3)",
+  " (in 'independent_group', line 194, column 2 to line 204, column 3)",
+  " (in 'independent_group', line 207, column 4 to column 72)",
+  " (in 'independent_group', line 208, column 4 to column 55)",
+  " (in 'independent_group', line 206, column 15 to line 209, column 3)",
+  " (in 'independent_group', line 206, column 2 to line 209, column 3)",
+  " (in 'independent_group', line 214, column 6 to column 40)",
+  " (in 'independent_group', line 213, column 47 to line 215, column 5)",
+  " (in 'independent_group', line 213, column 4 to line 215, column 5)",
+  " (in 'independent_group', line 217, column 6 to column 49)",
+  " (in 'independent_group', line 216, column 47 to line 218, column 5)",
+  " (in 'independent_group', line 216, column 4 to line 218, column 5)",
+  " (in 'independent_group', line 212, column 23 to line 219, column 3)",
+  " (in 'independent_group', line 212, column 2 to line 219, column 3)",
+  " (in 'independent_group', line 223, column 6 to column 38)",
+  " (in 'independent_group', line 222, column 28 to line 224, column 5)",
+  " (in 'independent_group', line 222, column 4 to line 224, column 5)",
+  " (in 'independent_group', line 221, column 28 to line 225, column 3)",
+  " (in 'independent_group', line 221, column 2 to line 225, column 3)",
+  " (in 'independent_group', line 228, column 4 to column 27)",
+  " (in 'independent_group', line 227, column 33 to line 229, column 3)",
+  " (in 'independent_group', line 227, column 2 to line 229, column 3)",
+  " (in 'independent_group', line 231, column 4 to column 38)",
+  " (in 'independent_group', line 230, column 33 to line 232, column 3)",
+  " (in 'independent_group', line 230, column 2 to line 232, column 3)",
+  " (in 'independent_group', line 233, column 4 to column 27)",
+  " (in 'independent_group', line 235, column 4 to column 52)",
+  " (in 'independent_group', line 234, column 17 to line 236, column 3)",
+  " (in 'independent_group', line 234, column 2 to line 236, column 3)",
   " (in 'independent_group', line 2, column 2 to column 18)",
-  " (in 'independent_group', line 4, column 2 to column 28)",
-  " (in 'independent_group', line 6, column 23 to column 24)",
-  " (in 'independent_group', line 6, column 25 to column 35)",
-  " (in 'independent_group', line 6, column 2 to column 37)",
-  " (in 'independent_group', line 8, column 23 to column 24)",
-  " (in 'independent_group', line 8, column 25 to column 35)",
-  " (in 'independent_group', line 8, column 2 to column 37)",
-  " (in 'independent_group', line 10, column 2 to column 24)",
-  " (in 'independent_group', line 12, column 2 to column 18)",
-  " (in 'independent_group', line 14, column 20 to column 21)",
-  " (in 'independent_group', line 14, column 2 to column 23)",
-  " (in 'independent_group', line 16, column 27 to column 28)",
-  " (in 'independent_group', line 16, column 2 to column 30)",
-  " (in 'independent_group', line 18, column 2 to column 40)",
-  " (in 'independent_group', line 20, column 30 to column 31)",
-  " (in 'independent_group', line 20, column 2 to column 33)",
-  " (in 'independent_group', line 22, column 2 to column 26)",
-  " (in 'independent_group', line 24, column 2 to column 31)",
-  " (in 'independent_group', line 26, column 2 to column 28)",
-  " (in 'independent_group', line 28, column 30 to column 39)",
-  " (in 'independent_group', line 28, column 40 to column 54)",
-  " (in 'independent_group', line 28, column 2 to column 56)",
-  " (in 'independent_group', line 30, column 32 to column 33)",
-  " (in 'independent_group', line 30, column 2 to column 35)",
-  " (in 'independent_group', line 32, column 30 to column 31)",
-  " (in 'independent_group', line 32, column 2 to column 33)",
-  " (in 'independent_group', line 34, column 26 to column 27)",
-  " (in 'independent_group', line 34, column 2 to column 30)",
-  " (in 'independent_group', line 36, column 28 to column 38)",
-  " (in 'independent_group', line 36, column 2 to column 40)",
-  " (in 'independent_group', line 38, column 2 to column 34)",
-  " (in 'independent_group', line 40, column 33 to column 50)",
-  " (in 'independent_group', line 40, column 2 to column 52)",
-  " (in 'independent_group', line 42, column 2 to column 27)",
-  " (in 'independent_group', line 44, column 2 to column 27)",
-  " (in 'independent_group', line 46, column 2 to column 28)",
-  " (in 'independent_group', line 48, column 2 to column 29)",
-  " (in 'independent_group', line 50, column 2 to column 29)",
-  " (in 'independent_group', line 52, column 2 to column 29)",
-  " (in 'independent_group', line 55, column 29 to column 36)",
-  " (in 'independent_group', line 57, column 17 to column 29)",
-  " (in 'independent_group', line 57, column 30 to column 44)",
-  " (in 'independent_group', line 60, column 9 to column 10)",
-  " (in 'independent_group', line 62, column 23 to column 24)",
-  " (in 'independent_group', line 63, column 29 to column 30)",
-  " (in 'independent_group', line 63, column 31 to column 41)",
-  " (in 'independent_group', line 63, column 42 to column 51)",
-  " (in 'independent_group', line 64, column 28 to column 29)",
-  " (in 'independent_group', line 64, column 30 to column 40)",
-  " (in 'independent_group', line 64, column 41 to column 50)",
-  " (in 'independent_group', line 65, column 25 to column 34)",
-  " (in 'independent_group', line 66, column 38 to column 39)"};
+  " (in 'independent_group', line 3, column 2 to column 28)",
+  " (in 'independent_group', line 5, column 8 to column 9)",
+  " (in 'independent_group', line 5, column 10 to column 20)",
+  " (in 'independent_group', line 5, column 2 to column 44)",
+  " (in 'independent_group', line 6, column 8 to column 9)",
+  " (in 'independent_group', line 6, column 10 to column 20)",
+  " (in 'independent_group', line 6, column 2 to column 44)",
+  " (in 'independent_group', line 7, column 2 to column 24)",
+  " (in 'independent_group', line 8, column 2 to column 18)",
+  " (in 'independent_group', line 9, column 8 to column 9)",
+  " (in 'independent_group', line 9, column 2 to column 29)",
+  " (in 'independent_group', line 10, column 8 to column 9)",
+  " (in 'independent_group', line 10, column 2 to column 36)",
+  " (in 'independent_group', line 11, column 2 to column 40)",
+  " (in 'independent_group', line 12, column 2 to column 44)",
+  " (in 'independent_group', line 13, column 8 to column 9)",
+  " (in 'independent_group', line 13, column 2 to column 40)",
+  " (in 'independent_group', line 14, column 2 to column 31)",
+  " (in 'independent_group', line 15, column 2 to column 26)",
+  " (in 'independent_group', line 16, column 2 to column 28)",
+  " (in 'independent_group', line 17, column 8 to column 17)",
+  " (in 'independent_group', line 17, column 18 to column 32)",
+  " (in 'independent_group', line 17, column 2 to column 63)",
+  " (in 'independent_group', line 18, column 8 to column 9)",
+  " (in 'independent_group', line 18, column 2 to column 42)",
+  " (in 'independent_group', line 19, column 8 to column 9)",
+  " (in 'independent_group', line 19, column 2 to column 40)",
+  " (in 'independent_group', line 20, column 8 to column 9)",
+  " (in 'independent_group', line 20, column 2 to column 36)",
+  " (in 'independent_group', line 21, column 8 to column 18)",
+  " (in 'independent_group', line 21, column 2 to column 46)",
+  " (in 'independent_group', line 22, column 2 to column 34)",
+  " (in 'independent_group', line 23, column 8 to column 25)",
+  " (in 'independent_group', line 23, column 2 to column 58)",
+  " (in 'independent_group', line 24, column 2 to column 27)",
+  " (in 'independent_group', line 25, column 2 to column 27)",
+  " (in 'independent_group', line 26, column 2 to column 29)",
+  " (in 'independent_group', line 27, column 2 to column 29)",
+  " (in 'independent_group', line 28, column 2 to column 29)",
+  " (in 'independent_group', line 29, column 2 to column 29)",
+  " (in 'independent_group', line 30, column 2 to column 29)",
+  " (in 'independent_group', line 33, column 2 to column 31)",
+  " (in 'independent_group', line 34, column 2 to column 27)",
+  " (in 'independent_group', line 35, column 2 to column 38)",
+  " (in 'independent_group', line 36, column 2 to column 41)",
+  " (in 'independent_group', line 37, column 2 to column 29)",
+  " (in 'independent_group', line 40, column 8 to column 15)",
+  " (in 'independent_group', line 42, column 8 to column 20)",
+  " (in 'independent_group', line 42, column 21 to column 35)",
+  " (in 'independent_group', line 47, column 8 to column 9)",
+  " (in 'independent_group', line 49, column 8 to column 9)",
+  " (in 'independent_group', line 50, column 8 to column 9)",
+  " (in 'independent_group', line 50, column 10 to column 20)",
+  " (in 'independent_group', line 50, column 21 to column 30)",
+  " (in 'independent_group', line 51, column 8 to column 9)",
+  " (in 'independent_group', line 51, column 10 to column 20)",
+  " (in 'independent_group', line 51, column 21 to column 30)",
+  " (in 'independent_group', line 52, column 8 to column 17)",
+  " (in 'independent_group', line 53, column 8 to column 9)",
+  " (in 'independent_group', line 54, column 8 to column 9)",
+  " (in 'independent_group', line 57, column 8 to column 15)"};
 class model_independent_group final : public model_base_crtp<model_independent_group> {
 private:
   int A;
@@ -185,9 +272,10 @@ private:
   std::vector<int> age;
   std::vector<int> Y;
   int seroreversion;
+  int age_dependent_foi;
   std::vector<int> categoryindex;
-  int Ncategory;
   int Ncategoryclass;
+  int Ncategory;
   int maxNcategory;
   std::vector<std::vector<int>> MatrixCategory;
   std::vector<int> age_at_sampling;
@@ -198,10 +286,16 @@ private:
   std::vector<int> group_size_array;
   double priorY1;
   double priorY2;
-  double priorRho;
+  double priorRho1;
+  double priorRho2;
   double se;
   double sp;
   int cat_lambda;
+  int prior_distribution_alpha;
+  int prior_distribution_T;
+  int prior_distribution_constant_foi;
+  int prior_distribution_independent_foi;
+  int prior_distribution_rho;
 public:
   ~model_independent_group() {}
   model_independent_group(stan::io::var_context& context__, unsigned int
@@ -223,29 +317,29 @@ public:
     try {
       int pos__ = std::numeric_limits<int>::min();
       pos__ = 1;
-      current_statement__ = 95;
+      current_statement__ = 173;
       context__.validate_dims("data initialization", "A", "int",
         std::vector<size_t>{});
       A = std::numeric_limits<int>::min();
-      current_statement__ = 95;
+      current_statement__ = 173;
       A = context__.vals_i("A")[(1 - 1)];
-      current_statement__ = 95;
+      current_statement__ = 173;
       stan::math::check_greater_or_equal(function__, "A", A, 0);
-      current_statement__ = 96;
+      current_statement__ = 174;
       context__.validate_dims("data initialization", "NAgeGroups", "int",
         std::vector<size_t>{});
       NAgeGroups = std::numeric_limits<int>::min();
-      current_statement__ = 96;
+      current_statement__ = 174;
       NAgeGroups = context__.vals_i("NAgeGroups")[(1 - 1)];
-      current_statement__ = 96;
+      current_statement__ = 174;
       stan::math::check_greater_or_equal(function__, "NAgeGroups",
         NAgeGroups, 1);
-      current_statement__ = 97;
+      current_statement__ = 175;
       stan::math::validate_non_negative_index("class1", "A", A);
-      current_statement__ = 98;
+      current_statement__ = 176;
       stan::math::validate_non_negative_index("class1", "NAgeGroups",
         NAgeGroups);
-      current_statement__ = 99;
+      current_statement__ = 177;
       context__.validate_dims("data initialization", "class1", "int",
         std::vector<size_t>{static_cast<size_t>(A),
           static_cast<size_t>(NAgeGroups)});
@@ -254,31 +348,31 @@ public:
                    std::numeric_limits<int>::min()));
       {
         std::vector<int> class1_flat__;
-        current_statement__ = 99;
+        current_statement__ = 177;
         class1_flat__ = context__.vals_i("class1");
-        current_statement__ = 99;
+        current_statement__ = 177;
         pos__ = 1;
-        current_statement__ = 99;
+        current_statement__ = 177;
         for (int sym1__ = 1; sym1__ <= NAgeGroups; ++sym1__) {
-          current_statement__ = 99;
+          current_statement__ = 177;
           for (int sym2__ = 1; sym2__ <= A; ++sym2__) {
-            current_statement__ = 99;
+            current_statement__ = 177;
             stan::model::assign(class1, class1_flat__[(pos__ - 1)],
               "assigning variable class1", stan::model::index_uni(sym2__),
               stan::model::index_uni(sym1__));
-            current_statement__ = 99;
+            current_statement__ = 177;
             pos__ = (pos__ + 1);
           }
         }
       }
-      current_statement__ = 99;
+      current_statement__ = 177;
       stan::math::check_greater_or_equal(function__, "class1", class1, 1);
-      current_statement__ = 100;
+      current_statement__ = 178;
       stan::math::validate_non_negative_index("class2", "A", A);
-      current_statement__ = 101;
+      current_statement__ = 179;
       stan::math::validate_non_negative_index("class2", "NAgeGroups",
         NAgeGroups);
-      current_statement__ = 102;
+      current_statement__ = 180;
       context__.validate_dims("data initialization", "class2", "int",
         std::vector<size_t>{static_cast<size_t>(A),
           static_cast<size_t>(NAgeGroups)});
@@ -287,120 +381,132 @@ public:
                    std::numeric_limits<int>::min()));
       {
         std::vector<int> class2_flat__;
-        current_statement__ = 102;
+        current_statement__ = 180;
         class2_flat__ = context__.vals_i("class2");
-        current_statement__ = 102;
+        current_statement__ = 180;
         pos__ = 1;
-        current_statement__ = 102;
+        current_statement__ = 180;
         for (int sym1__ = 1; sym1__ <= NAgeGroups; ++sym1__) {
-          current_statement__ = 102;
+          current_statement__ = 180;
           for (int sym2__ = 1; sym2__ <= A; ++sym2__) {
-            current_statement__ = 102;
+            current_statement__ = 180;
             stan::model::assign(class2, class2_flat__[(pos__ - 1)],
               "assigning variable class2", stan::model::index_uni(sym2__),
               stan::model::index_uni(sym1__));
-            current_statement__ = 102;
+            current_statement__ = 180;
             pos__ = (pos__ + 1);
           }
         }
       }
-      current_statement__ = 102;
+      current_statement__ = 180;
       stan::math::check_greater_or_equal(function__, "class2", class2, 1);
-      current_statement__ = 103;
+      current_statement__ = 181;
       context__.validate_dims("data initialization", "NGroups", "int",
         std::vector<size_t>{});
       NGroups = std::numeric_limits<int>::min();
-      current_statement__ = 103;
+      current_statement__ = 181;
       NGroups = context__.vals_i("NGroups")[(1 - 1)];
-      current_statement__ = 103;
+      current_statement__ = 181;
       stan::math::check_greater_or_equal(function__, "NGroups", NGroups, 0);
-      current_statement__ = 104;
+      current_statement__ = 182;
       context__.validate_dims("data initialization", "N", "int",
         std::vector<size_t>{});
       N = std::numeric_limits<int>::min();
-      current_statement__ = 104;
+      current_statement__ = 182;
       N = context__.vals_i("N")[(1 - 1)];
-      current_statement__ = 104;
+      current_statement__ = 182;
       stan::math::check_greater_or_equal(function__, "N", N, 0);
-      current_statement__ = 105;
+      current_statement__ = 183;
       stan::math::validate_non_negative_index("age", "N", N);
-      current_statement__ = 106;
+      current_statement__ = 184;
       context__.validate_dims("data initialization", "age", "int",
         std::vector<size_t>{static_cast<size_t>(N)});
       age = std::vector<int>(N, std::numeric_limits<int>::min());
-      current_statement__ = 106;
+      current_statement__ = 184;
       age = context__.vals_i("age");
-      current_statement__ = 106;
+      current_statement__ = 184;
       stan::math::check_greater_or_equal(function__, "age", age, 0);
-      current_statement__ = 107;
+      current_statement__ = 185;
       stan::math::validate_non_negative_index("Y", "N", N);
-      current_statement__ = 108;
+      current_statement__ = 186;
       context__.validate_dims("data initialization", "Y", "int",
         std::vector<size_t>{static_cast<size_t>(N)});
       Y = std::vector<int>(N, std::numeric_limits<int>::min());
-      current_statement__ = 108;
+      current_statement__ = 186;
       Y = context__.vals_i("Y");
-      current_statement__ = 108;
+      current_statement__ = 186;
       stan::math::check_greater_or_equal(function__, "Y", Y, 0);
-      current_statement__ = 108;
+      current_statement__ = 186;
       stan::math::check_less_or_equal(function__, "Y", Y, 1);
-      current_statement__ = 109;
+      current_statement__ = 187;
       context__.validate_dims("data initialization", "seroreversion", "int",
         std::vector<size_t>{});
       seroreversion = std::numeric_limits<int>::min();
-      current_statement__ = 109;
+      current_statement__ = 187;
       seroreversion = context__.vals_i("seroreversion")[(1 - 1)];
-      current_statement__ = 109;
+      current_statement__ = 187;
       stan::math::check_greater_or_equal(function__, "seroreversion",
         seroreversion, 0);
-      current_statement__ = 109;
+      current_statement__ = 187;
       stan::math::check_less_or_equal(function__, "seroreversion",
         seroreversion, 1);
-      current_statement__ = 110;
+      current_statement__ = 188;
+      context__.validate_dims("data initialization", "age_dependent_foi",
+        "int", std::vector<size_t>{});
+      age_dependent_foi = std::numeric_limits<int>::min();
+      current_statement__ = 188;
+      age_dependent_foi = context__.vals_i("age_dependent_foi")[(1 - 1)];
+      current_statement__ = 188;
+      stan::math::check_greater_or_equal(function__, "age_dependent_foi",
+        age_dependent_foi, 0);
+      current_statement__ = 188;
+      stan::math::check_less_or_equal(function__, "age_dependent_foi",
+        age_dependent_foi, 1);
+      current_statement__ = 189;
       stan::math::validate_non_negative_index("categoryindex", "N", N);
-      current_statement__ = 111;
+      current_statement__ = 190;
       context__.validate_dims("data initialization", "categoryindex", "int",
         std::vector<size_t>{static_cast<size_t>(N)});
       categoryindex = std::vector<int>(N, std::numeric_limits<int>::min());
-      current_statement__ = 111;
+      current_statement__ = 190;
       categoryindex = context__.vals_i("categoryindex");
-      current_statement__ = 111;
+      current_statement__ = 190;
       stan::math::check_greater_or_equal(function__, "categoryindex",
         categoryindex, 1);
-      current_statement__ = 112;
-      context__.validate_dims("data initialization", "Ncategory", "int",
-        std::vector<size_t>{});
-      Ncategory = std::numeric_limits<int>::min();
-      current_statement__ = 112;
-      Ncategory = context__.vals_i("Ncategory")[(1 - 1)];
-      current_statement__ = 112;
-      stan::math::check_greater_or_equal(function__, "Ncategory", Ncategory,
-        1);
-      current_statement__ = 113;
+      current_statement__ = 191;
       context__.validate_dims("data initialization", "Ncategoryclass", "int",
         std::vector<size_t>{});
       Ncategoryclass = std::numeric_limits<int>::min();
-      current_statement__ = 113;
+      current_statement__ = 191;
       Ncategoryclass = context__.vals_i("Ncategoryclass")[(1 - 1)];
-      current_statement__ = 113;
+      current_statement__ = 191;
       stan::math::check_greater_or_equal(function__, "Ncategoryclass",
         Ncategoryclass, 1);
-      current_statement__ = 114;
+      current_statement__ = 192;
+      context__.validate_dims("data initialization", "Ncategory", "int",
+        std::vector<size_t>{});
+      Ncategory = std::numeric_limits<int>::min();
+      current_statement__ = 192;
+      Ncategory = context__.vals_i("Ncategory")[(1 - 1)];
+      current_statement__ = 192;
+      stan::math::check_greater_or_equal(function__, "Ncategory", Ncategory,
+        1);
+      current_statement__ = 193;
       context__.validate_dims("data initialization", "maxNcategory", "int",
         std::vector<size_t>{});
       maxNcategory = std::numeric_limits<int>::min();
-      current_statement__ = 114;
+      current_statement__ = 193;
       maxNcategory = context__.vals_i("maxNcategory")[(1 - 1)];
-      current_statement__ = 114;
+      current_statement__ = 193;
       stan::math::check_greater_or_equal(function__, "maxNcategory",
         maxNcategory, 1);
-      current_statement__ = 115;
+      current_statement__ = 194;
       stan::math::validate_non_negative_index("MatrixCategory", "Ncategory",
         Ncategory);
-      current_statement__ = 116;
+      current_statement__ = 195;
       stan::math::validate_non_negative_index("MatrixCategory",
         "Ncategoryclass", Ncategoryclass);
-      current_statement__ = 117;
+      current_statement__ = 196;
       context__.validate_dims("data initialization", "MatrixCategory", "int",
         std::vector<size_t>{static_cast<size_t>(Ncategory),
           static_cast<size_t>(Ncategoryclass)});
@@ -409,181 +515,231 @@ public:
                            std::numeric_limits<int>::min()));
       {
         std::vector<int> MatrixCategory_flat__;
-        current_statement__ = 117;
+        current_statement__ = 196;
         MatrixCategory_flat__ = context__.vals_i("MatrixCategory");
-        current_statement__ = 117;
+        current_statement__ = 196;
         pos__ = 1;
-        current_statement__ = 117;
+        current_statement__ = 196;
         for (int sym1__ = 1; sym1__ <= Ncategoryclass; ++sym1__) {
-          current_statement__ = 117;
+          current_statement__ = 196;
           for (int sym2__ = 1; sym2__ <= Ncategory; ++sym2__) {
-            current_statement__ = 117;
+            current_statement__ = 196;
             stan::model::assign(MatrixCategory, MatrixCategory_flat__[(pos__
               - 1)], "assigning variable MatrixCategory",
               stan::model::index_uni(sym2__), stan::model::index_uni(sym1__));
-            current_statement__ = 117;
+            current_statement__ = 196;
             pos__ = (pos__ + 1);
           }
         }
       }
-      current_statement__ = 117;
+      current_statement__ = 196;
       stan::math::check_greater_or_equal(function__, "MatrixCategory",
         MatrixCategory, 1);
-      current_statement__ = 118;
+      current_statement__ = 197;
       stan::math::validate_non_negative_index("age_at_sampling", "N", N);
-      current_statement__ = 119;
+      current_statement__ = 198;
       context__.validate_dims("data initialization", "age_at_sampling",
         "int", std::vector<size_t>{static_cast<size_t>(N)});
       age_at_sampling = std::vector<int>(N, std::numeric_limits<int>::min());
-      current_statement__ = 119;
+      current_statement__ = 198;
       age_at_sampling = context__.vals_i("age_at_sampling");
-      current_statement__ = 119;
+      current_statement__ = 198;
       stan::math::check_greater_or_equal(function__, "age_at_sampling",
         age_at_sampling, 0);
-      current_statement__ = 120;
+      current_statement__ = 199;
       stan::math::validate_non_negative_index("sampling_year", "N", N);
-      current_statement__ = 121;
+      current_statement__ = 200;
       context__.validate_dims("data initialization", "sampling_year", "int",
         std::vector<size_t>{static_cast<size_t>(N)});
       sampling_year = std::vector<int>(N, std::numeric_limits<int>::min());
-      current_statement__ = 121;
+      current_statement__ = 200;
       sampling_year = context__.vals_i("sampling_year");
-      current_statement__ = 121;
+      current_statement__ = 200;
       stan::math::check_greater_or_equal(function__, "sampling_year",
         sampling_year, 0);
-      current_statement__ = 122;
+      current_statement__ = 201;
       stan::math::validate_non_negative_index("age_group", "N", N);
-      current_statement__ = 123;
+      current_statement__ = 202;
       context__.validate_dims("data initialization", "age_group", "int",
         std::vector<size_t>{static_cast<size_t>(N)});
       age_group = std::vector<int>(N, std::numeric_limits<int>::min());
-      current_statement__ = 123;
+      current_statement__ = 202;
       age_group = context__.vals_i("age_group");
-      current_statement__ = 123;
+      current_statement__ = 202;
       stan::math::check_greater_or_equal(function__, "age_group", age_group,
         1);
-      current_statement__ = 124;
+      current_statement__ = 203;
       stan::math::validate_non_negative_index("age_at_init", "NAgeGroups",
         NAgeGroups);
-      current_statement__ = 125;
+      current_statement__ = 204;
       context__.validate_dims("data initialization", "age_at_init", "int",
         std::vector<size_t>{static_cast<size_t>(NAgeGroups)});
       age_at_init = std::vector<int>(NAgeGroups,
                       std::numeric_limits<int>::min());
-      current_statement__ = 125;
+      current_statement__ = 204;
       age_at_init = context__.vals_i("age_at_init");
-      current_statement__ = 125;
+      current_statement__ = 204;
       stan::math::check_greater_or_equal(function__, "age_at_init",
         age_at_init, 1);
-      current_statement__ = 126;
+      current_statement__ = 205;
       context__.validate_dims("data initialization", "group_size_length",
         "int", std::vector<size_t>{});
       group_size_length = std::numeric_limits<int>::min();
-      current_statement__ = 126;
+      current_statement__ = 205;
       group_size_length = context__.vals_i("group_size_length")[(1 - 1)];
-      current_statement__ = 126;
+      current_statement__ = 205;
       stan::math::check_greater_or_equal(function__, "group_size_length",
         group_size_length, 1);
-      current_statement__ = 127;
+      current_statement__ = 206;
       stan::math::validate_non_negative_index("group_size_array",
         "group_size_length", group_size_length);
-      current_statement__ = 128;
+      current_statement__ = 207;
       context__.validate_dims("data initialization", "group_size_array",
         "int", std::vector<size_t>{static_cast<size_t>(group_size_length)});
       group_size_array = std::vector<int>(group_size_length,
                            std::numeric_limits<int>::min());
-      current_statement__ = 128;
+      current_statement__ = 207;
       group_size_array = context__.vals_i("group_size_array");
-      current_statement__ = 128;
+      current_statement__ = 207;
       stan::math::check_greater_or_equal(function__, "group_size_array",
         group_size_array, 1);
-      current_statement__ = 129;
+      current_statement__ = 208;
       context__.validate_dims("data initialization", "priorY1", "double",
         std::vector<size_t>{});
       priorY1 = std::numeric_limits<double>::quiet_NaN();
-      current_statement__ = 129;
+      current_statement__ = 208;
       priorY1 = context__.vals_r("priorY1")[(1 - 1)];
-      current_statement__ = 129;
+      current_statement__ = 208;
       stan::math::check_greater_or_equal(function__, "priorY1", priorY1, 0);
-      current_statement__ = 130;
+      current_statement__ = 209;
       context__.validate_dims("data initialization", "priorY2", "double",
         std::vector<size_t>{});
       priorY2 = std::numeric_limits<double>::quiet_NaN();
-      current_statement__ = 130;
+      current_statement__ = 209;
       priorY2 = context__.vals_r("priorY2")[(1 - 1)];
-      current_statement__ = 130;
+      current_statement__ = 209;
       stan::math::check_greater_or_equal(function__, "priorY2", priorY2, 0);
-      current_statement__ = 131;
-      context__.validate_dims("data initialization", "priorRho", "double",
+      current_statement__ = 210;
+      context__.validate_dims("data initialization", "priorRho1", "double",
         std::vector<size_t>{});
-      priorRho = std::numeric_limits<double>::quiet_NaN();
-      current_statement__ = 131;
-      priorRho = context__.vals_r("priorRho")[(1 - 1)];
-      current_statement__ = 131;
-      stan::math::check_greater_or_equal(function__, "priorRho", priorRho, 0);
-      current_statement__ = 132;
+      priorRho1 = std::numeric_limits<double>::quiet_NaN();
+      current_statement__ = 210;
+      priorRho1 = context__.vals_r("priorRho1")[(1 - 1)];
+      current_statement__ = 210;
+      stan::math::check_greater_or_equal(function__, "priorRho1", priorRho1,
+        0);
+      current_statement__ = 211;
+      context__.validate_dims("data initialization", "priorRho2", "double",
+        std::vector<size_t>{});
+      priorRho2 = std::numeric_limits<double>::quiet_NaN();
+      current_statement__ = 211;
+      priorRho2 = context__.vals_r("priorRho2")[(1 - 1)];
+      current_statement__ = 211;
+      stan::math::check_greater_or_equal(function__, "priorRho2", priorRho2,
+        0);
+      current_statement__ = 212;
       context__.validate_dims("data initialization", "se", "double",
         std::vector<size_t>{});
       se = std::numeric_limits<double>::quiet_NaN();
-      current_statement__ = 132;
+      current_statement__ = 212;
       se = context__.vals_r("se")[(1 - 1)];
-      current_statement__ = 132;
+      current_statement__ = 212;
       stan::math::check_greater_or_equal(function__, "se", se, 0);
-      current_statement__ = 132;
+      current_statement__ = 212;
       stan::math::check_less_or_equal(function__, "se", se, 1);
-      current_statement__ = 133;
+      current_statement__ = 213;
       context__.validate_dims("data initialization", "sp", "double",
         std::vector<size_t>{});
       sp = std::numeric_limits<double>::quiet_NaN();
-      current_statement__ = 133;
+      current_statement__ = 213;
       sp = context__.vals_r("sp")[(1 - 1)];
-      current_statement__ = 133;
+      current_statement__ = 213;
       stan::math::check_greater_or_equal(function__, "sp", sp, 0);
-      current_statement__ = 133;
+      current_statement__ = 213;
       stan::math::check_less_or_equal(function__, "sp", sp, 1);
-      current_statement__ = 134;
+      current_statement__ = 214;
       context__.validate_dims("data initialization", "cat_lambda", "int",
         std::vector<size_t>{});
       cat_lambda = std::numeric_limits<int>::min();
-      current_statement__ = 134;
+      current_statement__ = 214;
       cat_lambda = context__.vals_i("cat_lambda")[(1 - 1)];
-      current_statement__ = 134;
+      current_statement__ = 214;
       stan::math::check_greater_or_equal(function__, "cat_lambda",
         cat_lambda, 0);
-      current_statement__ = 135;
-      stan::math::validate_non_negative_index("logitlambda", "NGroups",
+      current_statement__ = 215;
+      context__.validate_dims("data initialization",
+        "prior_distribution_alpha", "int", std::vector<size_t>{});
+      prior_distribution_alpha = std::numeric_limits<int>::min();
+      current_statement__ = 215;
+      prior_distribution_alpha = context__.vals_i("prior_distribution_alpha")[(1
+        - 1)];
+      current_statement__ = 216;
+      context__.validate_dims("data initialization", "prior_distribution_T",
+        "int", std::vector<size_t>{});
+      prior_distribution_T = std::numeric_limits<int>::min();
+      current_statement__ = 216;
+      prior_distribution_T = context__.vals_i("prior_distribution_T")[(1 -
+        1)];
+      current_statement__ = 217;
+      context__.validate_dims("data initialization",
+        "prior_distribution_constant_foi", "int", std::vector<size_t>{});
+      prior_distribution_constant_foi = std::numeric_limits<int>::min();
+      current_statement__ = 217;
+      prior_distribution_constant_foi = context__.vals_i("prior_distribution_constant_foi")[(1
+        - 1)];
+      current_statement__ = 218;
+      context__.validate_dims("data initialization",
+        "prior_distribution_independent_foi", "int", std::vector<size_t>{});
+      prior_distribution_independent_foi = std::numeric_limits<int>::min();
+      current_statement__ = 218;
+      prior_distribution_independent_foi = context__.vals_i("prior_distribution_independent_foi")[(1
+        - 1)];
+      current_statement__ = 219;
+      context__.validate_dims("data initialization",
+        "prior_distribution_rho", "int", std::vector<size_t>{});
+      prior_distribution_rho = std::numeric_limits<int>::min();
+      current_statement__ = 219;
+      prior_distribution_rho = context__.vals_i("prior_distribution_rho")[(1
+        - 1)];
+      current_statement__ = 220;
+      stan::math::validate_non_negative_index("lambda_group_raw", "NGroups",
         NGroups);
-      current_statement__ = 136;
+      current_statement__ = 221;
       stan::math::validate_non_negative_index("Flambda2", "maxNcategory",
         maxNcategory);
-      current_statement__ = 137;
+      current_statement__ = 222;
       stan::math::validate_non_negative_index("Flambda2", "Ncategoryclass",
         Ncategoryclass);
-      current_statement__ = 138;
+      current_statement__ = 223;
       stan::math::validate_non_negative_index("x", "A", A);
-      current_statement__ = 139;
+      current_statement__ = 224;
       stan::math::validate_non_negative_index("lambda", "A", A);
-      current_statement__ = 140;
+      current_statement__ = 225;
       stan::math::validate_non_negative_index("P1", "A", A);
-      current_statement__ = 141;
+      current_statement__ = 226;
       stan::math::validate_non_negative_index("P1", "NAgeGroups", NAgeGroups);
-      current_statement__ = 142;
+      current_statement__ = 227;
       stan::math::validate_non_negative_index("P1", "Ncategory", Ncategory);
-      current_statement__ = 143;
+      current_statement__ = 228;
       stan::math::validate_non_negative_index("P", "A", A);
-      current_statement__ = 144;
+      current_statement__ = 229;
       stan::math::validate_non_negative_index("P", "NAgeGroups", NAgeGroups);
-      current_statement__ = 145;
+      current_statement__ = 230;
       stan::math::validate_non_negative_index("P", "Ncategory", Ncategory);
-      current_statement__ = 146;
+      current_statement__ = 231;
       stan::math::validate_non_negative_index("Flambda", "Ncategory",
         Ncategory);
-      current_statement__ = 147;
+      current_statement__ = 232;
       stan::math::validate_non_negative_index("Likelihood", "N", N);
+      current_statement__ = 233;
+      stan::math::validate_non_negative_index("log_lik", "N", N);
+      current_statement__ = 234;
+      stan::math::validate_non_negative_index("lambda_group", "NGroups",
+        NGroups);
     } catch (const std::exception& e) {
       stan::lang::rethrow_located(e, locations_array__[current_statement__]);
     }
-    num_params_r__ = NGroups + 1 + (maxNcategory * Ncategoryclass);
+    num_params_r__ = NGroups + 1 + (maxNcategory * Ncategoryclass) + 1;
   }
   inline std::string model_name() const final {
     return "model_independent_group";
@@ -612,16 +768,14 @@ public:
     // suppress unused var warning
     (void) function__;
     try {
-      std::vector<local_scalar_t__> logitlambda =
+      std::vector<local_scalar_t__> lambda_group_raw =
         std::vector<local_scalar_t__>(NGroups, DUMMY_VAR__);
       current_statement__ = 1;
-      logitlambda = in__.template read_constrain_lb<
-                      std::vector<local_scalar_t__>, jacobian__>(0, lp__,
-                      NGroups);
-      local_scalar_t__ rho = DUMMY_VAR__;
+      lambda_group_raw = in__.template read<
+                           std::vector<local_scalar_t__>>(NGroups);
+      local_scalar_t__ rho_raw = DUMMY_VAR__;
       current_statement__ = 2;
-      rho = in__.template read_constrain_lub<local_scalar_t__, jacobian__>(0,
-              20, lp__);
+      rho_raw = in__.template read<local_scalar_t__>();
       std::vector<std::vector<local_scalar_t__>> Flambda2 =
         std::vector<std::vector<local_scalar_t__>>(maxNcategory,
           std::vector<local_scalar_t__>(Ncategoryclass, DUMMY_VAR__));
@@ -629,6 +783,9 @@ public:
       Flambda2 = in__.template read<
                    std::vector<std::vector<local_scalar_t__>>>(maxNcategory,
                    Ncategoryclass);
+      local_scalar_t__ age_risk = DUMMY_VAR__;
+      current_statement__ = 4;
+      age_risk = in__.template read<local_scalar_t__>();
       std::vector<local_scalar_t__> x =
         std::vector<local_scalar_t__>(A, DUMMY_VAR__);
       local_scalar_t__ L = DUMMY_VAR__;
@@ -646,39 +803,77 @@ public:
         std::vector<local_scalar_t__>(Ncategory, DUMMY_VAR__);
       std::vector<local_scalar_t__> Likelihood =
         std::vector<local_scalar_t__>(N, DUMMY_VAR__);
+      std::vector<local_scalar_t__> log_lik =
+        std::vector<local_scalar_t__>(N, DUMMY_VAR__);
+      local_scalar_t__ C1 = DUMMY_VAR__;
       local_scalar_t__ c = DUMMY_VAR__;
-      current_statement__ = 14;
+      std::vector<local_scalar_t__> lambda_group =
+        std::vector<local_scalar_t__>(NGroups, DUMMY_VAR__);
+      local_scalar_t__ rho = DUMMY_VAR__;
+      current_statement__ = 17;
+      c = 0;
+      current_statement__ = 18;
+      C1 = 0;
+      current_statement__ = 26;
+      for (int j = 1; j <= NGroups; ++j) {
+        current_statement__ = 21;
+        if (stan::math::logical_eq(prior_distribution_independent_foi, 1)) {
+          current_statement__ = 19;
+          stan::model::assign(lambda_group, (priorY1 *
+            stan::math::exp((priorY2 *
+              stan::model::rvalue(lambda_group_raw, "lambda_group_raw",
+                stan::model::index_uni(j))))),
+            "assigning variable lambda_group", stan::model::index_uni(j));
+        }
+        current_statement__ = 24;
+        if (stan::math::logical_eq(prior_distribution_independent_foi, 2)) {
+          current_statement__ = 22;
+          stan::model::assign(lambda_group,
+            stan::model::rvalue(lambda_group_raw, "lambda_group_raw",
+              stan::model::index_uni(j)), "assigning variable lambda_group",
+            stan::model::index_uni(j));
+        }
+      }
+      current_statement__ = 29;
+      if (stan::math::logical_eq(prior_distribution_rho, 1)) {
+        current_statement__ = 27;
+        rho = (priorRho1 * stan::math::exp((rho_raw * priorRho2)));
+      }
+      current_statement__ = 32;
+      if (stan::math::logical_eq(prior_distribution_rho, 2)) {
+        current_statement__ = 30;
+        rho = rho_raw;
+      }
+      current_statement__ = 35;
       for (int j = 1; j <= A; ++j) {
-        current_statement__ = 12;
+        current_statement__ = 33;
         stan::model::assign(lambda,
-          stan::model::rvalue(logitlambda, "logitlambda",
+          stan::model::rvalue(lambda_group, "lambda_group",
             stan::model::index_uni(
               stan::model::rvalue(group_size_array, "group_size_array",
                 stan::model::index_uni(j)))), "assigning variable lambda",
           stan::model::index_uni(j));
       }
-      current_statement__ = 15;
-      c = 0;
-      current_statement__ = 30;
+      current_statement__ = 50;
       if (stan::math::logical_negation(cat_lambda)) {
-        current_statement__ = 28;
+        current_statement__ = 48;
         for (int i = 1; i <= Ncategory; ++i) {
-          current_statement__ = 26;
+          current_statement__ = 46;
           stan::model::assign(Flambda, 1, "assigning variable Flambda",
             stan::model::index_uni(i));
         }
       } else {
-        current_statement__ = 24;
+        current_statement__ = 44;
         for (int i = 1; i <= Ncategory; ++i) {
-          current_statement__ = 16;
+          current_statement__ = 36;
           c = 0;
-          current_statement__ = 21;
+          current_statement__ = 41;
           for (int I = 1; I <= Ncategoryclass; ++I) {
-            current_statement__ = 19;
+            current_statement__ = 39;
             if (stan::math::logical_gt(
                   stan::model::rvalue(MatrixCategory, "MatrixCategory",
                     stan::model::index_uni(i), stan::model::index_uni(I)), 1)) {
-              current_statement__ = 17;
+              current_statement__ = 37;
               c = (c +
                 stan::model::rvalue(Flambda2, "Flambda2",
                   stan::model::index_uni(
@@ -687,20 +882,24 @@ public:
                   stan::model::index_uni(I)));
             }
           }
-          current_statement__ = 22;
+          current_statement__ = 42;
           stan::model::assign(Flambda, stan::math::exp(c),
             "assigning variable Flambda", stan::model::index_uni(i));
         }
       }
-      current_statement__ = 31;
+      current_statement__ = 51;
       L = 1;
-      current_statement__ = 47;
-      if (stan::math::logical_eq(seroreversion, 0)) {
-        current_statement__ = 45;
+      current_statement__ = 67;
+      if ((stan::math::primitive_value(
+             stan::math::logical_eq(seroreversion, 0))
+          &&
+          stan::math::primitive_value(
+            stan::math::logical_eq(age_dependent_foi, 0)))) {
+        current_statement__ = 65;
         for (int J = 1; J <= NAgeGroups; ++J) {
-          current_statement__ = 43;
+          current_statement__ = 63;
           for (int i = 1; i <= Ncategory; ++i) {
-            current_statement__ = 32;
+            current_statement__ = 52;
             stan::model::assign(P1,
               stan::math::exp(
                 (-stan::model::rvalue(Flambda, "Flambda",
@@ -709,16 +908,16 @@ public:
                   stan::model::index_uni(1)))), "assigning variable P1",
               stan::model::index_uni(1), stan::model::index_uni(J),
               stan::model::index_uni(i));
-            current_statement__ = 40;
+            current_statement__ = 60;
             for (int j = 1; j <= (A - 1); ++j) {
-              current_statement__ = 33;
+              current_statement__ = 53;
               stan::model::assign(x, 1, "assigning variable x",
                 stan::model::index_uni(j));
-              current_statement__ = 38;
+              current_statement__ = 58;
               if (stan::math::logical_lt(j,
                     stan::model::rvalue(age_at_init, "age_at_init",
                       stan::model::index_uni(J)))) {
-                current_statement__ = 36;
+                current_statement__ = 56;
                 stan::model::assign(P1,
                   stan::math::exp(
                     (-stan::model::rvalue(Flambda, "Flambda",
@@ -728,7 +927,7 @@ public:
                   stan::model::index_uni((j + 1)), stan::model::index_uni(J),
                   stan::model::index_uni(i));
               } else {
-                current_statement__ = 34;
+                current_statement__ = 54;
                 stan::model::assign(P1,
                   (stan::model::rvalue(P1, "P1", stan::model::index_uni(j),
                      stan::model::index_uni(J), stan::model::index_uni(i)) *
@@ -741,24 +940,28 @@ public:
                   stan::model::index_uni(J), stan::model::index_uni(i));
               }
             }
-            current_statement__ = 41;
+            current_statement__ = 61;
             stan::model::assign(x, 1, "assigning variable x",
               stan::model::index_uni(A));
           }
         }
       }
-      current_statement__ = 68;
-      if (stan::math::logical_eq(seroreversion, 1)) {
-        current_statement__ = 66;
+      current_statement__ = 88;
+      if ((stan::math::primitive_value(
+             stan::math::logical_eq(seroreversion, 1))
+          &&
+          stan::math::primitive_value(
+            stan::math::logical_eq(age_dependent_foi, 0)))) {
+        current_statement__ = 86;
         for (int J = 1; J <= NAgeGroups; ++J) {
-          current_statement__ = 64;
+          current_statement__ = 84;
           for (int i = 1; i <= Ncategory; ++i) {
-            current_statement__ = 48;
+            current_statement__ = 68;
             stan::model::assign(x, 1, "assigning variable x",
               stan::model::index_uni(A));
-            current_statement__ = 51;
+            current_statement__ = 71;
             for (int j = 1; j <= A; ++j) {
-              current_statement__ = 49;
+              current_statement__ = 69;
               stan::model::assign(x,
                 stan::math::exp(
                   (-stan::model::rvalue(Flambda, "Flambda",
@@ -767,9 +970,9 @@ public:
                     stan::model::index_uni(1)))), "assigning variable x",
                 stan::model::index_uni(j));
             }
-            current_statement__ = 62;
+            current_statement__ = 82;
             for (int j = 1; j <= A; ++j) {
-              current_statement__ = 52;
+              current_statement__ = 72;
               L = (stan::model::rvalue(Flambda, "Flambda",
                      stan::model::index_uni(i))
                 *
@@ -777,21 +980,21 @@ public:
                   stan::model::index_uni(
                     stan::model::rvalue(age_at_init, "age_at_init",
                       stan::model::index_uni(J)))));
-              current_statement__ = 53;
+              current_statement__ = 73;
               stan::model::assign(x, ((rho / (L + rho)) + ((L / (L + rho)) *
                 stan::math::exp(-L))), "assigning variable x",
                 stan::model::index_uni(j));
-              current_statement__ = 59;
+              current_statement__ = 79;
               if (stan::math::logical_gt(j, 1)) {
-                current_statement__ = 57;
+                current_statement__ = 77;
                 for (int k = 2; k <= j; ++k) {
-                  current_statement__ = 54;
+                  current_statement__ = 74;
                   L = (stan::model::rvalue(Flambda, "Flambda",
                          stan::model::index_uni(i))
                     *
                     stan::model::rvalue(lambda, "lambda",
                       stan::model::index_uni(((j - k) + 2))));
-                  current_statement__ = 55;
+                  current_statement__ = 75;
                   stan::model::assign(x,
                     ((stan::model::rvalue(x, "x",
                         stan::model::index_uni(((j - k) + 2))) *
@@ -800,7 +1003,7 @@ public:
                     stan::model::index_uni((((j - k) + 2) - 1)));
                 }
               }
-              current_statement__ = 60;
+              current_statement__ = 80;
               stan::model::assign(P1,
                 stan::model::rvalue(x, "x",
                   stan::model::index_uni(
@@ -812,24 +1015,173 @@ public:
           }
         }
       }
-      current_statement__ = 79;
+      current_statement__ = 111;
+      if ((stan::math::primitive_value(
+             stan::math::logical_eq(seroreversion, 1))
+          &&
+          stan::math::primitive_value(
+            stan::math::logical_eq(age_dependent_foi, 1)))) {
+        current_statement__ = 109;
+        for (int J = 1; J <= NAgeGroups; ++J) {
+          current_statement__ = 107;
+          for (int i = 1; i <= Ncategory; ++i) {
+            current_statement__ = 89;
+            stan::model::assign(x, 1, "assigning variable x",
+              stan::model::index_uni(A));
+            current_statement__ = 92;
+            for (int j = 1; j <= A; ++j) {
+              current_statement__ = 90;
+              stan::model::assign(x,
+                stan::math::exp(
+                  (-stan::model::rvalue(Flambda, "Flambda",
+                      stan::model::index_uni(i)) *
+                  stan::model::rvalue(lambda, "lambda",
+                    stan::model::index_uni(1)))), "assigning variable x",
+                stan::model::index_uni(j));
+            }
+            current_statement__ = 105;
+            for (int j = 1; j <= A; ++j) {
+              current_statement__ = 93;
+              L = (stan::model::rvalue(Flambda, "Flambda",
+                     stan::model::index_uni(i))
+                *
+                stan::model::rvalue(lambda, "lambda",
+                  stan::model::index_uni(
+                    stan::model::rvalue(age_at_init, "age_at_init",
+                      stan::model::index_uni(J)))));
+              current_statement__ = 94;
+              C1 = stan::math::exp((age_risk *
+                     (stan::model::rvalue(age_at_init, "age_at_init",
+                        stan::model::index_uni(J)) - 1)));
+              current_statement__ = 95;
+              stan::model::assign(x, ((rho / ((L * C1) + rho)) + (((L * C1) /
+                ((L * C1) + rho)) * stan::math::exp((-L * C1)))),
+                "assigning variable x", stan::model::index_uni(j));
+              current_statement__ = 102;
+              if (stan::math::logical_gt(j, 1)) {
+                current_statement__ = 100;
+                for (int k = 2; k <= j; ++k) {
+                  current_statement__ = 96;
+                  L = (stan::model::rvalue(Flambda, "Flambda",
+                         stan::model::index_uni(i))
+                    *
+                    stan::model::rvalue(lambda, "lambda",
+                      stan::model::index_uni(((j - k) + 2))));
+                  current_statement__ = 97;
+                  C1 = (C1 * stan::math::exp(age_risk));
+                  current_statement__ = 98;
+                  stan::model::assign(x,
+                    ((stan::model::rvalue(x, "x",
+                        stan::model::index_uni(((j - k) + 2))) *
+                    stan::math::exp(-(rho + (L * C1)))) + ((rho / ((L * C1) +
+                    rho)) * (1 - stan::math::exp(-(rho + (L * C1)))))),
+                    "assigning variable x",
+                    stan::model::index_uni((((j - k) + 2) - 1)));
+                }
+              }
+              current_statement__ = 103;
+              stan::model::assign(P1,
+                stan::model::rvalue(x, "x",
+                  stan::model::index_uni(
+                    stan::model::rvalue(age_at_init, "age_at_init",
+                      stan::model::index_uni(J)))), "assigning variable P1",
+                stan::model::index_uni(j), stan::model::index_uni(J),
+                stan::model::index_uni(i));
+            }
+          }
+        }
+      }
+      current_statement__ = 134;
+      if ((stan::math::primitive_value(
+             stan::math::logical_eq(seroreversion, 0))
+          &&
+          stan::math::primitive_value(
+            stan::math::logical_eq(age_dependent_foi, 1)))) {
+        current_statement__ = 132;
+        for (int J = 1; J <= NAgeGroups; ++J) {
+          current_statement__ = 130;
+          for (int i = 1; i <= Ncategory; ++i) {
+            current_statement__ = 112;
+            stan::model::assign(x, 1, "assigning variable x",
+              stan::model::index_uni(A));
+            current_statement__ = 115;
+            for (int j = 1; j <= A; ++j) {
+              current_statement__ = 113;
+              stan::model::assign(x,
+                stan::math::exp(
+                  (-stan::model::rvalue(Flambda, "Flambda",
+                      stan::model::index_uni(i)) *
+                  stan::model::rvalue(lambda, "lambda",
+                    stan::model::index_uni(1)))), "assigning variable x",
+                stan::model::index_uni(j));
+            }
+            current_statement__ = 128;
+            for (int j = 1; j <= A; ++j) {
+              current_statement__ = 116;
+              L = (stan::model::rvalue(Flambda, "Flambda",
+                     stan::model::index_uni(i))
+                *
+                stan::model::rvalue(lambda, "lambda",
+                  stan::model::index_uni(
+                    stan::model::rvalue(age_at_init, "age_at_init",
+                      stan::model::index_uni(J)))));
+              current_statement__ = 117;
+              C1 = stan::math::exp((age_risk *
+                     (stan::model::rvalue(age_at_init, "age_at_init",
+                        stan::model::index_uni(J)) - 1)));
+              current_statement__ = 118;
+              stan::model::assign(x, stan::math::exp((-L * C1)),
+                "assigning variable x", stan::model::index_uni(j));
+              current_statement__ = 125;
+              if (stan::math::logical_gt(j, 1)) {
+                current_statement__ = 123;
+                for (int k = 2; k <= j; ++k) {
+                  current_statement__ = 119;
+                  L = (stan::model::rvalue(Flambda, "Flambda",
+                         stan::model::index_uni(i))
+                    *
+                    stan::model::rvalue(lambda, "lambda",
+                      stan::model::index_uni(((j - k) + 2))));
+                  current_statement__ = 120;
+                  C1 = (C1 * stan::math::exp(age_risk));
+                  current_statement__ = 121;
+                  stan::model::assign(x,
+                    (stan::model::rvalue(x, "x",
+                       stan::model::index_uni(((j - k) + 2))) *
+                    stan::math::exp((-L * C1))), "assigning variable x",
+                    stan::model::index_uni((((j - k) + 2) - 1)));
+                }
+              }
+              current_statement__ = 126;
+              stan::model::assign(P1,
+                stan::model::rvalue(x, "x",
+                  stan::model::index_uni(
+                    stan::model::rvalue(age_at_init, "age_at_init",
+                      stan::model::index_uni(J)))), "assigning variable P1",
+                stan::model::index_uni(j), stan::model::index_uni(J),
+                stan::model::index_uni(i));
+            }
+          }
+        }
+      }
+      current_statement__ = 145;
       for (int J = 1; J <= NAgeGroups; ++J) {
-        current_statement__ = 77;
+        current_statement__ = 143;
         for (int i = 1; i <= Ncategory; ++i) {
-          current_statement__ = 75;
+          current_statement__ = 141;
           for (int j = 1; j <= A; ++j) {
-            current_statement__ = 69;
+            current_statement__ = 135;
             stan::model::assign(P, 0, "assigning variable P",
               stan::model::index_uni(j), stan::model::index_uni(J),
               stan::model::index_uni(i));
-            current_statement__ = 72;
+            current_statement__ = 138;
             for (int k =
                    stan::model::rvalue(class1, "class1",
                      stan::model::index_uni(j), stan::model::index_uni(J)); k
                  <=
                  stan::model::rvalue(class2, "class2",
                    stan::model::index_uni(j), stan::model::index_uni(J)); ++k) {
-              current_statement__ = 70;
+              current_statement__ = 136;
               stan::model::assign(P,
                 (stan::model::rvalue(P1, "P1", stan::model::index_uni(k),
                    stan::model::index_uni(J), stan::model::index_uni(i)) +
@@ -838,7 +1190,7 @@ public:
                 "assigning variable P", stan::model::index_uni(j),
                 stan::model::index_uni(J), stan::model::index_uni(i));
             }
-            current_statement__ = 73;
+            current_statement__ = 139;
             stan::model::assign(P,
               (stan::model::rvalue(P, "P", stan::model::index_uni(j),
                  stan::model::index_uni(J), stan::model::index_uni(i)) /
@@ -851,9 +1203,9 @@ public:
           }
         }
       }
-      current_statement__ = 82;
+      current_statement__ = 149;
       for (int j = 1; j <= N; ++j) {
-        current_statement__ = 80;
+        current_statement__ = 146;
         stan::model::assign(Likelihood, (se - (((se + sp) - 1) *
           stan::model::rvalue(P, "P",
             stan::model::index_uni(
@@ -865,48 +1217,87 @@ public:
               stan::model::rvalue(categoryindex, "categoryindex",
                 stan::model::index_uni(j)))))),
           "assigning variable Likelihood", stan::model::index_uni(j));
+        current_statement__ = 147;
+        stan::model::assign(log_lik,
+          stan::math::bernoulli_lpmf<false>(
+            stan::model::rvalue(Y, "Y", stan::model::index_uni(j)),
+            stan::model::rvalue(Likelihood, "Likelihood",
+              stan::model::index_uni(j))), "assigning variable log_lik",
+          stan::model::index_uni(j));
       }
-      current_statement__ = 6;
-      stan::math::check_greater_or_equal(function__, "lambda", lambda, 0);
       current_statement__ = 7;
+      stan::math::check_greater_or_equal(function__, "lambda", lambda, 0.0);
+      current_statement__ = 8;
       stan::math::check_greater_or_equal(function__, "P1", P1, 0);
-      current_statement__ = 7;
+      current_statement__ = 8;
       stan::math::check_less_or_equal(function__, "P1", P1, 1);
-      current_statement__ = 8;
-      stan::math::check_greater_or_equal(function__, "P", P, 0);
-      current_statement__ = 8;
-      stan::math::check_less_or_equal(function__, "P", P, 1);
       current_statement__ = 9;
-      stan::math::check_greater_or_equal(function__, "Flambda", Flambda, 0);
+      stan::math::check_greater_or_equal(function__, "P", P, 0);
+      current_statement__ = 9;
+      stan::math::check_less_or_equal(function__, "P", P, 1);
       current_statement__ = 10;
+      stan::math::check_greater_or_equal(function__, "Flambda", Flambda, 0);
+      current_statement__ = 11;
       stan::math::check_greater_or_equal(function__, "Likelihood",
         Likelihood, 0);
-      current_statement__ = 10;
+      current_statement__ = 11;
       stan::math::check_less_or_equal(function__, "Likelihood", Likelihood, 1);
+      current_statement__ = 13;
+      stan::math::check_greater_or_equal(function__, "C1", C1, 0);
+      current_statement__ = 15;
+      stan::math::check_greater_or_equal(function__, "lambda_group",
+        lambda_group, 0);
+      current_statement__ = 16;
+      stan::math::check_greater_or_equal(function__, "rho", rho, 0);
+      current_statement__ = 16;
+      stan::math::check_less_or_equal(function__, "rho", rho, 20);
       {
-        current_statement__ = 85;
+        current_statement__ = 157;
         for (int j = 1; j <= NGroups; ++j) {
-          current_statement__ = 83;
-          lp_accum__.add(stan::math::uniform_lpdf<propto__>(
-                           stan::model::rvalue(logitlambda, "logitlambda",
-                             stan::model::index_uni(j)), priorY1, priorY2));
+          current_statement__ = 152;
+          if (stan::math::logical_eq(prior_distribution_independent_foi, 1)) {
+            current_statement__ = 150;
+            lp_accum__.add(stan::math::normal_lpdf<propto__>(
+                             stan::model::rvalue(lambda_group_raw,
+                               "lambda_group_raw", stan::model::index_uni(j)),
+                             0, 1));
+          }
+          current_statement__ = 155;
+          if (stan::math::logical_eq(prior_distribution_independent_foi, 2)) {
+            current_statement__ = 153;
+            lp_accum__.add(stan::math::exponential_lpdf<propto__>(
+                             stan::model::rvalue(lambda_group_raw,
+                               "lambda_group_raw", stan::model::index_uni(j)),
+                             priorY1));
+          }
         }
-        current_statement__ = 90;
+        current_statement__ = 162;
         for (int I = 1; I <= Ncategoryclass; ++I) {
-          current_statement__ = 88;
+          current_statement__ = 160;
           for (int i = 1; i <= maxNcategory; ++i) {
-            current_statement__ = 86;
+            current_statement__ = 158;
             lp_accum__.add(stan::math::normal_lpdf<propto__>(
                              stan::model::rvalue(Flambda2, "Flambda2",
                                stan::model::index_uni(i),
                                stan::model::index_uni(I)), 0, 1.73));
           }
         }
-        current_statement__ = 91;
-        lp_accum__.add(stan::math::exponential_lpdf<propto__>(rho, priorRho));
-        current_statement__ = 94;
+        current_statement__ = 165;
+        if (stan::math::logical_eq(prior_distribution_rho, 1)) {
+          current_statement__ = 163;
+          lp_accum__.add(stan::math::normal_lpdf<propto__>(rho_raw, 0, 1));
+        }
+        current_statement__ = 168;
+        if (stan::math::logical_eq(prior_distribution_rho, 2)) {
+          current_statement__ = 166;
+          lp_accum__.add(stan::math::exponential_lpdf<propto__>(rho_raw,
+                           priorRho1));
+        }
+        current_statement__ = 169;
+        lp_accum__.add(stan::math::normal_lpdf<propto__>(age_risk, 0, 1));
+        current_statement__ = 172;
         for (int j = 1; j <= N; ++j) {
-          current_statement__ = 92;
+          current_statement__ = 170;
           lp_accum__.add(stan::math::bernoulli_lpmf<false>(
                            stan::model::rvalue(Y, "Y",
                              stan::model::index_uni(j)),
@@ -951,17 +1342,15 @@ public:
     // suppress unused var warning
     (void) function__;
     try {
-      std::vector<double> logitlambda =
+      std::vector<double> lambda_group_raw =
         std::vector<double>(NGroups,
           std::numeric_limits<double>::quiet_NaN());
       current_statement__ = 1;
-      logitlambda = in__.template read_constrain_lb<
-                      std::vector<local_scalar_t__>, jacobian__>(0, lp__,
-                      NGroups);
-      double rho = std::numeric_limits<double>::quiet_NaN();
+      lambda_group_raw = in__.template read<
+                           std::vector<local_scalar_t__>>(NGroups);
+      double rho_raw = std::numeric_limits<double>::quiet_NaN();
       current_statement__ = 2;
-      rho = in__.template read_constrain_lub<local_scalar_t__, jacobian__>(0,
-              20, lp__);
+      rho_raw = in__.template read<local_scalar_t__>();
       std::vector<std::vector<double>> Flambda2 =
         std::vector<std::vector<double>>(maxNcategory,
           std::vector<double>(Ncategoryclass,
@@ -970,6 +1359,9 @@ public:
       Flambda2 = in__.template read<
                    std::vector<std::vector<local_scalar_t__>>>(maxNcategory,
                    Ncategoryclass);
+      double age_risk = std::numeric_limits<double>::quiet_NaN();
+      current_statement__ = 4;
+      age_risk = in__.template read<local_scalar_t__>();
       std::vector<double> x =
         std::vector<double>(A, std::numeric_limits<double>::quiet_NaN());
       double L = std::numeric_limits<double>::quiet_NaN();
@@ -990,51 +1382,91 @@ public:
           std::numeric_limits<double>::quiet_NaN());
       std::vector<double> Likelihood =
         std::vector<double>(N, std::numeric_limits<double>::quiet_NaN());
+      std::vector<double> log_lik =
+        std::vector<double>(N, std::numeric_limits<double>::quiet_NaN());
+      double C1 = std::numeric_limits<double>::quiet_NaN();
       double c = std::numeric_limits<double>::quiet_NaN();
-      out__.write(logitlambda);
-      out__.write(rho);
+      std::vector<double> lambda_group =
+        std::vector<double>(NGroups,
+          std::numeric_limits<double>::quiet_NaN());
+      double rho = std::numeric_limits<double>::quiet_NaN();
+      out__.write(lambda_group_raw);
+      out__.write(rho_raw);
       for (int sym1__ = 1; sym1__ <= Ncategoryclass; ++sym1__) {
         for (int sym2__ = 1; sym2__ <= maxNcategory; ++sym2__) {
           out__.write(Flambda2[(sym2__ - 1)][(sym1__ - 1)]);
         }
       }
+      out__.write(age_risk);
       if (stan::math::logical_negation(
             (stan::math::primitive_value(emit_transformed_parameters__) ||
             stan::math::primitive_value(emit_generated_quantities__)))) {
         return ;
       }
-      current_statement__ = 14;
+      current_statement__ = 17;
+      c = 0;
+      current_statement__ = 18;
+      C1 = 0;
+      current_statement__ = 26;
+      for (int j = 1; j <= NGroups; ++j) {
+        current_statement__ = 21;
+        if (stan::math::logical_eq(prior_distribution_independent_foi, 1)) {
+          current_statement__ = 19;
+          stan::model::assign(lambda_group, (priorY1 *
+            stan::math::exp((priorY2 *
+              stan::model::rvalue(lambda_group_raw, "lambda_group_raw",
+                stan::model::index_uni(j))))),
+            "assigning variable lambda_group", stan::model::index_uni(j));
+        }
+        current_statement__ = 24;
+        if (stan::math::logical_eq(prior_distribution_independent_foi, 2)) {
+          current_statement__ = 22;
+          stan::model::assign(lambda_group,
+            stan::model::rvalue(lambda_group_raw, "lambda_group_raw",
+              stan::model::index_uni(j)), "assigning variable lambda_group",
+            stan::model::index_uni(j));
+        }
+      }
+      current_statement__ = 29;
+      if (stan::math::logical_eq(prior_distribution_rho, 1)) {
+        current_statement__ = 27;
+        rho = (priorRho1 * stan::math::exp((rho_raw * priorRho2)));
+      }
+      current_statement__ = 32;
+      if (stan::math::logical_eq(prior_distribution_rho, 2)) {
+        current_statement__ = 30;
+        rho = rho_raw;
+      }
+      current_statement__ = 35;
       for (int j = 1; j <= A; ++j) {
-        current_statement__ = 12;
+        current_statement__ = 33;
         stan::model::assign(lambda,
-          stan::model::rvalue(logitlambda, "logitlambda",
+          stan::model::rvalue(lambda_group, "lambda_group",
             stan::model::index_uni(
               stan::model::rvalue(group_size_array, "group_size_array",
                 stan::model::index_uni(j)))), "assigning variable lambda",
           stan::model::index_uni(j));
       }
-      current_statement__ = 15;
-      c = 0;
-      current_statement__ = 30;
+      current_statement__ = 50;
       if (stan::math::logical_negation(cat_lambda)) {
-        current_statement__ = 28;
+        current_statement__ = 48;
         for (int i = 1; i <= Ncategory; ++i) {
-          current_statement__ = 26;
+          current_statement__ = 46;
           stan::model::assign(Flambda, 1, "assigning variable Flambda",
             stan::model::index_uni(i));
         }
       } else {
-        current_statement__ = 24;
+        current_statement__ = 44;
         for (int i = 1; i <= Ncategory; ++i) {
-          current_statement__ = 16;
+          current_statement__ = 36;
           c = 0;
-          current_statement__ = 21;
+          current_statement__ = 41;
           for (int I = 1; I <= Ncategoryclass; ++I) {
-            current_statement__ = 19;
+            current_statement__ = 39;
             if (stan::math::logical_gt(
                   stan::model::rvalue(MatrixCategory, "MatrixCategory",
                     stan::model::index_uni(i), stan::model::index_uni(I)), 1)) {
-              current_statement__ = 17;
+              current_statement__ = 37;
               c = (c +
                 stan::model::rvalue(Flambda2, "Flambda2",
                   stan::model::index_uni(
@@ -1043,20 +1475,24 @@ public:
                   stan::model::index_uni(I)));
             }
           }
-          current_statement__ = 22;
+          current_statement__ = 42;
           stan::model::assign(Flambda, stan::math::exp(c),
             "assigning variable Flambda", stan::model::index_uni(i));
         }
       }
-      current_statement__ = 31;
+      current_statement__ = 51;
       L = 1;
-      current_statement__ = 47;
-      if (stan::math::logical_eq(seroreversion, 0)) {
-        current_statement__ = 45;
+      current_statement__ = 67;
+      if ((stan::math::primitive_value(
+             stan::math::logical_eq(seroreversion, 0))
+          &&
+          stan::math::primitive_value(
+            stan::math::logical_eq(age_dependent_foi, 0)))) {
+        current_statement__ = 65;
         for (int J = 1; J <= NAgeGroups; ++J) {
-          current_statement__ = 43;
+          current_statement__ = 63;
           for (int i = 1; i <= Ncategory; ++i) {
-            current_statement__ = 32;
+            current_statement__ = 52;
             stan::model::assign(P1,
               stan::math::exp(
                 (-stan::model::rvalue(Flambda, "Flambda",
@@ -1065,16 +1501,16 @@ public:
                   stan::model::index_uni(1)))), "assigning variable P1",
               stan::model::index_uni(1), stan::model::index_uni(J),
               stan::model::index_uni(i));
-            current_statement__ = 40;
+            current_statement__ = 60;
             for (int j = 1; j <= (A - 1); ++j) {
-              current_statement__ = 33;
+              current_statement__ = 53;
               stan::model::assign(x, 1, "assigning variable x",
                 stan::model::index_uni(j));
-              current_statement__ = 38;
+              current_statement__ = 58;
               if (stan::math::logical_lt(j,
                     stan::model::rvalue(age_at_init, "age_at_init",
                       stan::model::index_uni(J)))) {
-                current_statement__ = 36;
+                current_statement__ = 56;
                 stan::model::assign(P1,
                   stan::math::exp(
                     (-stan::model::rvalue(Flambda, "Flambda",
@@ -1084,7 +1520,7 @@ public:
                   stan::model::index_uni((j + 1)), stan::model::index_uni(J),
                   stan::model::index_uni(i));
               } else {
-                current_statement__ = 34;
+                current_statement__ = 54;
                 stan::model::assign(P1,
                   (stan::model::rvalue(P1, "P1", stan::model::index_uni(j),
                      stan::model::index_uni(J), stan::model::index_uni(i)) *
@@ -1097,24 +1533,28 @@ public:
                   stan::model::index_uni(J), stan::model::index_uni(i));
               }
             }
-            current_statement__ = 41;
+            current_statement__ = 61;
             stan::model::assign(x, 1, "assigning variable x",
               stan::model::index_uni(A));
           }
         }
       }
-      current_statement__ = 68;
-      if (stan::math::logical_eq(seroreversion, 1)) {
-        current_statement__ = 66;
+      current_statement__ = 88;
+      if ((stan::math::primitive_value(
+             stan::math::logical_eq(seroreversion, 1))
+          &&
+          stan::math::primitive_value(
+            stan::math::logical_eq(age_dependent_foi, 0)))) {
+        current_statement__ = 86;
         for (int J = 1; J <= NAgeGroups; ++J) {
-          current_statement__ = 64;
+          current_statement__ = 84;
           for (int i = 1; i <= Ncategory; ++i) {
-            current_statement__ = 48;
+            current_statement__ = 68;
             stan::model::assign(x, 1, "assigning variable x",
               stan::model::index_uni(A));
-            current_statement__ = 51;
+            current_statement__ = 71;
             for (int j = 1; j <= A; ++j) {
-              current_statement__ = 49;
+              current_statement__ = 69;
               stan::model::assign(x,
                 stan::math::exp(
                   (-stan::model::rvalue(Flambda, "Flambda",
@@ -1123,9 +1563,9 @@ public:
                     stan::model::index_uni(1)))), "assigning variable x",
                 stan::model::index_uni(j));
             }
-            current_statement__ = 62;
+            current_statement__ = 82;
             for (int j = 1; j <= A; ++j) {
-              current_statement__ = 52;
+              current_statement__ = 72;
               L = (stan::model::rvalue(Flambda, "Flambda",
                      stan::model::index_uni(i))
                 *
@@ -1133,21 +1573,21 @@ public:
                   stan::model::index_uni(
                     stan::model::rvalue(age_at_init, "age_at_init",
                       stan::model::index_uni(J)))));
-              current_statement__ = 53;
+              current_statement__ = 73;
               stan::model::assign(x, ((rho / (L + rho)) + ((L / (L + rho)) *
                 stan::math::exp(-L))), "assigning variable x",
                 stan::model::index_uni(j));
-              current_statement__ = 59;
+              current_statement__ = 79;
               if (stan::math::logical_gt(j, 1)) {
-                current_statement__ = 57;
+                current_statement__ = 77;
                 for (int k = 2; k <= j; ++k) {
-                  current_statement__ = 54;
+                  current_statement__ = 74;
                   L = (stan::model::rvalue(Flambda, "Flambda",
                          stan::model::index_uni(i))
                     *
                     stan::model::rvalue(lambda, "lambda",
                       stan::model::index_uni(((j - k) + 2))));
-                  current_statement__ = 55;
+                  current_statement__ = 75;
                   stan::model::assign(x,
                     ((stan::model::rvalue(x, "x",
                         stan::model::index_uni(((j - k) + 2))) *
@@ -1156,7 +1596,7 @@ public:
                     stan::model::index_uni((((j - k) + 2) - 1)));
                 }
               }
-              current_statement__ = 60;
+              current_statement__ = 80;
               stan::model::assign(P1,
                 stan::model::rvalue(x, "x",
                   stan::model::index_uni(
@@ -1168,24 +1608,173 @@ public:
           }
         }
       }
-      current_statement__ = 79;
+      current_statement__ = 111;
+      if ((stan::math::primitive_value(
+             stan::math::logical_eq(seroreversion, 1))
+          &&
+          stan::math::primitive_value(
+            stan::math::logical_eq(age_dependent_foi, 1)))) {
+        current_statement__ = 109;
+        for (int J = 1; J <= NAgeGroups; ++J) {
+          current_statement__ = 107;
+          for (int i = 1; i <= Ncategory; ++i) {
+            current_statement__ = 89;
+            stan::model::assign(x, 1, "assigning variable x",
+              stan::model::index_uni(A));
+            current_statement__ = 92;
+            for (int j = 1; j <= A; ++j) {
+              current_statement__ = 90;
+              stan::model::assign(x,
+                stan::math::exp(
+                  (-stan::model::rvalue(Flambda, "Flambda",
+                      stan::model::index_uni(i)) *
+                  stan::model::rvalue(lambda, "lambda",
+                    stan::model::index_uni(1)))), "assigning variable x",
+                stan::model::index_uni(j));
+            }
+            current_statement__ = 105;
+            for (int j = 1; j <= A; ++j) {
+              current_statement__ = 93;
+              L = (stan::model::rvalue(Flambda, "Flambda",
+                     stan::model::index_uni(i))
+                *
+                stan::model::rvalue(lambda, "lambda",
+                  stan::model::index_uni(
+                    stan::model::rvalue(age_at_init, "age_at_init",
+                      stan::model::index_uni(J)))));
+              current_statement__ = 94;
+              C1 = stan::math::exp((age_risk *
+                     (stan::model::rvalue(age_at_init, "age_at_init",
+                        stan::model::index_uni(J)) - 1)));
+              current_statement__ = 95;
+              stan::model::assign(x, ((rho / ((L * C1) + rho)) + (((L * C1) /
+                ((L * C1) + rho)) * stan::math::exp((-L * C1)))),
+                "assigning variable x", stan::model::index_uni(j));
+              current_statement__ = 102;
+              if (stan::math::logical_gt(j, 1)) {
+                current_statement__ = 100;
+                for (int k = 2; k <= j; ++k) {
+                  current_statement__ = 96;
+                  L = (stan::model::rvalue(Flambda, "Flambda",
+                         stan::model::index_uni(i))
+                    *
+                    stan::model::rvalue(lambda, "lambda",
+                      stan::model::index_uni(((j - k) + 2))));
+                  current_statement__ = 97;
+                  C1 = (C1 * stan::math::exp(age_risk));
+                  current_statement__ = 98;
+                  stan::model::assign(x,
+                    ((stan::model::rvalue(x, "x",
+                        stan::model::index_uni(((j - k) + 2))) *
+                    stan::math::exp(-(rho + (L * C1)))) + ((rho / ((L * C1) +
+                    rho)) * (1 - stan::math::exp(-(rho + (L * C1)))))),
+                    "assigning variable x",
+                    stan::model::index_uni((((j - k) + 2) - 1)));
+                }
+              }
+              current_statement__ = 103;
+              stan::model::assign(P1,
+                stan::model::rvalue(x, "x",
+                  stan::model::index_uni(
+                    stan::model::rvalue(age_at_init, "age_at_init",
+                      stan::model::index_uni(J)))), "assigning variable P1",
+                stan::model::index_uni(j), stan::model::index_uni(J),
+                stan::model::index_uni(i));
+            }
+          }
+        }
+      }
+      current_statement__ = 134;
+      if ((stan::math::primitive_value(
+             stan::math::logical_eq(seroreversion, 0))
+          &&
+          stan::math::primitive_value(
+            stan::math::logical_eq(age_dependent_foi, 1)))) {
+        current_statement__ = 132;
+        for (int J = 1; J <= NAgeGroups; ++J) {
+          current_statement__ = 130;
+          for (int i = 1; i <= Ncategory; ++i) {
+            current_statement__ = 112;
+            stan::model::assign(x, 1, "assigning variable x",
+              stan::model::index_uni(A));
+            current_statement__ = 115;
+            for (int j = 1; j <= A; ++j) {
+              current_statement__ = 113;
+              stan::model::assign(x,
+                stan::math::exp(
+                  (-stan::model::rvalue(Flambda, "Flambda",
+                      stan::model::index_uni(i)) *
+                  stan::model::rvalue(lambda, "lambda",
+                    stan::model::index_uni(1)))), "assigning variable x",
+                stan::model::index_uni(j));
+            }
+            current_statement__ = 128;
+            for (int j = 1; j <= A; ++j) {
+              current_statement__ = 116;
+              L = (stan::model::rvalue(Flambda, "Flambda",
+                     stan::model::index_uni(i))
+                *
+                stan::model::rvalue(lambda, "lambda",
+                  stan::model::index_uni(
+                    stan::model::rvalue(age_at_init, "age_at_init",
+                      stan::model::index_uni(J)))));
+              current_statement__ = 117;
+              C1 = stan::math::exp((age_risk *
+                     (stan::model::rvalue(age_at_init, "age_at_init",
+                        stan::model::index_uni(J)) - 1)));
+              current_statement__ = 118;
+              stan::model::assign(x, stan::math::exp((-L * C1)),
+                "assigning variable x", stan::model::index_uni(j));
+              current_statement__ = 125;
+              if (stan::math::logical_gt(j, 1)) {
+                current_statement__ = 123;
+                for (int k = 2; k <= j; ++k) {
+                  current_statement__ = 119;
+                  L = (stan::model::rvalue(Flambda, "Flambda",
+                         stan::model::index_uni(i))
+                    *
+                    stan::model::rvalue(lambda, "lambda",
+                      stan::model::index_uni(((j - k) + 2))));
+                  current_statement__ = 120;
+                  C1 = (C1 * stan::math::exp(age_risk));
+                  current_statement__ = 121;
+                  stan::model::assign(x,
+                    (stan::model::rvalue(x, "x",
+                       stan::model::index_uni(((j - k) + 2))) *
+                    stan::math::exp((-L * C1))), "assigning variable x",
+                    stan::model::index_uni((((j - k) + 2) - 1)));
+                }
+              }
+              current_statement__ = 126;
+              stan::model::assign(P1,
+                stan::model::rvalue(x, "x",
+                  stan::model::index_uni(
+                    stan::model::rvalue(age_at_init, "age_at_init",
+                      stan::model::index_uni(J)))), "assigning variable P1",
+                stan::model::index_uni(j), stan::model::index_uni(J),
+                stan::model::index_uni(i));
+            }
+          }
+        }
+      }
+      current_statement__ = 145;
       for (int J = 1; J <= NAgeGroups; ++J) {
-        current_statement__ = 77;
+        current_statement__ = 143;
         for (int i = 1; i <= Ncategory; ++i) {
-          current_statement__ = 75;
+          current_statement__ = 141;
           for (int j = 1; j <= A; ++j) {
-            current_statement__ = 69;
+            current_statement__ = 135;
             stan::model::assign(P, 0, "assigning variable P",
               stan::model::index_uni(j), stan::model::index_uni(J),
               stan::model::index_uni(i));
-            current_statement__ = 72;
+            current_statement__ = 138;
             for (int k =
                    stan::model::rvalue(class1, "class1",
                      stan::model::index_uni(j), stan::model::index_uni(J)); k
                  <=
                  stan::model::rvalue(class2, "class2",
                    stan::model::index_uni(j), stan::model::index_uni(J)); ++k) {
-              current_statement__ = 70;
+              current_statement__ = 136;
               stan::model::assign(P,
                 (stan::model::rvalue(P1, "P1", stan::model::index_uni(k),
                    stan::model::index_uni(J), stan::model::index_uni(i)) +
@@ -1194,7 +1783,7 @@ public:
                 "assigning variable P", stan::model::index_uni(j),
                 stan::model::index_uni(J), stan::model::index_uni(i));
             }
-            current_statement__ = 73;
+            current_statement__ = 139;
             stan::model::assign(P,
               (stan::model::rvalue(P, "P", stan::model::index_uni(j),
                  stan::model::index_uni(J), stan::model::index_uni(i)) /
@@ -1207,9 +1796,9 @@ public:
           }
         }
       }
-      current_statement__ = 82;
+      current_statement__ = 149;
       for (int j = 1; j <= N; ++j) {
-        current_statement__ = 80;
+        current_statement__ = 146;
         stan::model::assign(Likelihood, (se - (((se + sp) - 1) *
           stan::model::rvalue(P, "P",
             stan::model::index_uni(
@@ -1221,24 +1810,40 @@ public:
               stan::model::rvalue(categoryindex, "categoryindex",
                 stan::model::index_uni(j)))))),
           "assigning variable Likelihood", stan::model::index_uni(j));
+        current_statement__ = 147;
+        stan::model::assign(log_lik,
+          stan::math::bernoulli_lpmf<false>(
+            stan::model::rvalue(Y, "Y", stan::model::index_uni(j)),
+            stan::model::rvalue(Likelihood, "Likelihood",
+              stan::model::index_uni(j))), "assigning variable log_lik",
+          stan::model::index_uni(j));
       }
-      current_statement__ = 6;
-      stan::math::check_greater_or_equal(function__, "lambda", lambda, 0);
       current_statement__ = 7;
+      stan::math::check_greater_or_equal(function__, "lambda", lambda, 0.0);
+      current_statement__ = 8;
       stan::math::check_greater_or_equal(function__, "P1", P1, 0);
-      current_statement__ = 7;
+      current_statement__ = 8;
       stan::math::check_less_or_equal(function__, "P1", P1, 1);
-      current_statement__ = 8;
-      stan::math::check_greater_or_equal(function__, "P", P, 0);
-      current_statement__ = 8;
-      stan::math::check_less_or_equal(function__, "P", P, 1);
       current_statement__ = 9;
-      stan::math::check_greater_or_equal(function__, "Flambda", Flambda, 0);
+      stan::math::check_greater_or_equal(function__, "P", P, 0);
+      current_statement__ = 9;
+      stan::math::check_less_or_equal(function__, "P", P, 1);
       current_statement__ = 10;
+      stan::math::check_greater_or_equal(function__, "Flambda", Flambda, 0);
+      current_statement__ = 11;
       stan::math::check_greater_or_equal(function__, "Likelihood",
         Likelihood, 0);
-      current_statement__ = 10;
+      current_statement__ = 11;
       stan::math::check_less_or_equal(function__, "Likelihood", Likelihood, 1);
+      current_statement__ = 13;
+      stan::math::check_greater_or_equal(function__, "C1", C1, 0);
+      current_statement__ = 15;
+      stan::math::check_greater_or_equal(function__, "lambda_group",
+        lambda_group, 0);
+      current_statement__ = 16;
+      stan::math::check_greater_or_equal(function__, "rho", rho, 0);
+      current_statement__ = 16;
+      stan::math::check_less_or_equal(function__, "rho", rho, 20);
       if (emit_transformed_parameters__) {
         out__.write(x);
         out__.write(L);
@@ -1259,7 +1864,11 @@ public:
         }
         out__.write(Flambda);
         out__.write(Likelihood);
+        out__.write(log_lik);
+        out__.write(C1);
         out__.write(c);
+        out__.write(lambda_group);
+        out__.write(rho);
       }
       if (stan::math::logical_negation(emit_generated_quantities__)) {
         return ;
@@ -1284,17 +1893,17 @@ public:
     try {
       int pos__ = std::numeric_limits<int>::min();
       pos__ = 1;
-      std::vector<local_scalar_t__> logitlambda =
+      std::vector<local_scalar_t__> lambda_group_raw =
         std::vector<local_scalar_t__>(NGroups, DUMMY_VAR__);
       current_statement__ = 1;
-      stan::model::assign(logitlambda,
+      stan::model::assign(lambda_group_raw,
         in__.read<std::vector<local_scalar_t__>>(NGroups),
-        "assigning variable logitlambda");
-      out__.write_free_lb(0, logitlambda);
-      local_scalar_t__ rho = DUMMY_VAR__;
+        "assigning variable lambda_group_raw");
+      out__.write(lambda_group_raw);
+      local_scalar_t__ rho_raw = DUMMY_VAR__;
       current_statement__ = 2;
-      rho = in__.read<local_scalar_t__>();
-      out__.write_free_lub(0, 20, rho);
+      rho_raw = in__.read<local_scalar_t__>();
+      out__.write(rho_raw);
       std::vector<std::vector<local_scalar_t__>> Flambda2 =
         std::vector<std::vector<local_scalar_t__>>(maxNcategory,
           std::vector<local_scalar_t__>(Ncategoryclass, DUMMY_VAR__));
@@ -1308,6 +1917,10 @@ public:
         }
       }
       out__.write(Flambda2);
+      local_scalar_t__ age_risk = DUMMY_VAR__;
+      current_statement__ = 4;
+      age_risk = in__.read<local_scalar_t__>();
+      out__.write(age_risk);
     } catch (const std::exception& e) {
       stan::lang::rethrow_located(e, locations_array__[current_statement__]);
     }
@@ -1324,27 +1937,30 @@ public:
     (void) DUMMY_VAR__;
     try {
       current_statement__ = 1;
-      context__.validate_dims("parameter initialization", "logitlambda",
+      context__.validate_dims("parameter initialization", "lambda_group_raw",
         "double", std::vector<size_t>{static_cast<size_t>(NGroups)});
       current_statement__ = 2;
-      context__.validate_dims("parameter initialization", "rho", "double",
-        std::vector<size_t>{});
+      context__.validate_dims("parameter initialization", "rho_raw",
+        "double", std::vector<size_t>{});
       current_statement__ = 3;
       context__.validate_dims("parameter initialization", "Flambda2",
         "double",
         std::vector<size_t>{static_cast<size_t>(maxNcategory),
           static_cast<size_t>(Ncategoryclass)});
+      current_statement__ = 4;
+      context__.validate_dims("parameter initialization", "age_risk",
+        "double", std::vector<size_t>{});
       int pos__ = std::numeric_limits<int>::min();
       pos__ = 1;
-      std::vector<local_scalar_t__> logitlambda =
+      std::vector<local_scalar_t__> lambda_group_raw =
         std::vector<local_scalar_t__>(NGroups, DUMMY_VAR__);
       current_statement__ = 1;
-      logitlambda = context__.vals_r("logitlambda");
-      out__.write_free_lb(0, logitlambda);
-      local_scalar_t__ rho = DUMMY_VAR__;
+      lambda_group_raw = context__.vals_r("lambda_group_raw");
+      out__.write(lambda_group_raw);
+      local_scalar_t__ rho_raw = DUMMY_VAR__;
       current_statement__ = 2;
-      rho = context__.vals_r("rho")[(1 - 1)];
-      out__.write_free_lub(0, 20, rho);
+      rho_raw = context__.vals_r("rho_raw")[(1 - 1)];
+      out__.write(rho_raw);
       std::vector<std::vector<local_scalar_t__>> Flambda2 =
         std::vector<std::vector<local_scalar_t__>>(maxNcategory,
           std::vector<local_scalar_t__>(Ncategoryclass, DUMMY_VAR__));
@@ -1368,6 +1984,10 @@ public:
         }
       }
       out__.write(Flambda2);
+      local_scalar_t__ age_risk = DUMMY_VAR__;
+      current_statement__ = 4;
+      age_risk = context__.vals_r("age_risk")[(1 - 1)];
+      out__.write(age_risk);
     } catch (const std::exception& e) {
       stan::lang::rethrow_located(e, locations_array__[current_statement__]);
     }
@@ -1376,10 +1996,12 @@ public:
   get_param_names(std::vector<std::string>& names__, const bool
                   emit_transformed_parameters__ = true, const bool
                   emit_generated_quantities__ = true) const {
-    names__ = std::vector<std::string>{"logitlambda", "rho", "Flambda2"};
+    names__ = std::vector<std::string>{"lambda_group_raw", "rho_raw",
+                "Flambda2", "age_risk"};
     if (emit_transformed_parameters__) {
       std::vector<std::string>
-        temp{"x", "L", "lambda", "P1", "P", "Flambda", "Likelihood", "c"};
+        temp{"x", "L", "lambda", "P1", "P", "Flambda", "Likelihood",
+             "log_lik", "C1", "c", "lambda_group", "rho"};
       names__.reserve(names__.size() + temp.size());
       names__.insert(names__.end(), temp.begin(), temp.end());
     }
@@ -1394,7 +2016,8 @@ public:
                                                                     NGroups)},
                 std::vector<size_t>{},
                 std::vector<size_t>{static_cast<size_t>(maxNcategory),
-                  static_cast<size_t>(Ncategoryclass)}};
+                  static_cast<size_t>(Ncategoryclass)},
+                std::vector<size_t>{}};
     if (emit_transformed_parameters__) {
       std::vector<std::vector<size_t>>
         temp{std::vector<size_t>{static_cast<size_t>(A)},
@@ -1408,6 +2031,9 @@ public:
                static_cast<size_t>(Ncategory)},
              std::vector<size_t>{static_cast<size_t>(Ncategory)},
              std::vector<size_t>{static_cast<size_t>(N)},
+             std::vector<size_t>{static_cast<size_t>(N)},
+             std::vector<size_t>{}, std::vector<size_t>{},
+             std::vector<size_t>{static_cast<size_t>(NGroups)},
              std::vector<size_t>{}};
       dimss__.reserve(dimss__.size() + temp.size());
       dimss__.insert(dimss__.end(), temp.begin(), temp.end());
@@ -1419,16 +2045,17 @@ public:
                           emit_transformed_parameters__ = true, bool
                           emit_generated_quantities__ = true) const final {
     for (int sym1__ = 1; sym1__ <= NGroups; ++sym1__) {
-      param_names__.emplace_back(std::string() + "logitlambda" + '.' +
+      param_names__.emplace_back(std::string() + "lambda_group_raw" + '.' +
         std::to_string(sym1__));
     }
-    param_names__.emplace_back(std::string() + "rho");
+    param_names__.emplace_back(std::string() + "rho_raw");
     for (int sym1__ = 1; sym1__ <= Ncategoryclass; ++sym1__) {
       for (int sym2__ = 1; sym2__ <= maxNcategory; ++sym2__) {
         param_names__.emplace_back(std::string() + "Flambda2" + '.' +
           std::to_string(sym2__) + '.' + std::to_string(sym1__));
       }
     }
+    param_names__.emplace_back(std::string() + "age_risk");
     if (emit_transformed_parameters__) {
       for (int sym1__ = 1; sym1__ <= A; ++sym1__) {
         param_names__.emplace_back(std::string() + "x" + '.' +
@@ -1465,7 +2092,17 @@ public:
         param_names__.emplace_back(std::string() + "Likelihood" + '.' +
           std::to_string(sym1__));
       }
+      for (int sym1__ = 1; sym1__ <= N; ++sym1__) {
+        param_names__.emplace_back(std::string() + "log_lik" + '.' +
+          std::to_string(sym1__));
+      }
+      param_names__.emplace_back(std::string() + "C1");
       param_names__.emplace_back(std::string() + "c");
+      for (int sym1__ = 1; sym1__ <= NGroups; ++sym1__) {
+        param_names__.emplace_back(std::string() + "lambda_group" + '.' +
+          std::to_string(sym1__));
+      }
+      param_names__.emplace_back(std::string() + "rho");
     }
     if (emit_generated_quantities__) {}
   }
@@ -1474,16 +2111,17 @@ public:
                             emit_transformed_parameters__ = true, bool
                             emit_generated_quantities__ = true) const final {
     for (int sym1__ = 1; sym1__ <= NGroups; ++sym1__) {
-      param_names__.emplace_back(std::string() + "logitlambda" + '.' +
+      param_names__.emplace_back(std::string() + "lambda_group_raw" + '.' +
         std::to_string(sym1__));
     }
-    param_names__.emplace_back(std::string() + "rho");
+    param_names__.emplace_back(std::string() + "rho_raw");
     for (int sym1__ = 1; sym1__ <= Ncategoryclass; ++sym1__) {
       for (int sym2__ = 1; sym2__ <= maxNcategory; ++sym2__) {
         param_names__.emplace_back(std::string() + "Flambda2" + '.' +
           std::to_string(sym2__) + '.' + std::to_string(sym1__));
       }
     }
+    param_names__.emplace_back(std::string() + "age_risk");
     if (emit_transformed_parameters__) {
       for (int sym1__ = 1; sym1__ <= A; ++sym1__) {
         param_names__.emplace_back(std::string() + "x" + '.' +
@@ -1520,15 +2158,25 @@ public:
         param_names__.emplace_back(std::string() + "Likelihood" + '.' +
           std::to_string(sym1__));
       }
+      for (int sym1__ = 1; sym1__ <= N; ++sym1__) {
+        param_names__.emplace_back(std::string() + "log_lik" + '.' +
+          std::to_string(sym1__));
+      }
+      param_names__.emplace_back(std::string() + "C1");
       param_names__.emplace_back(std::string() + "c");
+      for (int sym1__ = 1; sym1__ <= NGroups; ++sym1__) {
+        param_names__.emplace_back(std::string() + "lambda_group" + '.' +
+          std::to_string(sym1__));
+      }
+      param_names__.emplace_back(std::string() + "rho");
     }
     if (emit_generated_quantities__) {}
   }
   inline std::string get_constrained_sizedtypes() const {
-    return std::string("[{\"name\":\"logitlambda\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(NGroups) + ",\"element_type\":{\"name\":\"real\"}},\"block\":\"parameters\"},{\"name\":\"rho\",\"type\":{\"name\":\"real\"},\"block\":\"parameters\"},{\"name\":\"Flambda2\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(maxNcategory) + ",\"element_type\":{\"name\":\"array\",\"length\":" + std::to_string(Ncategoryclass) + ",\"element_type\":{\"name\":\"real\"}}},\"block\":\"parameters\"},{\"name\":\"x\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(A) + ",\"element_type\":{\"name\":\"real\"}},\"block\":\"transformed_parameters\"},{\"name\":\"L\",\"type\":{\"name\":\"real\"},\"block\":\"transformed_parameters\"},{\"name\":\"lambda\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(A) + ",\"element_type\":{\"name\":\"real\"}},\"block\":\"transformed_parameters\"},{\"name\":\"P1\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(A) + ",\"element_type\":{\"name\":\"array\",\"length\":" + std::to_string(NAgeGroups) + ",\"element_type\":{\"name\":\"array\",\"length\":" + std::to_string(Ncategory) + ",\"element_type\":{\"name\":\"real\"}}}},\"block\":\"transformed_parameters\"},{\"name\":\"P\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(A) + ",\"element_type\":{\"name\":\"array\",\"length\":" + std::to_string(NAgeGroups) + ",\"element_type\":{\"name\":\"array\",\"length\":" + std::to_string(Ncategory) + ",\"element_type\":{\"name\":\"real\"}}}},\"block\":\"transformed_parameters\"},{\"name\":\"Flambda\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(Ncategory) + ",\"element_type\":{\"name\":\"real\"}},\"block\":\"transformed_parameters\"},{\"name\":\"Likelihood\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(N) + ",\"element_type\":{\"name\":\"real\"}},\"block\":\"transformed_parameters\"},{\"name\":\"c\",\"type\":{\"name\":\"real\"},\"block\":\"transformed_parameters\"}]");
+    return std::string("[{\"name\":\"lambda_group_raw\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(NGroups) + ",\"element_type\":{\"name\":\"real\"}},\"block\":\"parameters\"},{\"name\":\"rho_raw\",\"type\":{\"name\":\"real\"},\"block\":\"parameters\"},{\"name\":\"Flambda2\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(maxNcategory) + ",\"element_type\":{\"name\":\"array\",\"length\":" + std::to_string(Ncategoryclass) + ",\"element_type\":{\"name\":\"real\"}}},\"block\":\"parameters\"},{\"name\":\"age_risk\",\"type\":{\"name\":\"real\"},\"block\":\"parameters\"},{\"name\":\"x\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(A) + ",\"element_type\":{\"name\":\"real\"}},\"block\":\"transformed_parameters\"},{\"name\":\"L\",\"type\":{\"name\":\"real\"},\"block\":\"transformed_parameters\"},{\"name\":\"lambda\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(A) + ",\"element_type\":{\"name\":\"real\"}},\"block\":\"transformed_parameters\"},{\"name\":\"P1\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(A) + ",\"element_type\":{\"name\":\"array\",\"length\":" + std::to_string(NAgeGroups) + ",\"element_type\":{\"name\":\"array\",\"length\":" + std::to_string(Ncategory) + ",\"element_type\":{\"name\":\"real\"}}}},\"block\":\"transformed_parameters\"},{\"name\":\"P\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(A) + ",\"element_type\":{\"name\":\"array\",\"length\":" + std::to_string(NAgeGroups) + ",\"element_type\":{\"name\":\"array\",\"length\":" + std::to_string(Ncategory) + ",\"element_type\":{\"name\":\"real\"}}}},\"block\":\"transformed_parameters\"},{\"name\":\"Flambda\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(Ncategory) + ",\"element_type\":{\"name\":\"real\"}},\"block\":\"transformed_parameters\"},{\"name\":\"Likelihood\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(N) + ",\"element_type\":{\"name\":\"real\"}},\"block\":\"transformed_parameters\"},{\"name\":\"log_lik\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(N) + ",\"element_type\":{\"name\":\"real\"}},\"block\":\"transformed_parameters\"},{\"name\":\"C1\",\"type\":{\"name\":\"real\"},\"block\":\"transformed_parameters\"},{\"name\":\"c\",\"type\":{\"name\":\"real\"},\"block\":\"transformed_parameters\"},{\"name\":\"lambda_group\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(NGroups) + ",\"element_type\":{\"name\":\"real\"}},\"block\":\"transformed_parameters\"},{\"name\":\"rho\",\"type\":{\"name\":\"real\"},\"block\":\"transformed_parameters\"}]");
   }
   inline std::string get_unconstrained_sizedtypes() const {
-    return std::string("[{\"name\":\"logitlambda\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(NGroups) + ",\"element_type\":{\"name\":\"real\"}},\"block\":\"parameters\"},{\"name\":\"rho\",\"type\":{\"name\":\"real\"},\"block\":\"parameters\"},{\"name\":\"Flambda2\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(maxNcategory) + ",\"element_type\":{\"name\":\"array\",\"length\":" + std::to_string(Ncategoryclass) + ",\"element_type\":{\"name\":\"real\"}}},\"block\":\"parameters\"},{\"name\":\"x\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(A) + ",\"element_type\":{\"name\":\"real\"}},\"block\":\"transformed_parameters\"},{\"name\":\"L\",\"type\":{\"name\":\"real\"},\"block\":\"transformed_parameters\"},{\"name\":\"lambda\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(A) + ",\"element_type\":{\"name\":\"real\"}},\"block\":\"transformed_parameters\"},{\"name\":\"P1\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(A) + ",\"element_type\":{\"name\":\"array\",\"length\":" + std::to_string(NAgeGroups) + ",\"element_type\":{\"name\":\"array\",\"length\":" + std::to_string(Ncategory) + ",\"element_type\":{\"name\":\"real\"}}}},\"block\":\"transformed_parameters\"},{\"name\":\"P\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(A) + ",\"element_type\":{\"name\":\"array\",\"length\":" + std::to_string(NAgeGroups) + ",\"element_type\":{\"name\":\"array\",\"length\":" + std::to_string(Ncategory) + ",\"element_type\":{\"name\":\"real\"}}}},\"block\":\"transformed_parameters\"},{\"name\":\"Flambda\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(Ncategory) + ",\"element_type\":{\"name\":\"real\"}},\"block\":\"transformed_parameters\"},{\"name\":\"Likelihood\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(N) + ",\"element_type\":{\"name\":\"real\"}},\"block\":\"transformed_parameters\"},{\"name\":\"c\",\"type\":{\"name\":\"real\"},\"block\":\"transformed_parameters\"}]");
+    return std::string("[{\"name\":\"lambda_group_raw\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(NGroups) + ",\"element_type\":{\"name\":\"real\"}},\"block\":\"parameters\"},{\"name\":\"rho_raw\",\"type\":{\"name\":\"real\"},\"block\":\"parameters\"},{\"name\":\"Flambda2\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(maxNcategory) + ",\"element_type\":{\"name\":\"array\",\"length\":" + std::to_string(Ncategoryclass) + ",\"element_type\":{\"name\":\"real\"}}},\"block\":\"parameters\"},{\"name\":\"age_risk\",\"type\":{\"name\":\"real\"},\"block\":\"parameters\"},{\"name\":\"x\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(A) + ",\"element_type\":{\"name\":\"real\"}},\"block\":\"transformed_parameters\"},{\"name\":\"L\",\"type\":{\"name\":\"real\"},\"block\":\"transformed_parameters\"},{\"name\":\"lambda\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(A) + ",\"element_type\":{\"name\":\"real\"}},\"block\":\"transformed_parameters\"},{\"name\":\"P1\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(A) + ",\"element_type\":{\"name\":\"array\",\"length\":" + std::to_string(NAgeGroups) + ",\"element_type\":{\"name\":\"array\",\"length\":" + std::to_string(Ncategory) + ",\"element_type\":{\"name\":\"real\"}}}},\"block\":\"transformed_parameters\"},{\"name\":\"P\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(A) + ",\"element_type\":{\"name\":\"array\",\"length\":" + std::to_string(NAgeGroups) + ",\"element_type\":{\"name\":\"array\",\"length\":" + std::to_string(Ncategory) + ",\"element_type\":{\"name\":\"real\"}}}},\"block\":\"transformed_parameters\"},{\"name\":\"Flambda\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(Ncategory) + ",\"element_type\":{\"name\":\"real\"}},\"block\":\"transformed_parameters\"},{\"name\":\"Likelihood\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(N) + ",\"element_type\":{\"name\":\"real\"}},\"block\":\"transformed_parameters\"},{\"name\":\"log_lik\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(N) + ",\"element_type\":{\"name\":\"real\"}},\"block\":\"transformed_parameters\"},{\"name\":\"C1\",\"type\":{\"name\":\"real\"},\"block\":\"transformed_parameters\"},{\"name\":\"c\",\"type\":{\"name\":\"real\"},\"block\":\"transformed_parameters\"},{\"name\":\"lambda_group\",\"type\":{\"name\":\"array\",\"length\":" + std::to_string(NGroups) + ",\"element_type\":{\"name\":\"real\"}},\"block\":\"transformed_parameters\"},{\"name\":\"rho\",\"type\":{\"name\":\"real\"},\"block\":\"transformed_parameters\"}]");
   }
   // Begin method overload boilerplate
   template <typename RNG> inline void
@@ -1537,11 +2185,12 @@ public:
               emit_transformed_parameters = true, const bool
               emit_generated_quantities = true, std::ostream*
               pstream = nullptr) const {
-    const size_t num_params__ = ((NGroups + 1) + (maxNcategory *
-      Ncategoryclass));
-    const size_t num_transformed = emit_transformed_parameters * ((((((((A +
-      1) + A) + ((A * NAgeGroups) * Ncategory)) + ((A * NAgeGroups) *
-      Ncategory)) + Ncategory) + N) + 1));
+    const size_t num_params__ = (((NGroups + 1) + (maxNcategory *
+      Ncategoryclass)) + 1);
+    const size_t num_transformed = emit_transformed_parameters *
+      ((((((((((((A + 1) + A) + ((A * NAgeGroups) * Ncategory)) + ((A *
+      NAgeGroups) * Ncategory)) + Ncategory) + N) + N) + 1) + 1) + NGroups) +
+      1));
     const size_t num_gen_quantities = emit_generated_quantities * (0);
     const size_t num_to_write = num_params__ + num_transformed +
       num_gen_quantities;
@@ -1557,11 +2206,12 @@ public:
               emit_transformed_parameters = true, bool
               emit_generated_quantities = true, std::ostream*
               pstream = nullptr) const {
-    const size_t num_params__ = ((NGroups + 1) + (maxNcategory *
-      Ncategoryclass));
-    const size_t num_transformed = emit_transformed_parameters * ((((((((A +
-      1) + A) + ((A * NAgeGroups) * Ncategory)) + ((A * NAgeGroups) *
-      Ncategory)) + Ncategory) + N) + 1));
+    const size_t num_params__ = (((NGroups + 1) + (maxNcategory *
+      Ncategoryclass)) + 1);
+    const size_t num_transformed = emit_transformed_parameters *
+      ((((((((((((A + 1) + A) + ((A * NAgeGroups) * Ncategory)) + ((A *
+      NAgeGroups) * Ncategory)) + Ncategory) + N) + N) + 1) + 1) + NGroups) +
+      1));
     const size_t num_gen_quantities = emit_generated_quantities * (0);
     const size_t num_to_write = num_params__ + num_transformed +
       num_gen_quantities;

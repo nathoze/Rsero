@@ -37,12 +37,10 @@ plot_posterior<- function(FOIfit, show.prior = TRUE) {
     }
     
     if(name %in% model.list('I models')){
-      
       C<- chains$Time
       K=FOIfit$model$K
       
       YearMax <- max(FOIfit$data$sampling_year)
-      #   Years = matrix(0,ncol(C),nrow(C))
       Years  <- YearMax - C+1
       for(i in 1:K){
         if(name != 'constant'){
@@ -51,12 +49,10 @@ plot_posterior<- function(FOIfit, show.prior = TRUE) {
                                title = paste('Histogram for Time',i),
                                xlabel = "Year",
                                ylabel = 'Count') 
-          
           plotindex <- plotindex+1
           plots[[plotindex]]  = gT
         }
       }
-      
       for(i in 1:K){
         gT <- plot_histogram(distribution = data.frame(X= chains$annual_foi[,i] ), 
                              title = paste('Histogram for annual FOI',i),
@@ -75,10 +71,8 @@ plot_posterior<- function(FOIfit, show.prior = TRUE) {
       Torder <- data.frame(C, t(apply(-C, 1, rank, ties.method='min')))
       K=FOIfit$model$K
       Ranks <- matrix(0,ncol(C),nrow(C))
-      
       YearMax <- max(FOIfit$data$sampling_year)
       Years = matrix(0,ncol(C),nrow(C))
-      
       for (i in 1:K) { 
         Ranks[i, ] <- which(apply(C,1,function(x) rank(x)) == i);
         Years[i, ] <- YearMax - t(C)[Ranks[i,]]+1
@@ -92,8 +86,6 @@ plot_posterior<- function(FOIfit, show.prior = TRUE) {
         }
         chainsout$T[,i] <- t(Years[i, ]) 
         chainsout$alpha[, i] <- t(chains$alpha)[Ranks[i,]] 
-        # chainsout$beta[, i] <- t(chains$beta)[Ranks[i,]]
-        
         gT <- plot_histogram(distribution = data.frame(X= chainsout$T[,i] ), 
                              title = paste('Histogram for Time',i),
                              xlabel = "Year",
@@ -171,9 +163,9 @@ plot_posterior<- function(FOIfit, show.prior = TRUE) {
       C<- chains$Time
       YearMax <- max(FOIfit$data$sampling_year)
       Years  <- YearMax - C+1
-      chainsout$T[,i] <- Years[,i]
-      gT <- plot_histogram(distribution = data.frame(X= chainsout$T[,i] ), 
-                           title = paste('Histogram for Time',i),
+      chainsout$T <- Years
+      gT <- plot_histogram(distribution = data.frame(X= chainsout$T ), 
+                           title = paste('Histogram for Time'),
                            xlabel = "Year",
                            ylabel = 'Count') 
       
