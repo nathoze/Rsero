@@ -107,7 +107,7 @@ compute_information_criteria <- function(FOIfit,...){
   # Compute the WAIC
   #variance along the column. Each individual has its own variance measured over all sampled parameters 
   
-  V = ColVar(exp(LogLikelihoods))
+  V = ColVar(LogLikelihoods)
   pwaic = sum(V)
   lpd = sum(log( colSums(exp(LogLikelihoods))/S))
   WAIC <- -2*(lpd-pwaic)
