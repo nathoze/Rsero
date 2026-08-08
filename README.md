@@ -275,3 +275,7 @@ A full running example is available
 
 The following schematic summarizes the different functions available
 with the package <img src="/schema.png" width="1000" />
+
+## License
+
+*Rsero* is released under the [GPL (>= 3)](https://www.gnu.org/licenses/gpl-3.0.html) license. © Nathanael Hoze.

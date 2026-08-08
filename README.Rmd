@@ -159,3 +159,7 @@ The following schematic summarizes the different functions available with the pa
 
 
 
+
+## License
+
+*Rsero* is released under the [GPL (>= 3)](https://www.gnu.org/licenses/gpl-3.0.html) license. © Nathanael Hoze.

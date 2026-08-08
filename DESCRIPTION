@@ -5,7 +5,7 @@ Version: 2.0
 Author: Nathanael Hoze
 Maintainer: Nathanael Hoze <nathanael.hoze@gmail.com>
 Description: Fit models of the force of infection to serological data using Bayesian MCMC methods. The package provides a standardized format for handling serological data, contains various serocatalytic models of force of infection, fits the models to the data, and provides tools to analyse and plot the results of the fits.  
-License: What license is it under?
+License: GPL (>= 3)
 Depends: 
 	R (>= 4.0.2), 
 	Rcpp (>= 0.12.13), 
